@@ -7,3 +7,7 @@ commands:
     usage: /sethome
   listhome:
     usage: /listhome
+  home:
+    usage: /home
+  menuhome:
+    usage: /menuhome

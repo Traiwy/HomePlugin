@@ -1,6 +1,6 @@
 package command;
 
-import GUI.SecondMenuHome;
+import invHolderMainMenu.MainMenuHome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,7 +13,7 @@ public class MenuHomeCommand implements CommandExecutor {
         if(!(sender instanceof Player)) return  false;
 
         Player player = (Player) sender;
-        SecondMenuHome.HomeGUI(player);
+        MainMenuHome.HomeGUI(player);
         return  true;
     }
 }
