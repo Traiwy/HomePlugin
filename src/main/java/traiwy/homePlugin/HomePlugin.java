@@ -1,18 +1,22 @@
 package traiwy.homePlugin;
 
+import command.HomeCommand;
 import command.ListHomeCommand;
+import command.MenuHomeCommand;
 import command.SethomeCommand;
 import org.bukkit.plugin.java.JavaPlugin;
-import util.SaveLocationPlayer;
+import util.HomeManager;
 
 public final class HomePlugin extends JavaPlugin {
 
-    public SaveLocationPlayer saveLocationPlayer;
+    public HomeManager homeManager;
     @Override
     public void onEnable() {
-        this.saveLocationPlayer = new SaveLocationPlayer(this);
-        getCommand("sethome").setExecutor(new SethomeCommand(this, saveLocationPlayer));
-        getCommand("listhome").setExecutor(new ListHomeCommand(this, saveLocationPlayer));
+        this.homeManager = new HomeManager(this);
+        getCommand("sethome").setExecutor(new SethomeCommand(this, homeManager));
+        getCommand("listhome").setExecutor(new ListHomeCommand(this, homeManager));
+        getCommand("home").setExecutor(new HomeCommand(homeManager));
+        getCommand("menuhome").setExecutor(new MenuHomeCommand());
 
     }
 
@@ -21,7 +25,8 @@ public final class HomePlugin extends JavaPlugin {
         // Plugin shutdown logic
     }
 
-    public SaveLocationPlayer getSaveLocationPlayer() {
-        return saveLocationPlayer;
+
+    public HomeManager getHomeManager() {
+        return homeManager;
     }
 }
