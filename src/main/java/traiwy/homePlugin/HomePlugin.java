@@ -18,7 +18,7 @@ public final class HomePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         this.homeManager = new HomeManager(this);
-        this.listHomeMenu = new ListHomeMenu();
+        this.listHomeMenu = new ListHomeMenu(homeManager);
         getCommand("sethome").setExecutor(new SethomeCommand(this, homeManager));
         getCommand("listhome").setExecutor(new ListHomeCommand(this, homeManager));
         getCommand("home").setExecutor(new HomeCommand(homeManager));

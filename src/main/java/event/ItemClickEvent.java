@@ -1,6 +1,7 @@
 package event;
 
 import invHolderMainMenu.ListHomeMenu;
+import invHolderMainMenu.MainMenuHome;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,15 +28,23 @@ public class ItemClickEvent implements Listener {
 
         if(item != null){
             switch (item.getType()){
-                case ELYTRA -> player.performCommand("sethome");
-                case APPLE -> listHomeMenu.ListHomeGUI(player);
-                case DIAMOND ->  player.sendMessage("Нужно сделать отдельное меню");
-                default -> {
+                case ELYTRA:
+                    player.performCommand("sethome");
+                    inventory.close();
                     break;
-                }
+                case APPLE:
+                    listHomeMenu.ListHomeGUI(player);
+                    break;
+                case DIAMOND:
+                    player.sendMessage("Нужно сделать отдельное меню");
+                    break;
+                case ARROW:
+                    MainMenuHome.HomeGUI(player);
+                default:
+                    break;
+
             }
         }
-        player.closeInventory();
 
     }
 }
