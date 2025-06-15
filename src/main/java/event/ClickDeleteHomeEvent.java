@@ -25,7 +25,6 @@ public class ClickDeleteHomeEvent implements Listener {
     @EventHandler
     public void DeleteHomeEvent(InventoryClickEvent event){
         if (!(event.getWhoClicked() instanceof Player)) return;
-        event.setCancelled(true);
         Player player = (Player) event.getWhoClicked();
         UUID target = player.getUniqueId();
         Inventory clickInv = event.getClickedInventory();
@@ -42,7 +41,7 @@ public class ClickDeleteHomeEvent implements Listener {
         }
 
         if (clickInv.getHolder() instanceof DeleteMenuHolder && awaitingClickDeleteHome.contains(target)) {
-
+            event.setCancelled(true);
             if (event.isRightClick() && event.getClick().isShiftClick()){
                 player.sendMessage("Вы нажали шифт");
                 if(item != null && item.getType() == Material.PLAYER_HEAD) {

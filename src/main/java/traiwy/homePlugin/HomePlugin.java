@@ -1,10 +1,7 @@
 package traiwy.homePlugin;
 
 import command.*;
-import event.CanselClickInventory;
-import event.ClickDeleteHomeEvent;
-import event.ItemClickEvent;
-import event.onPlayerChat;
+import event.*;
 import invHolderMainMenu.deleteHolder.DeleteHomeMenu;
 import invHolderMainMenu.listHomeHolder.ListHomeMenu;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,6 +26,7 @@ public final class HomePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemClickEvent(homeManager, listHomeMenu, deleteHomeMenu), this);
         getServer().getPluginManager().registerEvents(new onPlayerChat(this, homeManager),this);
         getServer().getPluginManager().registerEvents(new ClickDeleteHomeEvent(),this);
+        getServer().getPluginManager().registerEvents(new ClickTeleportHome(homeManager), this);
 
     }
 
