@@ -14,14 +14,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import util.DeleteMapManager;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
 public class ClickDeleteHomeEvent implements Listener {
-    Set<UUID> awaitingClickDeleteHome = new HashSet<>();
+    private final DeleteMapManager deleteMapManager;
+    public ClickDeleteHomeEvent(DeleteMapManager deleteMapManager){
+        this.deleteMapManager = deleteMapManager;
+    }
     @EventHandler
     public void DeleteHomeEvent(InventoryClickEvent event){
         if (!(event.getWhoClicked() instanceof Player)) return;
@@ -35,12 +37,12 @@ public class ClickDeleteHomeEvent implements Listener {
 
         if (clickInv.getHolder() instanceof ListHomeHolder) {
             if (item != null && item.getType() == Material.LIME_DYE) {
-                awaitingClickDeleteHome.add(target);
+               deleteMapManager.addAwaitingClickDeleteHome(player);
             }
             return;
         }
 
-        if (clickInv.getHolder() instanceof DeleteMenuHolder && awaitingClickDeleteHome.contains(target)) {
+        if (clickInv.getHolder() instanceof DeleteMenuHolder && deleteMapManager.containsAwaitingClickDeleteHome(player)) {
             event.setCancelled(true);
             if (event.isRightClick() && event.getClick().isShiftClick()){
                 player.sendMessage("Вы нажали шифт");
@@ -50,10 +52,8 @@ public class ClickDeleteHomeEvent implements Listener {
                     String homeName = getHomeNameFromItem(item);
                     if (homeName != null && !homeName.isEmpty()) {
                         player.performCommand("delhome " + homeName);
-                        awaitingClickDeleteHome.remove(target);
                         clickInv.removeItem(item);
                         player.updateInventory();
-                        player.closeInventory();
                     } else {
                         player.sendMessage("§cНе удалось определить название дома!");
                     }

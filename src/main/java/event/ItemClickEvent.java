@@ -15,10 +15,12 @@ public class ItemClickEvent implements Listener {
     private final HomeManager homeManager;
     private final ListHomeMenu listHomeMenu;
     private final DeleteHomeMenu deleteHomeMenu;
-    public ItemClickEvent (HomeManager homeManager, ListHomeMenu listHomeMenu, DeleteHomeMenu deleteHomeMenu){
+    private final MainMenuHome mainMenuHome;
+    public ItemClickEvent (HomeManager homeManager, ListHomeMenu listHomeMenu, DeleteHomeMenu deleteHomeMenu, MainMenuHome mainMenuHome){
         this.homeManager = homeManager;
         this.listHomeMenu = listHomeMenu;
         this.deleteHomeMenu = deleteHomeMenu;
+        this.mainMenuHome = mainMenuHome;
     }
     @EventHandler
     public  void ItemClick(InventoryClickEvent event){
@@ -39,7 +41,7 @@ public class ItemClickEvent implements Listener {
                     player.sendMessage("Нужно сделать отдельное меню");
                     break;
                 case ARROW:
-                    MainMenuHome.HomeGUI(player);
+                    mainMenuHome.HomeGUI(player);
                     break;
                 case LIME_DYE:
                     deleteHomeMenu.DeleteHomeGUI(player);
