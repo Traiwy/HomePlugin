@@ -39,7 +39,6 @@ public class HomeManager {
 
     public void SetHome(Player player, String nameHome, Location loc){
         String path = "homes." + player.getName() + "." + nameHome.toLowerCase();
-        Bukkit.getLogger().info("Сохраняю по пути: " + path);
 
         config.set(path + ".world", loc.getWorld().getName());
         config.set(path + ".x", loc.getX());
@@ -63,6 +62,12 @@ public class HomeManager {
         String path = "homes." + player.getName();
         if (!config.contains(path)) return new HashSet<>();
         return config.getConfigurationSection(path).getKeys(false);
+    }
+
+    public void deleteHome(Player player, String homeName) {
+        String path = "homes." + player.getName() + "." + homeName.toLowerCase();
+        config.set(path, null);
+        save();
     }
 
 

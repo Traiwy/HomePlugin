@@ -1,8 +1,8 @@
 package event;
 
-import invHolderMainMenu.ListHomeMenu;
-import invHolderMainMenu.MainMenuHome;
-import org.bukkit.Material;
+import invHolderMainMenu.deleteHolder.DeleteHomeMenu;
+import invHolderMainMenu.listHomeHolder.ListHomeMenu;
+import invHolderMainMenu.homeHolder.MainMenuHome;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,14 +11,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import util.HomeManager;
 
-import static org.bukkit.Material.*;
-
 public class ItemClickEvent implements Listener {
     private final HomeManager homeManager;
     private final ListHomeMenu listHomeMenu;
-    public ItemClickEvent (HomeManager homeManager, ListHomeMenu listHomeMenu){
+    private final DeleteHomeMenu deleteHomeMenu;
+    public ItemClickEvent (HomeManager homeManager, ListHomeMenu listHomeMenu, DeleteHomeMenu deleteHomeMenu){
         this.homeManager = homeManager;
         this.listHomeMenu = listHomeMenu;
+        this.deleteHomeMenu = deleteHomeMenu;
     }
     @EventHandler
     public  void ItemClick(InventoryClickEvent event){
@@ -40,6 +40,13 @@ public class ItemClickEvent implements Listener {
                     break;
                 case ARROW:
                     MainMenuHome.HomeGUI(player);
+                    break;
+                case LIME_DYE:
+                    deleteHomeMenu.DeleteHomeGUI(player);
+                    break;
+                case RED_DYE:
+                    listHomeMenu.ListHomeGUI(player);
+                    break;
                 default:
                     break;
 

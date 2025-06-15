@@ -11,3 +11,5 @@ commands:
     usage: /home
   menuhome:
     usage: /menuhome
+  delhome:
+    usage: /delhome

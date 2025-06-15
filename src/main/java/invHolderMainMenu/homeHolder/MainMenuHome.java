@@ -1,4 +1,4 @@
-package invHolderMainMenu;
+package invHolderMainMenu.homeHolder;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class MainMenuHome {
     public static void HomeGUI(Player player){
-        Inventory home = Bukkit.createInventory(new CustomMenuHolder() , 27, "Дома" );
+        Inventory home = Bukkit.createInventory(new HomeHolder() , 27, "Дома" );
 
         ItemStack elytra = new ItemStack(Material.ELYTRA);
         ItemStack apple = new ItemStack(Material.APPLE);

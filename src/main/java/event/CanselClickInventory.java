@@ -1,6 +1,6 @@
 package event;
 
-import invHolderMainMenu.CustomMenuHolder;
+import invHolderMainMenu.listHomeHolder.ListHomeHolder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,7 +16,7 @@ public class CanselClickInventory implements Listener {
         if(!(event.getWhoClicked() instanceof  Player)) return;
         Player player = (Player) event.getWhoClicked(); //Игрок
         Inventory inventory = event.getClickedInventory(); //Инвентарь
-        if(event.getInventory().getHolder() instanceof CustomMenuHolder) {
+        if(event.getInventory().getHolder() instanceof ListHomeHolder) {
                 event.setCancelled(true);
         }
         ItemStack item = event.getCurrentItem(); //Предмет

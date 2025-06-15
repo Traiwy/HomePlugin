@@ -1,19 +1,13 @@
 package event;
 
-import io.papermc.paper.event.player.AsyncChatCommandDecorateEvent;
-import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 import util.HomeManager;
-import util.SethomeManager;
 
 import java.util.*;
 
@@ -43,10 +37,7 @@ public class onPlayerChat implements Listener {
             awaitingHomeName.remove(uuid);
             readyToSetHome.remove(uuid);
         });
-
         event.setCancelled(true);
-
-
 
     }
 
