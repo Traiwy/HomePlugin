@@ -26,9 +26,9 @@ public class MainMenuHome {
         ItemMeta appleMeta = apple.getItemMeta();
         ItemMeta diamondMeta = diamond.getItemMeta();
 
-        elytraMeta.setDisplayName("§b▪▪▪▪§r §aСоздание точки дома §b▪▪▪▪");
-        appleMeta.setDisplayName("§b▪▪▪▪§r §aТелепортация к вашей точке дома §b▪▪▪▪");
-        diamondMeta.setDisplayName("§b▪▪▪▪§r §cУдаление точки дома §b▪▪▪▪");
+        elytraMeta.setDisplayName("§a✦ Создание точки дома ✦");
+        appleMeta.setDisplayName("§b✦ Список домов ✦");
+        diamondMeta.setDisplayName("§4✦ Настройки ✦");
 
 
         apple.setItemMeta(appleMeta);
@@ -51,7 +51,7 @@ public class MainMenuHome {
 
         new BukkitRunnable() {
             int tick = 0;
-            final int trailLength = 3;
+            final int trailLength = 11;
 
             @Override
             public void run() {

@@ -5,6 +5,7 @@ import event.*;
 import invHolderMainMenu.deleteHolder.DeleteHomeMenu;
 import invHolderMainMenu.homeHolder.MainMenuHome;
 import invHolderMainMenu.listHomeHolder.ListHomeMenu;
+import invHolderMainMenu.settingHolder.SettingsHomeMenu;
 import org.bukkit.plugin.java.JavaPlugin;
 import util.DeleteMapManager;
 import util.HomeManager;
@@ -16,6 +17,7 @@ public final class HomePlugin extends JavaPlugin {
     public DeleteHomeMenu deleteHomeMenu;
     public MainMenuHome mainMenuHome;
     public DeleteMapManager deleteMapManager;
+    public SettingsHomeMenu settingsHomeMenu;
     @Override
     public void onEnable() {
         this.homeManager = new HomeManager(this);
@@ -23,13 +25,14 @@ public final class HomePlugin extends JavaPlugin {
         this.deleteHomeMenu = new DeleteHomeMenu(homeManager);
         this.mainMenuHome = new MainMenuHome(this);
         this.deleteMapManager = new DeleteMapManager();
+        this.settingsHomeMenu = new SettingsHomeMenu();
         getCommand("sethome").setExecutor(new SethomeCommand(this, homeManager));
         getCommand("listhome").setExecutor(new ListHomeCommand(this, homeManager));
         getCommand("home").setExecutor(new HomeCommand(homeManager));
         getCommand("menuhome").setExecutor(new MenuHomeCommand(mainMenuHome));
         getCommand("delhome").setExecutor(new DeleteHomeCommand(homeManager));
         getServer().getPluginManager().registerEvents(new CanselClickInventory(), this);
-        getServer().getPluginManager().registerEvents(new ItemClickEvent(homeManager, listHomeMenu, deleteHomeMenu,mainMenuHome), this);
+        getServer().getPluginManager().registerEvents(new ItemClickEvent(homeManager, listHomeMenu, deleteHomeMenu,mainMenuHome, settingsHomeMenu), this);
         getServer().getPluginManager().registerEvents(new onPlayerChat(this, homeManager),this);
         getServer().getPluginManager().registerEvents(new ClickDeleteHomeEvent(deleteMapManager),this);
         getServer().getPluginManager().registerEvents(new ClickTeleportHome(homeManager), this);

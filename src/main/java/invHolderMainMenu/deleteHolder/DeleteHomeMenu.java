@@ -33,7 +33,7 @@ public class DeleteHomeMenu {
                 meta.setOwningPlayer(Bukkit.getOfflinePlayer("Notch "));
                 meta.setDisplayName(name);
                 List<String> lore = new ArrayList<>();
-                lore.add("Нажмите ШИФТ+ПКМ, чтобы удалить дом");
+                lore.add("§e✦ Нажмите §fSHIFT§7 + §fПКМ§7, чтобы §cудалить ваш дом");
                 meta.setLore(lore);
 
                 headPlayer.setItemMeta(meta);

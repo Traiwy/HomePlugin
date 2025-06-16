@@ -3,6 +3,8 @@ package event;
 import invHolderMainMenu.deleteHolder.DeleteHomeMenu;
 import invHolderMainMenu.listHomeHolder.ListHomeMenu;
 import invHolderMainMenu.homeHolder.MainMenuHome;
+import invHolderMainMenu.settingHolder.SettingsHomeHolder;
+import invHolderMainMenu.settingHolder.SettingsHomeMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,11 +18,13 @@ public class ItemClickEvent implements Listener {
     private final ListHomeMenu listHomeMenu;
     private final DeleteHomeMenu deleteHomeMenu;
     private final MainMenuHome mainMenuHome;
-    public ItemClickEvent (HomeManager homeManager, ListHomeMenu listHomeMenu, DeleteHomeMenu deleteHomeMenu, MainMenuHome mainMenuHome){
+    private final SettingsHomeMenu settingsHomeMenu;
+    public ItemClickEvent (HomeManager homeManager, ListHomeMenu listHomeMenu, DeleteHomeMenu deleteHomeMenu, MainMenuHome mainMenuHome, SettingsHomeMenu settingsHomeMenu){
         this.homeManager = homeManager;
         this.listHomeMenu = listHomeMenu;
         this.deleteHomeMenu = deleteHomeMenu;
         this.mainMenuHome = mainMenuHome;
+        this.settingsHomeMenu = settingsHomeMenu;
     }
     @EventHandler
     public  void ItemClick(InventoryClickEvent event){
@@ -38,7 +42,7 @@ public class ItemClickEvent implements Listener {
                     listHomeMenu.ListHomeGUI(player);
                     break;
                 case DIAMOND:
-                    player.sendMessage("Нужно сделать отдельное меню");
+                    settingsHomeMenu.SettingsGUI(player);
                     break;
                 case ARROW:
                     mainMenuHome.HomeGUI(player);
