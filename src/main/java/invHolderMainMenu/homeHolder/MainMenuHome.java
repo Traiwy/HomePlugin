@@ -8,37 +8,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import util.ConfigManager;
 
 
 public class MainMenuHome {
     private final JavaPlugin plugin;
-    public MainMenuHome(JavaPlugin plugin) {
+    private final ConfigManager configManager;
+    public MainMenuHome(JavaPlugin plugin,ConfigManager configManager) {
         this.plugin = plugin;
+        this.configManager = configManager;
     }
     public void HomeGUI(Player player){
         Inventory home = Bukkit.createInventory(new HomeHolder() , 27, "Дома" );
-
-        ItemStack elytra = new ItemStack(Material.ELYTRA);
-        ItemStack apple = new ItemStack(Material.APPLE);
-        ItemStack diamond = new ItemStack(Material.DIAMOND);
-
-        ItemMeta elytraMeta = elytra.getItemMeta();
-        ItemMeta appleMeta = apple.getItemMeta();
-        ItemMeta diamondMeta = diamond.getItemMeta();
-
-        elytraMeta.setDisplayName("§a✦ Создание точки дома ✦");
-        appleMeta.setDisplayName("§b✦ Список домов ✦");
-        diamondMeta.setDisplayName("§4✦ Настройки ✦");
-
-
-        apple.setItemMeta(appleMeta);
-        elytra.setItemMeta(elytraMeta);
-        diamond.setItemMeta(diamondMeta);
-
-        home.setItem(11, elytra);
+        var elytra = configManager.getMenuItem(player, "mainmenu","elytra");
+        var apple = configManager.getMenuItem(player, "mainmenu","apple");
+        var diamont = configManager.getMenuItem(player,"mainmenu","diamond");
+        home.setItem(11,elytra);
         home.setItem(13, apple);
-        home.setItem(15,diamond);
-
+        home.setItem(15, diamont);
 
         player.openInventory(home);
         animateFrame(player, home);

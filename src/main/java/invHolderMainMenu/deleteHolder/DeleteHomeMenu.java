@@ -6,16 +6,24 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import util.ConfigManager;
 import util.HomeManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 public class DeleteHomeMenu {
     private final HomeManager homeManager;
-    public DeleteHomeMenu(HomeManager homeManager){
+    private final JavaPlugin plugin;
+    private final ConfigManager configManager;
+    public DeleteHomeMenu(HomeManager homeManager, JavaPlugin plugin, ConfigManager configManager){
         this.homeManager = homeManager;
+        this.plugin = plugin;
+        this.configManager = configManager;
     }
     public Inventory DeleteHomeGUI(Player player){
         Inventory delete = Bukkit.createInventory(new DeleteMenuHolder(), 54, "Режим удаления");
@@ -43,18 +51,61 @@ public class DeleteHomeMenu {
                 slotIndex++;
             }
         }
-        ItemStack pinkPanel = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
-        int[] countPinkPanel = {0,1,2,3,4,5,6,7,8,9,18,27,36,46,47,48,50,51,52,53,17,26,35,44};
-        for(int i = 0; i <countPinkPanel.length; i++){
-            delete.setItem(countPinkPanel[i], pinkPanel);
+        ItemStack redPanel = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+        int[] countRedPanel = {0,1,2,3,4,5,6,7,8,9,18,27,36,46,47,48,50,51,52,53,17,26,35,44};
+        for(int i = 0; i <countRedPanel.length; i++){
+            delete.setItem(countRedPanel[i], redPanel);
         }
 
-        ItemStack redDye = new ItemStack(Material.RED_DYE);
-        ItemStack arrow = new ItemStack(Material.ARROW);
+        var redDye = configManager.getMenuItem(player,"deletemenu", "reddye");
+        var arrow =  configManager.getMenuItem(player, "deletemenu", "arrow");
 
         delete.setItem(45, arrow);
         delete.setItem(49, redDye);
         player.openInventory(delete);
+        animateFrame(player, delete);
         return delete;
     }
+    private void animateFrame(Player player, Inventory inv) {
+    List<Integer> borderSlots = Arrays.asList(
+        0, 1, 2, 3, 4, 5, 6, 7, 8,
+        17, 26, 35, 44,
+        53, 52, 51, 50, 48, 47, 46,
+        36, 27, 18, 9
+        // Исключены 45 и 49
+    );
+
+    ItemStack redGlass = createPane(Material.RED_STAINED_GLASS_PANE);
+    ItemStack blackGlass = createPane(Material.BLACK_STAINED_GLASS_PANE);
+
+    new BukkitRunnable() {
+        int tick = 0;
+
+        @Override
+        public void run() {
+            if (!player.getOpenInventory().getTitle().equals("Режим удаления")) {
+                cancel();
+                return;
+            }
+
+            for (int i = 0; i < borderSlots.size(); i++) {
+                int slot = borderSlots.get(i);
+                ItemStack item = ((i + tick) % 2 == 0) ? redGlass : blackGlass;
+                inv.setItem(slot, item);
+            }
+
+            tick = (tick + 1) % 2;
+        }
+    }.runTaskTimer(plugin, 0L, 10L); // 0.5 сек (10 тиков)
+}
+
+private ItemStack createPane(Material material) {
+    ItemStack pane = new ItemStack(material);
+    var meta = pane.getItemMeta();
+    if (meta != null) {
+        meta.setDisplayName(" ");
+        pane.setItemMeta(meta);
+    }
+    return pane;
+}
 }

@@ -6,16 +6,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import util.ConfigManager;
 import util.HomeManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 public class ListHomeMenu {
     private final HomeManager homeManager;
-    public ListHomeMenu(HomeManager homeManager){
+    private final ConfigManager configManager;
+    public ListHomeMenu(HomeManager homeManager,ConfigManager configManager){
         this.homeManager = homeManager;
+        this.configManager = configManager;
     }
     public Inventory ListHomeGUI(Player player){
         Inventory list = Bukkit.createInventory(new ListHomeHolder(), 54, "Мои дома");
@@ -52,12 +56,13 @@ public class ListHomeMenu {
             list.setItem(countPinkPanel[i], pinkPanel);
         }
 
-        ItemStack limeDye = new ItemStack(Material.LIME_DYE);
-        ItemStack arrow = new ItemStack(Material.ARROW);
+        var arrow = configManager.getMenuItem(player,"listmenu", "arrow");
+        var limeDye = configManager.getMenuItem(player,"listmenu", "limedye");
 
         list.setItem(45, arrow);
         list.setItem(49, limeDye);
         player.openInventory(list);
         return list;
     }
+
 }

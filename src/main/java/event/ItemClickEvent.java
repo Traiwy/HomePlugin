@@ -1,5 +1,6 @@
 package event;
 
+import invHolderMainMenu.delayHolder.DelayMenu;
 import invHolderMainMenu.deleteHolder.DeleteHomeMenu;
 import invHolderMainMenu.listHomeHolder.ListHomeMenu;
 import invHolderMainMenu.homeHolder.MainMenuHome;
@@ -19,12 +20,19 @@ public class ItemClickEvent implements Listener {
     private final DeleteHomeMenu deleteHomeMenu;
     private final MainMenuHome mainMenuHome;
     private final SettingsHomeMenu settingsHomeMenu;
-    public ItemClickEvent (HomeManager homeManager, ListHomeMenu listHomeMenu, DeleteHomeMenu deleteHomeMenu, MainMenuHome mainMenuHome, SettingsHomeMenu settingsHomeMenu){
+    private final DelayMenu delayMenu;
+    public ItemClickEvent (HomeManager homeManager,
+                           ListHomeMenu listHomeMenu,
+                           DeleteHomeMenu deleteHomeMenu,
+                           MainMenuHome mainMenuHome,
+                           SettingsHomeMenu settingsHomeMenu,
+                           DelayMenu delayMenu){
         this.homeManager = homeManager;
         this.listHomeMenu = listHomeMenu;
         this.deleteHomeMenu = deleteHomeMenu;
         this.mainMenuHome = mainMenuHome;
         this.settingsHomeMenu = settingsHomeMenu;
+        this.delayMenu = delayMenu;
     }
     @EventHandler
     public  void ItemClick(InventoryClickEvent event){
@@ -52,6 +60,9 @@ public class ItemClickEvent implements Listener {
                     break;
                 case RED_DYE:
                     listHomeMenu.ListHomeGUI(player);
+                    break;
+                case CLOCK:
+                    delayMenu.DelayGUI(player);
                     break;
                 default:
                     break;
