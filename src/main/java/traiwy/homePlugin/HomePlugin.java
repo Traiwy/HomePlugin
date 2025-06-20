@@ -52,6 +52,7 @@ public final class HomePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ClickDeleteHomeEvent(deleteMapManager),this);
         getServer().getPluginManager().registerEvents(new ClickTeleportHome(homeManager), this);
         getServer().getPluginManager().registerEvents(new CloseInventoryEvent(deleteMapManager), this);
+        getServer().getPluginManager().registerEvents(new ClickItemSettingsEvent(), this);
 
     }
 
