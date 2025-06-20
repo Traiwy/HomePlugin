@@ -25,6 +25,10 @@ menu:
          - "§c§l┃§7 Нажмите, чтобы войти в режим "
          - "§c§l┃§7 удаления. В этом режиме вы сможете "
          - "§c§l┃§7 удалять свои дома простым кликом по   §c§l┃§7 ним."
+    nether_star:
+      item: NETHER_STAR
+      name: "избранные дома"
+      lore:
   settingsmenu:
     clock:
       item: CLOCK

@@ -33,9 +33,6 @@ public class DeleteHomeMenu {
         for(String name : homePlayer){
             if(slotIndex >= countPlayerHead.length) break;
             if(homeManager.getHome(player, name) != null){
-                double x = homeManager.getHome(player, name).getBlockX();
-                double y = homeManager.getHome(player, name).getBlockY();
-                double z = homeManager.getHome(player, name).getBlockZ();
                 ItemStack headPlayer = new ItemStack(Material.PLAYER_HEAD);
                 SkullMeta meta = (SkullMeta) headPlayer.getItemMeta();
                 meta.setOwningPlayer(Bukkit.getOfflinePlayer("Notch "));

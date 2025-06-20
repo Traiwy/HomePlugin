@@ -51,14 +51,16 @@ public class ListHomeMenu {
             }
         }
         ItemStack pinkPanel = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
-        int[] countPinkPanel = {0,1,2,3,4,5,6,7,8,9,18,27,36,46,47,48,50,51,52,53,17,26,35,44};
+        int[] countPinkPanel = {0,1,2,3,5,6,7,8,9,18,27,36,46,47,48,50,51,52,53,17,26,35,44};
         for(int i = 0; i <countPinkPanel.length; i++){
             list.setItem(countPinkPanel[i], pinkPanel);
         }
 
         var arrow = configManager.getMenuItem(player,"listmenu", "arrow");
         var limeDye = configManager.getMenuItem(player,"listmenu", "limedye");
+        var netherStart = configManager.getMenuItem(player,"listmenu", "nether_star");
 
+        list.setItem(4,netherStart);
         list.setItem(45, arrow);
         list.setItem(49, limeDye);
         player.openInventory(list);

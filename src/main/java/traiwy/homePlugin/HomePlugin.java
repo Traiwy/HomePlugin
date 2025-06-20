@@ -3,8 +3,12 @@ package traiwy.homePlugin;
 import command.*;
 import event.*;
 import invHolderMainMenu.delayHolder.DelayMenu;
+import invHolderMainMenu.deleteHolder.DeleteHomeListener;
 import invHolderMainMenu.deleteHolder.DeleteHomeMenu;
+import invHolderMainMenu.favoritesHolder.FavoritesHomeMenuBulder;
 import invHolderMainMenu.homeHolder.MainMenuHome;
+import invHolderMainMenu.homeHolder.MainMenuHomeListener;
+import invHolderMainMenu.listHomeHolder.ListHomeListener;
 import invHolderMainMenu.listHomeHolder.ListHomeMenu;
 import invHolderMainMenu.settingHolder.SettingsHomeMenu;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,13 +26,14 @@ public final class HomePlugin extends JavaPlugin {
     public SettingsHomeMenu settingsHomeMenu;
     public DelayMenu delayMenu;
     public ConfigManager configManager;
+    public FavoritesHomeMenuBulder favoritesHomeMenuBulder;
     @Override
     public void onEnable() {
 
         this.configManager = new ConfigManager(this);
          configManager.forceReplaceConfig();
 
-
+         this.favoritesHomeMenuBulder = new FavoritesHomeMenuBulder(homeManager);
         this.homeManager = new HomeManager(this);
         this.listHomeMenu = new ListHomeMenu(homeManager,configManager);
         this.deleteHomeMenu = new DeleteHomeMenu(homeManager, this,configManager);
@@ -42,15 +47,10 @@ public final class HomePlugin extends JavaPlugin {
         getCommand("menuhome").setExecutor(new MenuHomeCommand(mainMenuHome));
         getCommand("delhome").setExecutor(new DeleteHomeCommand(homeManager));
         getServer().getPluginManager().registerEvents(new CanselClickInventory(), this);
-        getServer().getPluginManager().registerEvents(new ItemClickEvent(homeManager,
-                listHomeMenu,
-                deleteHomeMenu,
-                mainMenuHome,
-                settingsHomeMenu,
-                delayMenu), this);
+       getServer().getPluginManager().registerEvents(new ListHomeListener(deleteHomeMenu, favoritesHomeMenuBulder, homeManager,mainMenuHome), this);
+       getServer().getPluginManager().registerEvents(new MainMenuHomeListener(listHomeMenu,settingsHomeMenu), this);
         getServer().getPluginManager().registerEvents(new onPlayerChat(this, homeManager),this);
-        getServer().getPluginManager().registerEvents(new ClickDeleteHomeEvent(deleteMapManager),this);
-        getServer().getPluginManager().registerEvents(new ClickTeleportHome(homeManager), this);
+        getServer().getPluginManager().registerEvents(new DeleteHomeListener(deleteMapManager),this);
         getServer().getPluginManager().registerEvents(new CloseInventoryEvent(deleteMapManager), this);
         getServer().getPluginManager().registerEvents(new ClickItemSettingsEvent(), this);
 
