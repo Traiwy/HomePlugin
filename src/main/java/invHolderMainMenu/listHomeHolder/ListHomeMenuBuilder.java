@@ -10,14 +10,13 @@ import util.ConfigManager;
 import util.HomeManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-public class ListHomeMenu {
+public class ListHomeMenuBuilder {
     private final HomeManager homeManager;
     private final ConfigManager configManager;
-    public ListHomeMenu(HomeManager homeManager,ConfigManager configManager){
+    public ListHomeMenuBuilder(HomeManager homeManager, ConfigManager configManager){
         this.homeManager = homeManager;
         this.configManager = configManager;
     }

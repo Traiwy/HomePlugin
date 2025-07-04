@@ -11,10 +11,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import util.ConfigManager;
 
 
-public class MainMenuHome {
+public class MainMenuHomeBuilder {
     private final JavaPlugin plugin;
     private final ConfigManager configManager;
-    public MainMenuHome(JavaPlugin plugin,ConfigManager configManager) {
+    public MainMenuHomeBuilder(JavaPlugin plugin, ConfigManager configManager) {
         this.plugin = plugin;
         this.configManager = configManager;
     }

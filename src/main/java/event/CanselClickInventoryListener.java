@@ -7,17 +7,14 @@ import invHolderMainMenu.favoritesHolder.choiseFovoritesHoolder.ChoiseFavoirites
 import invHolderMainMenu.homeHolder.HomeHolder;
 import invHolderMainMenu.listHomeHolder.ListHomeHolder;
 import invHolderMainMenu.settingHolder.SettingsHomeHolder;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 
 
-public class CanselClickInventory implements Listener {
+public class CanselClickInventoryListener implements Listener {
     @EventHandler
     public void  ClickInventoryEvent(InventoryClickEvent event) {
        if (!(event.getWhoClicked() instanceof Player) || event.getClickedInventory() == null) return;

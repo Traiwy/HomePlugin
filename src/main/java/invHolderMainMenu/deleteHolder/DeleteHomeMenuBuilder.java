@@ -16,11 +16,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-public class DeleteHomeMenu {
+public class DeleteHomeMenuBuilder {
     private final HomeManager homeManager;
     private final JavaPlugin plugin;
     private final ConfigManager configManager;
-    public DeleteHomeMenu(HomeManager homeManager, JavaPlugin plugin, ConfigManager configManager){
+    public DeleteHomeMenuBuilder(HomeManager homeManager, JavaPlugin plugin, ConfigManager configManager){
         this.homeManager = homeManager;
         this.plugin = plugin;
         this.configManager = configManager;
@@ -49,15 +49,14 @@ public class DeleteHomeMenu {
             }
         }
         ItemStack redPanel = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        int[] countRedPanel = {0,1,2,3,4,5,6,7,8,9,18,27,36,46,47,48,50,51,52,53,17,26,35,44};
+        int[] countRedPanel = {0,1,2,3,4,5,6,7,8,9,18,27,36,46,47,48,50,51,52,53,17,26,35,44,45};
         for(int i = 0; i <countRedPanel.length; i++){
             delete.setItem(countRedPanel[i], redPanel);
         }
 
         var redDye = configManager.getMenuItem(player,"deletemenu", "reddye");
-        var arrow =  configManager.getMenuItem(player, "deletemenu", "arrow");
 
-        delete.setItem(45, arrow);
+
         delete.setItem(49, redDye);
         player.openInventory(delete);
         animateFrame(player, delete);
