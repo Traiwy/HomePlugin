@@ -14,12 +14,14 @@ import java.util.List;
 
 public class ConfigManager {
     private final JavaPlugin plugin;
-    public ConfigManager(JavaPlugin plugin){
+
+    public ConfigManager(JavaPlugin plugin) {
         this.plugin = plugin;
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
     }
-   public ItemStack getMenuItem(Player player, String menuType, String key) {
+
+    public ItemStack getMenuItem(Player player, String menuType, String key) {
         ConfigurationSection section = plugin.getConfig().getConfigurationSection("menu." + menuType + "." + key);
         if (section == null) {
             player.sendMessage("§cЭлемент с ключом '" + key + "' не найден в '" + menuType + "'");
@@ -58,11 +60,12 @@ public class ConfigManager {
         }
         return item;
     }
+
     public void forceReplaceConfig() {
-    File configFile = new File(plugin.getDataFolder(), "config.yml");
-    if (configFile.exists()) {
-        configFile.delete();
+        File configFile = new File(plugin.getDataFolder(), "config.yml");
+        if (configFile.exists()) {
+            configFile.delete();
+        }
+        plugin.saveDefaultConfig();
     }
-    plugin.saveDefaultConfig();
-}
 }

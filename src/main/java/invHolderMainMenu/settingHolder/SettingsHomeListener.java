@@ -120,7 +120,7 @@ public class SettingsHomeListener implements Listener {
 
         if (ConfirmationManager.requiresConfirmation(playerId)) {
             ConfirmationManager.cancelConfirmation(playerId);
-            homeManager.deleteAllHome(player);
+            homeManager.deleteAllHomes(player);
             resetRedstoneBlock(player, inventory, slot);
             player.sendMessage(Component.text("Все дома успешно удалены!")
                     .color(TextColor.color(0x00FF00)));
