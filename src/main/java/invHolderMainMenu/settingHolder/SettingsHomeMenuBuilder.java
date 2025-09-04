@@ -17,13 +17,12 @@ public class SettingsHomeMenuBuilder {
 
         var clock = configManager.getMenuItem(player, "settingsmenu","clock");
         var player_head = configManager.getMenuItem(player, "settingsmenu","player_head");
-        var redstone_block = configManager.getMenuItem(player, "settingsmenu","redstone_block");
         var arrow = configManager.getMenuItem(player, "settingsmenu","arrow");
 
         inv.setItem(10,clock);
         inv.setItem(12, SettingsHomeListener.getTripwireHookState(player));
         inv.setItem(14, player_head);
-        inv.setItem(16, redstone_block);
+        inv.setItem(16, SettingsHomeListener.getRedstoneBlock(player));
         inv .setItem(18, arrow);
 
 
@@ -34,8 +33,6 @@ public class SettingsHomeMenuBuilder {
         }
 
         player.openInventory(inv);
-
-
 
     }
 }

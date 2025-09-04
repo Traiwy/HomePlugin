@@ -58,6 +58,7 @@ public class ListHomeListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         Inventory clickInv = event.getClickedInventory();
         ItemStack item = event.getCurrentItem();
+        if(clickInv.getHolder() == null) return;
         if(clickInv.getHolder() instanceof ListHomeHolder){
             if(item != null && item.getType() == Material.PLAYER_HEAD){
                 ItemMeta meta = item.getItemMeta();
@@ -71,7 +72,7 @@ public class ListHomeListener implements Listener {
                     player.sendMessage("Дом не найден");
                 }
                 player.teleport(location);
-                player.sendMessage("Вы телепортированны в дом" + homeName);
+                player.sendMessage("Вы телепортированы в дом" + homeName);
                 player.closeInventory();
             }
         }

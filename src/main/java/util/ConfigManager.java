@@ -17,6 +17,7 @@ public class ConfigManager {
     public ConfigManager(JavaPlugin plugin){
         this.plugin = plugin;
         plugin.saveDefaultConfig();
+        plugin.reloadConfig();
     }
    public ItemStack getMenuItem(Player player, String menuType, String key) {
         ConfigurationSection section = plugin.getConfig().getConfigurationSection("menu." + menuType + "." + key);

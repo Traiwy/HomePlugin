@@ -9,7 +9,3 @@ commands:
     usage: /listhome
   home:
     usage: /home
-  menuhome:
-    usage: /menuhome
-  delhome:
-    usage: /delhome

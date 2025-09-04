@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class HomeManager {
@@ -63,14 +64,34 @@ public class HomeManager {
         if (!config.contains(path)) return new HashSet<>();
         return config.getConfigurationSection(path).getKeys(false);
     }
-
     public void deleteHome(Player player, String homeName) {
         String path = "homes." + player.getName() + "." + homeName.toLowerCase();
         config.set(path, null);
         save();
     }
+    public boolean deleteAllHome(Player player) {
+        String path = "homes." + player.getName();
+        System.out.println("Проверяем путь: " + path); // Отладка
 
+        if (!plugin.getConfig().isConfigurationSection(path)) {
+            System.out.println("Секция " + path + " не найдена."); // Отладка
+            return false;
+        }
 
+        System.out.println("Удаляем секцию: " + path); // Отладка
+        plugin.getConfig().set(path, null);
+        plugin.saveConfig();
+        System.out.println("Сохранение выполнено."); // Отладка
+
+        // Проверка, удалено ли
+        if (!plugin.getConfig().isConfigurationSection(path)) {
+            System.out.println("Секция " + path + " успешно удалена."); // Отладка
+        } else {
+            System.out.println("Секция " + path + " НЕ удалена."); // Отладка
+        }
+
+        return true;
+    }
     public void save(){
         try {
             config.save(file);

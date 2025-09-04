@@ -47,7 +47,7 @@ public class DeleteHomeListener implements Listener {
                 if (item.getType() == Material.PLAYER_HEAD) {
                     String homeName = getHomeNameFromItem(item);
                     if (homeName != null && !homeName.isEmpty()) {
-                        player.performCommand("delhome " + homeName);
+                        player.performCommand("home delete " + homeName);
                         inventory.remove(item); // Удаляем предмет из инвентаря
                         player.updateInventory();
                         player.sendMessage("§aДом '" + homeName + "' успешно удален!");

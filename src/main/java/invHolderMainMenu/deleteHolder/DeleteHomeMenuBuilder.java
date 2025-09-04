@@ -38,7 +38,7 @@ public class DeleteHomeMenuBuilder {
                 meta.setOwningPlayer(Bukkit.getOfflinePlayer("Notch "));
                 meta.setDisplayName(name);
                 List<String> lore = new ArrayList<>();
-                lore.add("§e✦ Нажмите §fSHIFT§7 + §fПКМ§7, чтобы §cудалить ваш дом");
+                lore.add("§e✦ Нажмите §fCTRL§7 + §fSHIFT§7 + §fПКМ§7, чтобы §cудалить ваш дом");
                 meta.setLore(lore);
 
                 headPlayer.setItemMeta(meta);
@@ -53,11 +53,7 @@ public class DeleteHomeMenuBuilder {
         for(int i = 0; i <countRedPanel.length; i++){
             delete.setItem(countRedPanel[i], redPanel);
         }
-
         var redDye = configManager.getMenuItem(player,"deletemenu", "reddye");
-
-
-        delete.setItem(49, redDye);
         player.openInventory(delete);
         animateFrame(player, delete);
         return delete;
