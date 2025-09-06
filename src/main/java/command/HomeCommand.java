@@ -29,6 +29,8 @@ public class HomeCommand implements CommandExecutor, TabExecutor {
     private final ListHomeMenuBuilder listHomeMenuBuilder;
     private final ShareHomeMenuBuilder shareHomeMenuBuilder;
 
+    private static String sharedPlayerName;
+
     public HomeCommand(JavaPlugin plugin, HomeManager homeManager, MainMenuHomeBuilder mainMenuHomeBuilder, SettingsHomeMenuBuilder settingsHomeMenuBuilder, ListHomeMenuBuilder listHomeMenuBuilder, ShareHomeMenuBuilder shareHomeMenuBuilder) {
         this.plugin = plugin;
         this.homeManager = homeManager;
@@ -73,21 +75,22 @@ public class HomeCommand implements CommandExecutor, TabExecutor {
                 settingsHomeMenuBuilder.getSettingsGUI(player);
                 break;
             case "set":
-               setHomeCommand(player);
+                setHomeCommand(player);
                 break;
             case "share":
                 String namePlayer = args[1].toLowerCase();
+                sharedPlayerName = namePlayer;
                 Player sharePlayer = Bukkit.getPlayer(args[1]);
-                if(args.length < 2){
+                if (args.length < 2) {
                     player.sendMessage("Введите корректную команду: /home share <ник игрока>");
                 }
-                if(sharePlayer == null){
+                if (sharePlayer == null) {
                     player.sendMessage("Такого игрока нет на сервере");
                     return true;
                 }
                 shareHomeMenuBuilder.getShareHomeMenu(player);
 
-            break;
+                break;
         }
         return true;
     }
@@ -132,5 +135,9 @@ public class HomeCommand implements CommandExecutor, TabExecutor {
         }, 0L, 20L);
         PlayerChatListener.awaitingHomeName.put(uuid, task.toString());
         return true;
+    }
+
+    public static String getSharedPlayerName() {
+        return sharedPlayerName;
     }
 }

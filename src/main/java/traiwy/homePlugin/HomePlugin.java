@@ -31,6 +31,7 @@ public final class HomePlugin extends JavaPlugin {
     public ConfirmationManagerDeleteHome confirmationManagerDeleteHome;
     public ShareHomeMenuBuilder shareHomeMenuBuilder;
     public ConfirmationManagerShareHome confirmationManagerShareHome;
+    public ConfirmationManagerShareMessagePlayer confirmationManagerShareMessagePlayer;
 
     @Override
     public void onEnable() {
@@ -48,6 +49,7 @@ public final class HomePlugin extends JavaPlugin {
         this.confirmationManagerDeleteHome = new ConfirmationManagerDeleteHome();
         this.shareHomeMenuBuilder = new ShareHomeMenuBuilder(homeManager, configManager);
         this.confirmationManagerShareHome = new ConfirmationManagerShareHome();
+        this.confirmationManagerShareMessagePlayer = new ConfirmationManagerShareMessagePlayer();
         //регистрация команд
         getCommand("home").setExecutor(new HomeCommand(this, homeManager, mainMenuHomeBuilder, settingsHomeMenuBuilder, listHomeMenuBuilder, shareHomeMenuBuilder));
         //регистрация ивентов
@@ -58,7 +60,7 @@ public final class HomePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DeleteHomeListener(deleteMapManager, listHomeMenuBuilder), this);
         getServer().getPluginManager().registerEvents(new CloseInventoryListener(deleteMapManager), this);
         getServer().getPluginManager().registerEvents(new SettingsHomeListener(mainMenuHomeBuilder, confirmationManagerDeleteHome, this, homeManager, shareHomeMenuBuilder), this);
-        getServer().getPluginManager().registerEvents(new ShareHomeMenuListener(settingsHomeMenuBuilder, confirmationManagerShareHome), this);
+        getServer().getPluginManager().registerEvents(new ShareHomeMenuListener(settingsHomeMenuBuilder, confirmationManagerShareHome, confirmationManagerShareMessagePlayer), this);
 
     }
 
