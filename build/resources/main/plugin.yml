@@ -6,3 +6,7 @@ commands:
   home:
     usage: /home <выберите действие>
     description: Use the command /home <select actions> to perform a specific action. /home menu opens the main menu.
+  homeaccept:
+    usage: /homeaccept
+  homecancel:
+    usage: /homecancel

@@ -28,7 +28,7 @@ public class MainMenuHomeBuilder {
         home.setItem(15, diamont);
 
         player.openInventory(home);
-        animateFrame(player, home);
+       // animateFrame(player, home);
     }
     private void animateFrame(Player player, Inventory inv) {
         int[] frameSlots = {

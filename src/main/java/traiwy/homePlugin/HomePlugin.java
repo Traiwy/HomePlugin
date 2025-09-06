@@ -52,6 +52,7 @@ public final class HomePlugin extends JavaPlugin {
         this.confirmationManagerShareMessagePlayer = new ConfirmationManagerShareMessagePlayer();
         //регистрация команд
         getCommand("home").setExecutor(new HomeCommand(this, homeManager, mainMenuHomeBuilder, settingsHomeMenuBuilder, listHomeMenuBuilder, shareHomeMenuBuilder));
+        getCommand("homeaccept").setExecutor(new HomeAcceptCommand(homeManager));
         //регистрация ивентов
         getServer().getPluginManager().registerEvents(new CanselClickInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new ListHomeListener(deleteHomeMenuBuilder, favoritesHomeMenuBuilder, homeManager, mainMenuHomeBuilder), this);

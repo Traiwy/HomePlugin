@@ -52,28 +52,55 @@ public class ShareHomeMenuListener implements Listener {
                     break;
                 case DARK_OAK_DOOR:
                     String displayName = getDisplayNameAsString(item);
-                    player.sendMessage("Выбрано: " + displayName);
                     handleDarkDoor(player, inventory, event.getSlot(), displayName);
                     break;
                 case BONE_MEAL:
                     String nameRecipient = HomeCommand.getSharedPlayerName();
-                    Player recipient = Bukkit.getPlayer(nameRecipient);
-                    UUID playerID = player.getUniqueId();
 
-                    String confirmedHome = confirmationManagerShareHome.getConfirmedHomeName(playerID);
-                    if (confirmedHome != null) {
-                        confirmationManagerShareMessagePlayer.startSelection(
-                                playerID,
-                                player.getName(),
-                                confirmedHome
-                        );
-                        recipient.sendMessage("Принять запрос - /homеaccept, отказаться - /homecancel. У вас есть 60 секунд");
-                        player.sendMessage("Вы отправили запрос. Ожидайте, пока игрок примет его");
+                    if (nameRecipient == null || nameRecipient.isEmpty()) {
+                        player.sendMessage("§cСначала выберите игрока!");
                         player.closeInventory();
-
-                    } else {
-                        player.sendMessage("Сначала выберите дом для передачи!");
+                        return;
                     }
+
+                    Player recipient = Bukkit.getPlayer(nameRecipient);
+                    if (recipient == null) {
+                        player.sendMessage("§cИгрок " + nameRecipient + " не в сети!");
+                        player.closeInventory();
+                        return;
+                    }
+
+                    UUID playerID = player.getUniqueId();
+                    String confirmedHome = confirmationManagerShareHome.getConfirmedHomeName(playerID);
+
+                    if (confirmedHome == null) {
+                        player.sendMessage("§cСначала выберите дом для передачи!");
+                        player.closeInventory();
+                        return;
+                    }
+
+                    if (confirmationManagerShareMessagePlayer.hasActiveRequest(playerID)) {
+                        player.sendMessage("§cУ вас уже есть активный запрос. Ожидайте 60 секунд");
+                        player.closeInventory();
+                        return;
+                    }
+                    boolean success = confirmationManagerShareMessagePlayer.startSelection(
+                            playerID,
+                            nameRecipient,
+                            confirmedHome
+                    );
+
+                    if (success) {
+                        player.sendMessage("§aЗапрос на доступ к дому '" + confirmedHome + "' отправлен игроку " + nameRecipient);
+                        recipient.sendMessage("§eИгрок " + player.getName() + " хочет предоставить вам доступ к дому '" + confirmedHome + "'");
+                        recipient.sendMessage("§eПринять запрос - /homeaccept, отказаться - /homecancel");
+                        recipient.sendMessage("§eУ вас есть 60 секунд на ответ");
+                        player.closeInventory();
+                    } else {
+                        player.sendMessage("§cНе удалось отправить запрос. Попробуйте позже.");
+                        player.closeInventory();
+                    }
+                    break;
             }
         }
     }
@@ -87,7 +114,6 @@ public class ShareHomeMenuListener implements Listener {
             String confirmedHome = confirmationManagerShareHome.getConfirmedHomeName(targetPlayer);
             if (confirmedHome != null && confirmedHome.equals(displayName)) {
                 confirmationManagerShareHome.confirm(targetPlayer);
-                player.sendMessage("Дом '" + displayName + "' выбран для общего доступа!");
                 resetDarkDoor(player, inventory, slot);
                 // Реализация отправки запроса
             } else {
@@ -98,7 +124,6 @@ public class ShareHomeMenuListener implements Listener {
         } else {
             confirmationManagerShareHome.startConfirmation(targetPlayer, displayName);
             setConfirmationMode(player, inventory, slot, displayName);
-            player.sendMessage("Нажмите еще раз для подтверждения выбора дома '" + displayName + "'");
         }
     }
 

@@ -40,16 +40,33 @@ public class HomeManager {
         config = YamlConfiguration.loadConfiguration(file);
     }
 
-    public void SetHome(Player player, String nameHome, Location loc) {
-        String path = "homes." + player.getName() + "." + nameHome.toLowerCase();
+    public void setHome(Player owner, String nameHome, Location loc) {
+        String path = "homes." + owner.getName() + "." + nameHome.toLowerCase();
 
 
         config.set(path + ".world", loc.getWorld().getName());
         config.set(path + ".x", loc.getX());
         config.set(path + ".y", loc.getY());
         config.set(path + ".z", loc.getZ());
+        config.set(path + ".owner", owner.getName());
         save();
     }
+    public boolean shareHome(Player owner, String nameHome, Location location){
+        String path = "homes. " + owner.getName() + "." + nameHome.toLowerCase();
+            if (!config.contains(path)) {
+            return false;
+        }
+
+        config.set(path + ".world", location.getWorld().getName());
+        config.set(path + ".x", location.getX());
+        config.set(path + ".y", location.getX());
+        config.set(path + ".z", location.getZ());
+        config.set(path + ".owner", owner.getName());
+        String sharedPath = "homes." + owner.getName() + "." + nameHome + ".sharedWith." + owner.getName();
+        config.set(sharedPath, true);
+        return true;
+    }
+
 
     public Location getHome(Player player, String nameHome) {
         String path = "homes." + player.getName() + "." + nameHome.toLowerCase();
