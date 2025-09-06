@@ -60,8 +60,8 @@ public class ListHomeMenuBuilder {
         var netherStart = configManager.getMenuItem(player,"listmenu", "nether_star");
 
         list.setItem(4,netherStart);
-        list.setItem(45, arrow);
         list.setItem(49, limeDye);
+         list.setItem(45, arrow);
         player.openInventory(list);
         return list;
     }

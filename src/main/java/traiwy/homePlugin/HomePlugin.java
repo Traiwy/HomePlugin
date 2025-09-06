@@ -12,11 +12,10 @@ import invHolderMainMenu.listHomeHolder.ListHomeListener;
 import invHolderMainMenu.listHomeHolder.ListHomeMenuBuilder;
 import invHolderMainMenu.settingHolder.SettingsHomeListener;
 import invHolderMainMenu.settingHolder.SettingsHomeMenuBuilder;
+import invHolderMainMenu.shareHolder.ShareHomeMenuBuilder;
+import invHolderMainMenu.shareHolder.ShareHomeMenuListener;
 import org.bukkit.plugin.java.JavaPlugin;
-import util.ConfigManager;
-import util.ConfirmationManager;
-import util.DeleteMapManager;
-import util.HomeManager;
+import util.*;
 
 public final class HomePlugin extends JavaPlugin {
 
@@ -29,34 +28,37 @@ public final class HomePlugin extends JavaPlugin {
     public DelayMenuBuilder delayMenu;
     public ConfigManager configManager;
     public FavoritesHomeMenuBuilder favoritesHomeMenuBuilder;
-    public ConfirmationManager confirmationManager;
+    public ConfirmationManagerDeleteHome confirmationManagerDeleteHome;
+    public ShareHomeMenuBuilder shareHomeMenuBuilder;
+    public ConfirmationManagerShareHome confirmationManagerShareHome;
 
     @Override
     public void onEnable() {
 
         this.configManager = new ConfigManager(this);
-         configManager.forceReplaceConfig();
+        configManager.forceReplaceConfig();
         this.homeManager = new HomeManager(this);
-        this.listHomeMenuBuilder = new ListHomeMenuBuilder(homeManager,configManager);
-        this.deleteHomeMenuBuilder = new DeleteHomeMenuBuilder(homeManager, this,configManager);
-        this.mainMenuHomeBuilder = new MainMenuHomeBuilder(this,configManager);
+        this.listHomeMenuBuilder = new ListHomeMenuBuilder(homeManager, configManager);
+        this.deleteHomeMenuBuilder = new DeleteHomeMenuBuilder(homeManager, this, configManager);
+        this.mainMenuHomeBuilder = new MainMenuHomeBuilder(this, configManager);
         this.deleteMapManager = new DeleteMapManager();
         this.settingsHomeMenuBuilder = new SettingsHomeMenuBuilder(configManager);
-         this.favoritesHomeMenuBuilder = new FavoritesHomeMenuBuilder(homeManager);
+        this.favoritesHomeMenuBuilder = new FavoritesHomeMenuBuilder(homeManager);
         this.delayMenu = new DelayMenuBuilder();
-        this.confirmationManager = new ConfirmationManager();
+        this.confirmationManagerDeleteHome = new ConfirmationManagerDeleteHome();
+        this.shareHomeMenuBuilder = new ShareHomeMenuBuilder(homeManager, configManager);
+        this.confirmationManagerShareHome = new ConfirmationManagerShareHome();
         //регистрация команд
-        getCommand("sethome").setExecutor(new SethomeCommand(this, homeManager));
-        getCommand("listhome").setExecutor(new ListHomeCommand(this, homeManager));
-        getCommand("home").setExecutor(new HomeCommand(homeManager, mainMenuHomeBuilder, settingsHomeMenuBuilder, listHomeMenuBuilder));
+        getCommand("home").setExecutor(new HomeCommand(this, homeManager, mainMenuHomeBuilder, settingsHomeMenuBuilder, listHomeMenuBuilder, shareHomeMenuBuilder));
         //регистрация ивентов
         getServer().getPluginManager().registerEvents(new CanselClickInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new ListHomeListener(deleteHomeMenuBuilder, favoritesHomeMenuBuilder, homeManager, mainMenuHomeBuilder), this);
         getServer().getPluginManager().registerEvents(new MainMenuHomeListener(listHomeMenuBuilder, settingsHomeMenuBuilder), this);
-        getServer().getPluginManager().registerEvents(new PlayerChatListener(this, homeManager),this);
-        getServer().getPluginManager().registerEvents(new DeleteHomeListener(deleteMapManager, listHomeMenuBuilder),this);
+        getServer().getPluginManager().registerEvents(new PlayerChatListener(this, homeManager), this);
+        getServer().getPluginManager().registerEvents(new DeleteHomeListener(deleteMapManager, listHomeMenuBuilder), this);
         getServer().getPluginManager().registerEvents(new CloseInventoryListener(deleteMapManager), this);
-        getServer().getPluginManager().registerEvents(new SettingsHomeListener(mainMenuHomeBuilder, confirmationManager, this, homeManager), this);
+        getServer().getPluginManager().registerEvents(new SettingsHomeListener(mainMenuHomeBuilder, confirmationManagerDeleteHome, this, homeManager, shareHomeMenuBuilder), this);
+        getServer().getPluginManager().registerEvents(new ShareHomeMenuListener(settingsHomeMenuBuilder, confirmationManagerShareHome), this);
 
     }
 

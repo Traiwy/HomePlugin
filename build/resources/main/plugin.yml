@@ -3,9 +3,6 @@ version: '1.0-SNAPSHOT'
 main: traiwy.homePlugin.HomePlugin
 api-version: '1.20'
 commands:
-  sethome:
-    usage: /sethome
-  listhome:
-    usage: /listhome
   home:
-    usage: /home
+    usage: /home <выберите действие>
+    description: Use the command /home <select actions> to perform a specific action. /home menu opens the main menu.

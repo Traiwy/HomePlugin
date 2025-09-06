@@ -22,33 +22,28 @@ public class DeleteHomeListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        // Проверка, что клик сделал игрок
         if (!(event.getWhoClicked() instanceof Player)) return;
 
         Player player = (Player) event.getWhoClicked();
         Inventory inventory = event.getClickedInventory();
         ItemStack item = event.getCurrentItem();
-
-        // Проверка на null для инвентаря и предмета
         if (inventory == null || item == null || item.getType() == Material.AIR) return;
 
-        // Обработка клика по LIME_DYE
+
         if (item.getType() == Material.LIME_DYE) {
             deleteMapManager.addAwaitingClickDeleteHome(player);
             return;
         }
 
-        // Проверка, что инвентарь принадлежит DeleteMenuHolder
         if (inventory.getHolder() instanceof DeleteMenuHolder && deleteMapManager.containsAwaitingClickDeleteHome(player)) {
-            event.setCancelled(true); // Отмена действия по умолчанию
+            event.setCancelled(true);
             if(item.getType() == Material.RED_DYE) listHomeMenuBuilder.ListHomeGUI(player);
-            // Проверка на шифт + правый клик
             if (event.isRightClick() && event.isShiftClick()) {
                 if (item.getType() == Material.PLAYER_HEAD) {
                     String homeName = getHomeNameFromItem(item);
                     if (homeName != null && !homeName.isEmpty()) {
                         player.performCommand("home delete " + homeName);
-                        inventory.remove(item); // Удаляем предмет из инвентаря
+                        inventory.remove(item);
                         player.updateInventory();
                         player.sendMessage("§aДом '" + homeName + "' успешно удален!");
                     } else {
@@ -64,7 +59,6 @@ public class DeleteHomeListener implements Listener {
         }
         ItemMeta meta = item.getItemMeta();
         if (meta != null && meta.hasDisplayName()) {
-            // Удаляем цветовые коды и лишние пробелы
             return meta.getDisplayName().replaceAll("§[0-9a-fk-or]", "").trim();
         }
         return null;

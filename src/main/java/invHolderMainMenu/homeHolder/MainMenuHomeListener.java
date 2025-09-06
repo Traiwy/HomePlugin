@@ -24,14 +24,14 @@ public class MainMenuHomeListener implements Listener {
         if(inv == null ||!(inv.getHolder() instanceof HomeHolder) || item == null) return;
         if(inv.getHolder() instanceof HomeHolder && item != null){
             switch (item.getType()){
-                 case ELYTRA: player.performCommand("sethome");
+                 case ELYTRA: player.performCommand("home set");
                 inv.close();
                 break;
                 case APPLE:
                     listHomeMenuBuilder.ListHomeGUI(player);
                     break;
                 case DIAMOND:
-                    settingsHomeMenuBuilder.SettingsGUI(player);
+                    settingsHomeMenuBuilder.getSettingsGUI(player);
                     break;
                 default:
                     break;

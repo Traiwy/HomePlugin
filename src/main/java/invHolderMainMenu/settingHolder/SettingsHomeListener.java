@@ -2,6 +2,7 @@ package invHolderMainMenu.settingHolder;
 
 import invHolderMainMenu.delayHolder.DelayMenuBuilder;
 import invHolderMainMenu.homeHolder.MainMenuHomeBuilder;
+import invHolderMainMenu.shareHolder.ShareHomeMenuBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -17,8 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import traiwy.homePlugin.HomePlugin;
-import util.ConfirmationManager;
+import util.ConfirmationManagerDeleteHome;
 import util.HomeManager;
 
 import java.util.HashMap;
@@ -28,22 +28,24 @@ import java.util.UUID;
 
 public class SettingsHomeListener implements Listener {
     private final MainMenuHomeBuilder mainMenuHomeBuilder;
-    private final ConfirmationManager confirmationManager;
+    private final ConfirmationManagerDeleteHome confirmationManagerDeleteHome;
     private final JavaPlugin plugin;
     private final HomeManager homeManager;
+    private final ShareHomeMenuBuilder shareHomeMenuBuilder;
 
     private static final Map<UUID, Boolean> tripwireHookState = new HashMap<>();
     private static final Map<UUID, Boolean> redstoneBlockState = new HashMap<>();
 
-    public SettingsHomeListener(MainMenuHomeBuilder mainMenuHomeBuilder, ConfirmationManager confirmationManager, JavaPlugin plugin, HomeManager homeManager) {
+    public SettingsHomeListener(MainMenuHomeBuilder mainMenuHomeBuilder, ConfirmationManagerDeleteHome confirmationManagerDeleteHome, JavaPlugin plugin, HomeManager homeManager, ShareHomeMenuBuilder shareHomeMenuBuilder) {
         this.mainMenuHomeBuilder = mainMenuHomeBuilder;
-        this.confirmationManager = confirmationManager;
+        this.confirmationManagerDeleteHome = confirmationManagerDeleteHome;
         this.plugin = plugin;
         this.homeManager = homeManager;
+        this.shareHomeMenuBuilder = shareHomeMenuBuilder;
         new BukkitRunnable() {
             @Override
             public void run() {
-                ConfirmationManager.cleanupExpired();
+                ConfirmationManagerDeleteHome.cleanupExpired();
             }
         }.runTaskTimer(plugin, 1200L, 1200L);
     }
@@ -66,8 +68,6 @@ public class SettingsHomeListener implements Listener {
                         toggleTripwiteHook(player, inv, e.getSlot());
                         break;
                     case PLAYER_HEAD:
-                        break;
-                    case NETHER_STAR:
                         break;
                     case REDSTONE_BLOCK:
                         handleRedstoneBlockClick(player, inv, e.getSlot());
@@ -118,14 +118,14 @@ public class SettingsHomeListener implements Listener {
     private void handleRedstoneBlockClick(Player player, Inventory inventory, int slot) {
         UUID playerId = player.getUniqueId();
 
-        if (ConfirmationManager.requiresConfirmation(playerId)) {
-            ConfirmationManager.cancelConfirmation(playerId);
+        if (ConfirmationManagerDeleteHome.requiresConfirmation(playerId)) {
+            ConfirmationManagerDeleteHome.cancelConfirmation(playerId);
             homeManager.deleteAllHomes(player);
             resetRedstoneBlock(player, inventory, slot);
             player.sendMessage(Component.text("Все дома успешно удалены!")
                     .color(TextColor.color(0x00FF00)));
         } else {
-            ConfirmationManager.startConfirmation(playerId);
+            ConfirmationManagerDeleteHome.startConfirmation(playerId);
             setConfirmationMode(player, inventory, slot);
             player.sendMessage(Component.text("Нажмите еще раз для подтверждения удаления всех домов!")
                     .color(TextColor.color(0xFFA500)));

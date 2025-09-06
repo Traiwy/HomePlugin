@@ -1,13 +1,10 @@
 package util;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ConfirmationManager {
+public class ConfirmationManagerDeleteHome {
     private static final Map<UUID, Long> confirmationTimes  = new HashMap<>();
      private static final long CONFIRMATION_TIMEOUT = 15000;
 
