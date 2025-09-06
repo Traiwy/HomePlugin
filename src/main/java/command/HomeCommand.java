@@ -78,19 +78,19 @@ public class HomeCommand implements CommandExecutor, TabExecutor {
                 setHomeCommand(player);
                 break;
             case "share":
-                String namePlayer = args[1].toLowerCase();
-                sharedPlayerName = namePlayer;
-                Player sharePlayer = Bukkit.getPlayer(args[1]);
-                if(namePlayer != null && player.getName().equalsIgnoreCase(namePlayer)){
-                    player.sendMessage("Ошибка: Вы не можете отправить точку дома самому себе." );
-                    return true;
-                }
                 if (args.length < 2) {
                     player.sendMessage("Введите корректную команду: /home share <ник игрока>");
                     return true;
                 }
+                String namePlayer = args[1].toLowerCase();
+                sharedPlayerName = namePlayer;
+                Player sharePlayer = Bukkit.getPlayer(args[1]);
+                if (namePlayer != null && player.getName().equalsIgnoreCase(namePlayer)) {
+                    player.sendMessage("Ошибка: Вы не можете отправить точку дома самому себе.");
+                    return true;
+                }
                 if (sharePlayer == null) {
-                    player.sendMessage("Такого игрока нет на сервере");
+                    player.sendMessage("§cИгрок " + args[1] + " не найден или не в сети!");
                     return true;
                 }
                 shareHomeMenuBuilder.getShareHomeMenu(player);

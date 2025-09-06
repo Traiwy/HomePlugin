@@ -30,7 +30,7 @@ public class PlayerChatListener implements Listener {
 
         Bukkit.getScheduler().runTask(plugin, ()->{
             Location loc = player.getLocation();
-            homeManager.setHome(player, nameHome, loc);
+            homeManager.setHome(player, nameHome, loc, player.getName());
             player.sendMessage("Дом с названием  " + nameHome +" установлен");
         });
         Bukkit.getScheduler().runTask(plugin, () -> {

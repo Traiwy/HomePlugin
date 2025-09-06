@@ -41,10 +41,10 @@ public class SettingsHomeMenuBuilder {
         inv.setItem(18, arrow);
 
 
-        ItemStack pinkPanel = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
-        int[] countPinkPanel = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 19, 20, 21, 22, 23, 24, 25, 26, 17};
-        for (int i = 0; i < countPinkPanel.length; i++) {
-            inv.setItem(countPinkPanel[i], pinkPanel);
+        ItemStack grayPanel = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        int[] countGrayPanel = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 19, 20, 21, 22, 23, 24, 25, 26, 17};
+        for (int i = 0; i < countGrayPanel.length; i++) {
+            inv.setItem(countGrayPanel[i], grayPanel);
         }
 
         player.openInventory(inv);

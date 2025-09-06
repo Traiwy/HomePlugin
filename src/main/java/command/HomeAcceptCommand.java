@@ -41,7 +41,7 @@ public class HomeAcceptCommand implements CommandExecutor {
                 if (senderPlayer != null) {
                     Location loc = homeManager.getHome(senderPlayer, homeName);
                     if (loc != null) {
-                        homeManager.setHome(player, "shared_" + senderPlayer.getName() + "_" + homeName, loc);
+                       homeManager.setHome(player, "shared_" + senderPlayer.getName() + "_" + homeName, loc, senderPlayer.getName());
                         player.sendMessage("§aВы приняли доступ к дому '" + homeName + "' от " + senderPlayer.getName());
                         senderPlayer.sendMessage("§aИгрок " + player.getName() + " принял доступ к вашему дому '" + homeName + "'");
                         return true;

@@ -22,7 +22,7 @@ public class MainMenuHomeListener implements Listener {
         var item = e.getCurrentItem();
 
         if(inv == null ||!(inv.getHolder() instanceof HomeHolder) || item == null) return;
-        if(inv.getHolder() instanceof HomeHolder && item != null){
+        if(inv != null && inv.getHolder() instanceof HomeHolder && item != null){
             switch (item.getType()){
                  case ELYTRA: player.performCommand("home set");
                 inv.close();

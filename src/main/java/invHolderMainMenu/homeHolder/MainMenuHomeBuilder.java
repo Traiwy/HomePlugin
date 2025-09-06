@@ -28,7 +28,7 @@ public class MainMenuHomeBuilder {
         home.setItem(15, diamont);
 
         player.openInventory(home);
-       // animateFrame(player, home);
+        animateFrame(player, home);
     }
     private void animateFrame(Player player, Inventory inv) {
         int[] frameSlots = {
@@ -59,8 +59,8 @@ public class MainMenuHomeBuilder {
                     }
 
                     Material material = isTrail
-                            ? Material.MAGENTA_STAINED_GLASS_PANE
-                            : Material.PINK_STAINED_GLASS_PANE;
+                            ? Material.NETHER_STAR
+                            : Material.GRAY_STAINED_GLASS_PANE;
 
                     ItemStack pane = new ItemStack(material);
                     ItemMeta meta = pane.getItemMeta();

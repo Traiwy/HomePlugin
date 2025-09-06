@@ -49,10 +49,10 @@ public class ListHomeMenuBuilder {
                 slotIndex++;
             }
         }
-        ItemStack pinkPanel = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
-        int[] countPinkPanel = {0,1,2,3,5,6,7,8,9,18,27,36,46,47,48,50,51,52,53,17,26,35,44};
-        for(int i = 0; i <countPinkPanel.length; i++){
-            list.setItem(countPinkPanel[i], pinkPanel);
+        ItemStack grayPanel = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        int[] countGrayPanel = {0,1,2,3,5,6,7,8,9,18,27,36,46,47,48,50,51,52,53,17,26,35,44};
+        for(int i = 0; i <countGrayPanel.length; i++){
+            list.setItem(countGrayPanel[i], grayPanel);
         }
 
         var arrow = configManager.getMenuItem(player,"listmenu", "arrow");

@@ -33,7 +33,7 @@ public class ListHomeListener implements Listener {
         var item = e.getCurrentItem();
 
         if(inv == null ||!(inv.getHolder() instanceof ListHomeHolder) || item == null) return;
-        if(inv.getHolder() instanceof ListHomeHolder && item != null){
+        if(inv != null && inv.getHolder() instanceof ListHomeHolder){
 
             switch (item.getType()){
                 case LIME_DYE:
