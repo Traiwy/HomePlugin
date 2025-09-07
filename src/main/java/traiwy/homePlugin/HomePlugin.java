@@ -52,13 +52,14 @@ public final class HomePlugin extends JavaPlugin {
         this.confirmationManagerShareMessagePlayer = new ConfirmationManagerShareMessagePlayer();
         //регистрация команд
         getCommand("home").setExecutor(new HomeCommand(this, homeManager, mainMenuHomeBuilder, settingsHomeMenuBuilder, listHomeMenuBuilder, shareHomeMenuBuilder));
-        getCommand("homeaccept").setExecutor(new HomeAcceptCommand(homeManager));
+        getCommand("homeaccept").setExecutor(new HomeAcceptCommand(homeManager, confirmationManagerShareMessagePlayer));
+        getCommand("homecancel").setExecutor(new HomeCancelCommand(confirmationManagerShareMessagePlayer));
         //регистрация ивентов
         getServer().getPluginManager().registerEvents(new CanselClickInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new ListHomeListener(deleteHomeMenuBuilder, favoritesHomeMenuBuilder, homeManager, mainMenuHomeBuilder), this);
         getServer().getPluginManager().registerEvents(new MainMenuHomeListener(listHomeMenuBuilder, settingsHomeMenuBuilder), this);
         getServer().getPluginManager().registerEvents(new PlayerChatListener(this, homeManager), this);
-        getServer().getPluginManager().registerEvents(new DeleteHomeListener(deleteMapManager, listHomeMenuBuilder), this);
+        getServer().getPluginManager().registerEvents(new DeleteHomeListener(deleteMapManager, listHomeMenuBuilder, homeManager), this);
         getServer().getPluginManager().registerEvents(new CloseInventoryListener(deleteMapManager), this);
         getServer().getPluginManager().registerEvents(new SettingsHomeListener(mainMenuHomeBuilder, confirmationManagerDeleteHome, this, homeManager, shareHomeMenuBuilder), this);
         getServer().getPluginManager().registerEvents(new ShareHomeMenuListener(settingsHomeMenuBuilder, confirmationManagerShareHome, confirmationManagerShareMessagePlayer), this);

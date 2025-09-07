@@ -31,11 +31,19 @@ public class ListHomeMenuBuilder {
                 double x = homeManager.getHome(player, name).getBlockX();
                 double y = homeManager.getHome(player, name).getBlockY();
                 double z = homeManager.getHome(player, name).getBlockZ();
+                String owner = homeManager.getOwner(player, name);
+                List<String> member = homeManager.getMember(player, name);
+
                 ItemStack headPlayer = new ItemStack(Material.PLAYER_HEAD);
                 SkullMeta meta = (SkullMeta) headPlayer.getItemMeta();
                 meta.setOwningPlayer(Bukkit.getOfflinePlayer("Notch "));
                 meta.setDisplayName(name);
                 List<String> lore = new ArrayList<>();
+                lore.add("Owners: " + owner);
+                 if(member != null && !member.isEmpty()){
+                    String members = String.join(", ", member);
+                    lore.add("Members: " + members);
+                }
                 lore.add("Координаты: ");
                 lore.add("x: " + x);
                 lore.add("y: " + y);

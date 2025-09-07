@@ -17,9 +17,11 @@ public class HomeAcceptCommand implements CommandExecutor {
     private final HashMap<UUID, ConfirmationManagerShareMessagePlayer.DoorSelection> transmissionSelection =
             ConfirmationManagerShareMessagePlayer.transmissionSelection;
     private final HomeManager homeManager;
+    private final ConfirmationManagerShareMessagePlayer confirmationManagerShareMessagePlayer;
 
-    public HomeAcceptCommand(HomeManager homeManager) {
+    public HomeAcceptCommand(HomeManager homeManager, ConfirmationManagerShareMessagePlayer confirmationManagerShareMessagePlayer) {
         this.homeManager = homeManager;
+        this.confirmationManagerShareMessagePlayer = confirmationManagerShareMessagePlayer;
     }
 
     @Override
@@ -41,9 +43,12 @@ public class HomeAcceptCommand implements CommandExecutor {
                 if (senderPlayer != null) {
                     Location loc = homeManager.getHome(senderPlayer, homeName);
                     if (loc != null) {
-                       homeManager.setHome(player, "shared_" + senderPlayer.getName() + "_" + homeName, loc, senderPlayer.getName());
+
+                       homeManager.setHome(player.getName(), "shared_" + senderPlayer.getName() + "_" + homeName, loc, senderPlayer.getName());
                         player.sendMessage("§aВы приняли доступ к дому '" + homeName + "' от " + senderPlayer.getName());
                         senderPlayer.sendMessage("§aИгрок " + player.getName() + " принял доступ к вашему дому '" + homeName + "'");
+                        confirmationManagerShareMessagePlayer.confirm(senderUUID);
+                        homeManager.setMemberPlayer(senderPlayer, homeName, player.getName());
                         return true;
                     }
                 }

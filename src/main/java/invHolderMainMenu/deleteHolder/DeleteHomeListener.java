@@ -10,14 +10,17 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import util.DeleteMapManager;
+import util.HomeManager;
 
 public class DeleteHomeListener implements Listener {
-   private final DeleteMapManager deleteMapManager;
+    private final DeleteMapManager deleteMapManager;
     private final ListHomeMenuBuilder listHomeMenuBuilder;
+    private final HomeManager homeManager;
 
-    public DeleteHomeListener(DeleteMapManager deleteMapManager, ListHomeMenuBuilder listHomeMenuBuilder) {
+    public DeleteHomeListener(DeleteMapManager deleteMapManager, ListHomeMenuBuilder listHomeMenuBuilder, HomeManager homeManager) {
         this.deleteMapManager = deleteMapManager;
         this.listHomeMenuBuilder = listHomeMenuBuilder;
+        this.homeManager = homeManager;
     }
 
     @EventHandler
@@ -37,18 +40,21 @@ public class DeleteHomeListener implements Listener {
 
         if (inventory.getHolder() instanceof DeleteMenuHolder && deleteMapManager.containsAwaitingClickDeleteHome(player)) {
             event.setCancelled(true);
-            if(item.getType() == Material.RED_DYE) listHomeMenuBuilder.ListHomeGUI(player);
+            if (item.getType() == Material.RED_DYE) listHomeMenuBuilder.ListHomeGUI(player);
             if (event.isRightClick() && event.isShiftClick()) {
+
                 if (item.getType() == Material.PLAYER_HEAD) {
                     String homeName = getHomeNameFromItem(item);
-                    if (homeName != null && !homeName.isEmpty()) {
+                    if (homeManager.isOwner(player, player.getName(), homeName) && homeName != null && !homeName.isEmpty()) {
                         player.performCommand("home delete " + homeName);
                         inventory.remove(item);
                         player.updateInventory();
                         player.sendMessage("§aДом '" + homeName + "' успешно удален!");
                     } else {
-                        player.sendMessage("§cНе удалось определить название дома!");
+                        player.sendMessage("Вы не являетесь владельцем точки дома");
                     }
+                } else {
+                    player.sendMessage("§cНе удалось определить название дома!");
                 }
             }
         }
