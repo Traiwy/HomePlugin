@@ -5,7 +5,6 @@ import event.*;
 import invHolderMainMenu.delayHolder.DelayMenuBuilder;
 import invHolderMainMenu.deleteHolder.DeleteHomeListener;
 import invHolderMainMenu.deleteHolder.DeleteHomeMenuBuilder;
-import invHolderMainMenu.favoritesHolder.FavoritesHomeMenuBuilder;
 import invHolderMainMenu.homeHolder.MainMenuHomeBuilder;
 import invHolderMainMenu.homeHolder.MainMenuHomeListener;
 import invHolderMainMenu.listHomeHolder.ListHomeListener;
@@ -19,6 +18,8 @@ import util.*;
 
 public final class HomePlugin extends JavaPlugin {
 
+
+    public ConfigManager configManager;
     public HomeManager homeManager;
     public ListHomeMenuBuilder listHomeMenuBuilder;
     public DeleteHomeMenuBuilder deleteHomeMenuBuilder;
@@ -26,8 +27,6 @@ public final class HomePlugin extends JavaPlugin {
     public DeleteMapManager deleteMapManager;
     public SettingsHomeMenuBuilder settingsHomeMenuBuilder;
     public DelayMenuBuilder delayMenu;
-    public ConfigManager configManager;
-    public FavoritesHomeMenuBuilder favoritesHomeMenuBuilder;
     public ConfirmationManagerDeleteHome confirmationManagerDeleteHome;
     public ShareHomeMenuBuilder shareHomeMenuBuilder;
     public ConfirmationManagerShareHome confirmationManagerShareHome;
@@ -44,7 +43,6 @@ public final class HomePlugin extends JavaPlugin {
         this.mainMenuHomeBuilder = new MainMenuHomeBuilder(this, configManager);
         this.deleteMapManager = new DeleteMapManager();
         this.settingsHomeMenuBuilder = new SettingsHomeMenuBuilder(configManager);
-        this.favoritesHomeMenuBuilder = new FavoritesHomeMenuBuilder(homeManager);
         this.delayMenu = new DelayMenuBuilder();
         this.confirmationManagerDeleteHome = new ConfirmationManagerDeleteHome();
         this.shareHomeMenuBuilder = new ShareHomeMenuBuilder(homeManager, configManager);
@@ -56,7 +54,7 @@ public final class HomePlugin extends JavaPlugin {
         getCommand("homecancel").setExecutor(new HomeCancelCommand(confirmationManagerShareMessagePlayer));
         //регистрация ивентов
         getServer().getPluginManager().registerEvents(new CanselClickInventoryListener(), this);
-        getServer().getPluginManager().registerEvents(new ListHomeListener(deleteHomeMenuBuilder, favoritesHomeMenuBuilder, homeManager, mainMenuHomeBuilder), this);
+        getServer().getPluginManager().registerEvents(new ListHomeListener(deleteHomeMenuBuilder, homeManager, mainMenuHomeBuilder), this);
         getServer().getPluginManager().registerEvents(new MainMenuHomeListener(listHomeMenuBuilder, settingsHomeMenuBuilder), this);
         getServer().getPluginManager().registerEvents(new PlayerChatListener(this, homeManager), this);
         getServer().getPluginManager().registerEvents(new DeleteHomeListener(deleteMapManager, listHomeMenuBuilder, homeManager), this);

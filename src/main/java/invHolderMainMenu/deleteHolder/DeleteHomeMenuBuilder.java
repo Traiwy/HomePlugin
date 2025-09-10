@@ -20,19 +20,21 @@ public class DeleteHomeMenuBuilder {
     private final HomeManager homeManager;
     private final JavaPlugin plugin;
     private final ConfigManager configManager;
-    public DeleteHomeMenuBuilder(HomeManager homeManager, JavaPlugin plugin, ConfigManager configManager){
+
+    public DeleteHomeMenuBuilder(HomeManager homeManager, JavaPlugin plugin, ConfigManager configManager) {
         this.homeManager = homeManager;
         this.plugin = plugin;
         this.configManager = configManager;
     }
-    public Inventory DeleteHomeGUI(Player player){
+
+    public Inventory DeleteHomeGUI(Player player) {
         Inventory delete = Bukkit.createInventory(new DeleteMenuHolder(), 54, "Режим удаления");
         Set<String> homePlayer = homeManager.getHomeNames(player);
         int slotIndex = 0;
-        int[] countPlayerHead = {10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34,28,29,30,31,32,33,34,37,38,39,40,41,42,43};
-        for(String name : homePlayer){
-            if(slotIndex >= countPlayerHead.length) break;
-            if(homeManager.getHome(player, name) != null){
+        int[] countPlayerHead = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
+        for (String name : homePlayer) {
+            if (slotIndex >= countPlayerHead.length) break;
+            if (homeManager.getHome(player, name) != null) {
                 ItemStack headPlayer = new ItemStack(Material.PLAYER_HEAD);
                 SkullMeta meta = (SkullMeta) headPlayer.getItemMeta();
                 meta.setOwningPlayer(Bukkit.getOfflinePlayer("Notch "));
@@ -49,55 +51,55 @@ public class DeleteHomeMenuBuilder {
             }
         }
         ItemStack redPanel = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        int[] countRedPanel = {0,1,2,3,4,5,6,7,8,9,18,27,36,46,47,48,50,51,52,53,17,26,35,44,45};
-        for(int i = 0; i <countRedPanel.length; i++){
+        int[] countRedPanel = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 18, 27, 36, 46, 47, 48, 50, 51, 52, 53, 17, 26, 35, 44, 45};
+        for (int i = 0; i < countRedPanel.length; i++) {
             delete.setItem(countRedPanel[i], redPanel);
         }
-        var redDye = configManager.getMenuItem(player,"deletemenu", "reddye");
+        var redDye = configManager.getMenuItem(player, "deletemenu", "reddye");
         player.openInventory(delete);
         animateFrame(player, delete);
         return delete;
     }
+
     private void animateFrame(Player player, Inventory inv) {
-    List<Integer> borderSlots = Arrays.asList(
-        0, 1, 2, 3, 4, 5, 6, 7, 8,
-        17, 26, 35, 44,
-        53, 52, 51, 50, 48, 47, 46,
-        36, 27, 18, 9
-        // Исключены 45 и 49
-    );
+        List<Integer> borderSlots = Arrays.asList(
+                0, 1, 2, 3, 4, 5, 6, 7, 8,
+                17, 26, 35, 44,
+                53, 52, 51, 50, 48, 47, 46,
+                36, 27, 18, 9
+        );
 
-    ItemStack redGlass = createPane(Material.RED_STAINED_GLASS_PANE);
-    ItemStack blackGlass = createPane(Material.BLACK_STAINED_GLASS_PANE);
+        ItemStack redGlass = createPane(Material.RED_STAINED_GLASS_PANE);
+        ItemStack blackGlass = createPane(Material.BLACK_STAINED_GLASS_PANE);
 
-    new BukkitRunnable() {
-        int tick = 0;
+        new BukkitRunnable() {
+            int tick = 0;
 
-        @Override
-        public void run() {
-            if (!player.getOpenInventory().getTitle().equals("Режим удаления")) {
-                cancel();
-                return;
+            @Override
+            public void run() {
+                if (!player.getOpenInventory().getTitle().equals("Режим удаления")) {
+                    cancel();
+                    return;
+                }
+
+                for (int i = 0; i < borderSlots.size(); i++) {
+                    int slot = borderSlots.get(i);
+                    ItemStack item = ((i + tick) % 2 == 0) ? redGlass : blackGlass;
+                    inv.setItem(slot, item);
+                }
+
+                tick = (tick + 1) % 2;
             }
-
-            for (int i = 0; i < borderSlots.size(); i++) {
-                int slot = borderSlots.get(i);
-                ItemStack item = ((i + tick) % 2 == 0) ? redGlass : blackGlass;
-                inv.setItem(slot, item);
-            }
-
-            tick = (tick + 1) % 2;
-        }
-    }.runTaskTimer(plugin, 0L, 10L); // 0.5 сек (10 тиков)
-}
-
-private ItemStack createPane(Material material) {
-    ItemStack pane = new ItemStack(material);
-    var meta = pane.getItemMeta();
-    if (meta != null) {
-        meta.setDisplayName(" ");
-        pane.setItemMeta(meta);
+        }.runTaskTimer(plugin, 0L, 10L);
     }
-    return pane;
-}
+
+    private ItemStack createPane(Material material) {
+        ItemStack pane = new ItemStack(material);
+        var meta = pane.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(" ");
+            pane.setItemMeta(meta);
+        }
+        return pane;
+    }
 }

@@ -1,7 +1,6 @@
 package invHolderMainMenu.listHomeHolder;
 
 import invHolderMainMenu.deleteHolder.DeleteHomeMenuBuilder;
-import invHolderMainMenu.favoritesHolder.FavoritesHomeMenuBuilder;
 import invHolderMainMenu.homeHolder.MainMenuHomeBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,13 +16,11 @@ import util.HomeManager;
 
 public class ListHomeListener implements Listener {
     private final DeleteHomeMenuBuilder deleteHomeMenuBuilder;
-    private final FavoritesHomeMenuBuilder favoritesHomeMenuBuilder;
     private final MainMenuHomeBuilder mainMenuHomeBuilder;
     private final HomeManager homeManager;
-    public ListHomeListener(DeleteHomeMenuBuilder deleteHomeMenuBuilder, FavoritesHomeMenuBuilder favoritesHomeMenuBuilder, HomeManager homeManager, MainMenuHomeBuilder mainMenuHomeBuilder){
+    public ListHomeListener(DeleteHomeMenuBuilder deleteHomeMenuBuilder,  HomeManager homeManager, MainMenuHomeBuilder mainMenuHomeBuilder){
         this.mainMenuHomeBuilder = mainMenuHomeBuilder;
         this.deleteHomeMenuBuilder = deleteHomeMenuBuilder;
-        this.favoritesHomeMenuBuilder = favoritesHomeMenuBuilder;
         this.homeManager = homeManager;
     }
     @EventHandler
@@ -38,9 +35,6 @@ public class ListHomeListener implements Listener {
             switch (item.getType()){
                 case LIME_DYE:
                     deleteHomeMenuBuilder.DeleteHomeGUI(player);
-                    break;
-                case NETHER_STAR:
-                    favoritesHomeMenuBuilder.getFavoriteHomeMenu(player);
                     break;
                 case ARROW:
                     mainMenuHomeBuilder.HomeGUI(player);

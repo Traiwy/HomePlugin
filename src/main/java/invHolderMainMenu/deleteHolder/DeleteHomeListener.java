@@ -41,7 +41,7 @@ public class DeleteHomeListener implements Listener {
         if (inventory.getHolder() instanceof DeleteMenuHolder && deleteMapManager.containsAwaitingClickDeleteHome(player)) {
             event.setCancelled(true);
             if (item.getType() == Material.RED_DYE) listHomeMenuBuilder.ListHomeGUI(player);
-            if (event.isRightClick() && event.isShiftClick()) {
+            if (event.isShiftClick() && event.isRightClick()) {
 
                 if (item.getType() == Material.PLAYER_HEAD) {
                     String homeName = getHomeNameFromItem(item);

@@ -1,5 +1,8 @@
 package invHolderMainMenu.listHomeHolder;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import util.ConfigManager;
 import util.HomeManager;
+import util.TextUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,33 +29,32 @@ public class ListHomeMenuBuilder {
         Set<String> homePlayer = homeManager.getHomeNames(player);
         int slotIndex = 0;
         int[] countPlayerHead = {10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34,28,29,30,31,32,33,34,37,38,39,40,41,42,43};
-        for(String name : homePlayer){
-            if(slotIndex >= countPlayerHead.length) break;
-            if(homeManager.getHome(player, name) != null){
-                double x = homeManager.getHome(player, name).getBlockX();
-                double y = homeManager.getHome(player, name).getBlockY();
-                double z = homeManager.getHome(player, name).getBlockZ();
+        for(String name : homePlayer) {
+            if (slotIndex >= countPlayerHead.length) break;
+            if (homeManager.getHome(player, name) != null) {
+                int x = homeManager.getHome(player, name).getBlockX();
+                int y = homeManager.getHome(player, name).getBlockY();
+                int z = homeManager.getHome(player, name).getBlockZ();
                 String owner = homeManager.getOwner(player, name);
                 List<String> member = homeManager.getMember(player, name);
-
                 ItemStack headPlayer = new ItemStack(Material.PLAYER_HEAD);
+
                 SkullMeta meta = (SkullMeta) headPlayer.getItemMeta();
                 meta.setOwningPlayer(Bukkit.getOfflinePlayer("Notch "));
-                meta.setDisplayName(name);
-                List<String> lore = new ArrayList<>();
-                lore.add("Owners: " + owner);
-                 if(member != null && !member.isEmpty()){
+                meta.displayName(Component.text(name)
+                        .decoration(TextDecoration.ITALIC, false));
+                List<Component> lore = new ArrayList<>();
+                lore.add(TextUtil.descripthion("§b❙ §fВладелец: " + "§b" + owner));
+
+
+                if (member != null && !member.isEmpty()) {
                     String members = String.join(", ", member);
-                    lore.add("Members: " + members);
+                    lore.add(TextUtil.descripthion("§b❙ §fУчастники: " + "§b" + members));
                 }
-                lore.add("Координаты: ");
-                lore.add("x: " + x);
-                lore.add("y: " + y);
-                lore.add("z: " + z);
-                meta.setLore(lore);
+                lore.add(TextUtil.descripthion("§b❙ §fКоординаты: " + "§b" + x + ", " + y +", " + z+"."));
+                meta.lore(lore);
 
                 headPlayer.setItemMeta(meta);
-
 
                 list.setItem(countPlayerHead[slotIndex], headPlayer);
                 slotIndex++;

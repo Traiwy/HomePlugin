@@ -2,8 +2,6 @@ package event;
 
 import invHolderMainMenu.delayHolder.DelayHolder;
 import invHolderMainMenu.deleteHolder.DeleteMenuHolder;
-import invHolderMainMenu.favoritesHolder.FavoritesHomeMenuHolder;
-import invHolderMainMenu.favoritesHolder.choiseFovoritesHoolder.ChoiseFavoiritesHomeMenuHolder;
 import invHolderMainMenu.homeHolder.HomeHolder;
 import invHolderMainMenu.listHomeHolder.ListHomeHolder;
 import invHolderMainMenu.settingHolder.SettingsHomeHolder;
@@ -23,8 +21,6 @@ public class CanselClickInventoryListener implements Listener {
         if (holder instanceof ListHomeHolder
                 || holder instanceof SettingsHomeHolder
                 || holder instanceof HomeHolder
-                || holder instanceof FavoritesHomeMenuHolder
-                || holder instanceof ChoiseFavoiritesHomeMenuHolder
                 || holder instanceof DeleteMenuHolder
                 || holder instanceof DelayHolder) {
             event.setCancelled(true);

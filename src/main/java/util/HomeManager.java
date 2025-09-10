@@ -40,6 +40,7 @@ public class HomeManager {
 
     public void setHome(String member, String nameHome, Location loc, String realOwner) {
         String path = "homes." + member + "." + nameHome.toLowerCase();
+
         config.set(path + ".world", loc.getWorld().getName());
         config.set(path + ".x", loc.getX());
         config.set(path + ".y", loc.getY());
@@ -59,8 +60,6 @@ public class HomeManager {
         save();
     }
 }
-
-
     public Location getHome(Player player, String nameHome) {
         String path = "homes." + player.getName() + "." + nameHome.toLowerCase();
         if (!config.contains(path)) return null;
@@ -70,9 +69,9 @@ public class HomeManager {
             player.sendMessage("§cОшибка: у этого дома не сохранено название мира!");
             return null;
         }
-        double x = config.getDouble(path + ".x");
-        double y = config.getDouble(path + ".y");
-        double z = config.getDouble(path + ".z");
+        int x = config.getInt(path + ".x");
+        int y = config.getInt(path + ".y");
+        int z = config.getInt(path + ".z");
 
         return new Location(Bukkit.getWorld(world), x, y, z);
     }
@@ -88,31 +87,29 @@ public class HomeManager {
 
     public Set<String> getHomeNames(Player player) {
         String path = "homes." + player.getName();
+
         if (!config.contains(path)) return new HashSet<>();
         return config.getConfigurationSection(path).getKeys(false);
     }
 
     public boolean deleteHome(Player player, String nameHome) {
-    String path = "homes." + player.getName() + "." + nameHome.toLowerCase();
+        String path = "homes." + player.getName() + "." + nameHome.toLowerCase();
 
-    if (!config.contains(path)) {
-        player.sendMessage("§cДом '" + nameHome + "' не найден!");
-        return false;
+        if (!config.contains(path)) {
+            player.sendMessage("§cДом '" + nameHome + "' не найден!");
+            return false;
+        }
+        String owner = config.getString(path + ".owner");
+
+        if (owner == null || !owner.equalsIgnoreCase(player.getName())) {
+            player.sendMessage("§cВы не являетесь владельцем дома '" + nameHome + "'!");
+            return false;
+        }
+        config.set(path, null);
+        save();
+        player.sendMessage("§aДом '" + nameHome + "' успешно удалён!");
+        return true;
     }
-
-    String owner = config.getString(path + ".owner");
-
-    if (owner == null || !owner.equalsIgnoreCase(player.getName())) {
-        player.sendMessage("§cВы не являетесь владельцем дома '" + nameHome + "'!");
-        return false;
-    }
-
-    config.set(path, null);
-    save();
-
-    player.sendMessage("§aДом '" + nameHome + "' успешно удалён!");
-    return true;
-}
 
     public boolean deleteAllHomes(Player player) {
         String playerName = player.getName();
