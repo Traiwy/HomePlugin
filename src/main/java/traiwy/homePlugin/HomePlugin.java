@@ -1,20 +1,20 @@
 package traiwy.homePlugin;
 
-import command.*;
-import event.*;
-import invHolderMainMenu.delayHolder.DelayMenuBuilder;
-import invHolderMainMenu.deleteHolder.DeleteHomeListener;
-import invHolderMainMenu.deleteHolder.DeleteHomeMenuBuilder;
-import invHolderMainMenu.homeHolder.MainMenuHomeBuilder;
-import invHolderMainMenu.homeHolder.MainMenuHomeListener;
-import invHolderMainMenu.listHomeHolder.ListHomeListener;
-import invHolderMainMenu.listHomeHolder.ListHomeMenuBuilder;
-import invHolderMainMenu.settingHolder.SettingsHomeListener;
-import invHolderMainMenu.settingHolder.SettingsHomeMenuBuilder;
-import invHolderMainMenu.shareHolder.ShareHomeMenuBuilder;
-import invHolderMainMenu.shareHolder.ShareHomeMenuListener;
+import traiwy.homePlugin.command.*;
+import traiwy.homePlugin.listener.*;
+import traiwy.homePlugin.gui.delayHolder.DelayMenuBuilder;
+import traiwy.homePlugin.gui.deleteHolder.DeleteHomeListener;
+import traiwy.homePlugin.gui.deleteHolder.DeleteHomeMenuBuilder;
+import traiwy.homePlugin.gui.homeHolder.MainMenuHomeBuilder;
+import traiwy.homePlugin.gui.homeHolder.MainMenuHomeListener;
+import traiwy.homePlugin.gui.listHomeHolder.ListHomeListener;
+import traiwy.homePlugin.gui.listHomeHolder.ListHomeMenuBuilder;
+import traiwy.homePlugin.gui.settingHolder.SettingsHomeListener;
+import traiwy.homePlugin.gui.settingHolder.SettingsHomeMenuBuilder;
+import traiwy.homePlugin.gui.shareHolder.ShareHomeMenuBuilder;
+import traiwy.homePlugin.gui.shareHolder.ShareHomeMenuListener;
 import org.bukkit.plugin.java.JavaPlugin;
-import util.*;
+import traiwy.homePlugin.util.*;
 
 public final class HomePlugin extends JavaPlugin {
 
@@ -49,7 +49,7 @@ public final class HomePlugin extends JavaPlugin {
         this.confirmationManagerShareHome = new ConfirmationManagerShareHome();
         this.confirmationManagerShareMessagePlayer = new ConfirmationManagerShareMessagePlayer();
         //регистрация команд
-        getCommand("home").setExecutor(new HomeCommand(this, homeManager, mainMenuHomeBuilder, settingsHomeMenuBuilder, listHomeMenuBuilder, shareHomeMenuBuilder));
+        getCommand("home").setExecutor(new HomeCommand());
         getCommand("homeaccept").setExecutor(new HomeAcceptCommand(homeManager, confirmationManagerShareMessagePlayer));
         getCommand("homecancel").setExecutor(new HomeCancelCommand(confirmationManagerShareMessagePlayer));
         //регистрация ивентов

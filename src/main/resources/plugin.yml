@@ -5,7 +5,7 @@ api-version: '1.20'
 commands:
   home:
     usage: /home <выберите действие>
-    description: Use the command /home <select actions> to perform a specific action. /home menu opens the main menu.
+    description: Use the traiwy.homePlugin.command /home <select actions> to perform a specific action. /home menu opens the main menu.
   homeaccept:
     usage: /homeaccept
   homecancel:
