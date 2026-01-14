@@ -57,28 +57,28 @@ public class SettingsHomeListener implements Listener {
         var player = (Player) e.getWhoClicked();
         ItemStack item = e.getCurrentItem();
 
-        if (inv != null && inv.getHolder() instanceof SettingsHomeHolder) {
-            if (item != null) {
-                e.setCancelled(true);
-                switch (item.getType()) {
-                    case CLOCK:
-                        DelayMenuBuilder.DelayGUI(player);
-                        break;
-                    case TRIPWIRE_HOOK:
-                        toggleTripwiteHook(player, inv, e.getSlot());
-                        break;
-                    case PLAYER_HEAD:
-                        break;
-                    case REDSTONE_BLOCK:
-                        handleRedstoneBlockClick(player, inv, e.getSlot());
-                        break;
-                    case REPEATER:
-                        break;
-                    case ARROW:
-                        mainMenuHomeBuilder.HomeGUI(player);
-                }
-            }
-        }
+       //if (inv != null && inv.getHolder() instanceof SettingsHomeHolder) {
+       //    if (item != null) {
+       //        e.setCancelled(true);
+       //        switch (item.getType()) {
+       //            case CLOCK:
+       //                DelayMenuBuilder.DelayGUI(player);
+       //                break;
+       //            case TRIPWIRE_HOOK:
+       //                toggleTripwiteHook(player, inv, e.getSlot());
+       //                break;
+       //            case PLAYER_HEAD:
+       //                break;
+       //            case REDSTONE_BLOCK:
+       //                handleRedstoneBlockClick(player, inv, e.getSlot());
+       //                break;
+       //            case REPEATER:
+       //                break;
+       //            case ARROW:
+       //                mainMenuHomeBuilder.HomeGUI(player);
+       //        }
+       //    }
+       //}
     }
 
     private void toggleTripwiteHook(Player player, Inventory inventory, int slot) {

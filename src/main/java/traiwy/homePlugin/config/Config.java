@@ -19,7 +19,7 @@ public class Config {
     @Getter
     private ConfigData configData;
 
-    public Config(JavaPlugin plugin, File config) {
+    public Config(JavaPlugin plugin) {
         this.plugin = plugin;
         this.config = new File(plugin.getDataFolder(), "config.json");
         load();

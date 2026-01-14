@@ -42,15 +42,15 @@ public class ShareHomeMenuListener implements Listener {
         if (inventory.getHolder() == null) return;
         if (inventory.getHolder() instanceof ShareHomeHolder && inventory != null && item != null) {
             event.setCancelled(true);
-            switch (item.getType()) {
-                case ARROW:
-                    settingsHomeMenuBuilder.getSettingsGUI(player);
-                    break;
-                case DARK_OAK_DOOR:
-                    String displayName = getDisplayNameAsString(item);
-                    handleDarkDoor(player, inventory, event.getSlot(), displayName);
-                    break;
-                case BONE_MEAL:
+            //switch (item.getType()) {
+            //    case ARROW:
+            //        settingsHomeMenuBuilder.getSettingsGUI(player);
+            //        break;
+            //    case DARK_OAK_DOOR:
+            //        String displayName = getDisplayNameAsString(item);
+            //        handleDarkDoor(player, inventory, event.getSlot(), displayName);
+            //        break;
+            //    case BONE_MEAL:
                     //String nameRecipient = HomeCommand.getSharedPlayerName();
 
                     //if (nameRecipient == null || nameRecipient.isEmpty()) {
@@ -102,68 +102,68 @@ public class ShareHomeMenuListener implements Listener {
     }
 
 
-    private void handleDarkDoor(Player player, Inventory inventory, int slot, String displayName) {
-        UUID targetPlayer = player.getUniqueId();
+    //private void handleDarkDoor(Player player, Inventory inventory, int slot, String displayName) {
+    //    UUID targetPlayer = player.getUniqueId();
+//
+//
+    //    if (confirmationManagerShareHome.requiresConfirmation(targetPlayer)) {
+    //        String confirmedHome = confirmationManagerShareHome.getConfirmedHomeName(targetPlayer);
+    //        if (confirmedHome != null && confirmedHome.equals(displayName)) {
+    //            confirmationManagerShareHome.confirm(targetPlayer);
+    //            resetDarkDoor(player, inventory, slot);
+    //            // Реализация отправки запроса
+    //        } else {
+    //            confirmationManagerShareHome.cancelConfirmation(targetPlayer);
+    //            resetDarkDoor(player, inventory, slot);
+    //            player.sendMessage("Подтверждение отменено. Выберите дом заново.");
+    //        }
+    //    } else {
+    //        confirmationManagerShareHome.startConfirmation(targetPlayer, displayName);
+    //        setConfirmationMode(player, inventory, slot, displayName);
+    //    }
+    //}
+//
+    //public void setConfirmationMode(Player player, Inventory inventory, int slot, String displayName) {
+    //    ItemStack darkDoor = new ItemStack(Material.DARK_OAK_DOOR);
+    //    ItemMeta meta = darkDoor.getItemMeta();
+//
+    //    if (meta != null ) {
+    //        meta.displayName(Component.text(displayName)
+    //                .color(TextColor.color(0xFFD700)));
+    //        meta.lore(List.of(
+    //                Component.text("Нажмите еще раз для подтверждения")));
+    //        meta.addEnchant(Enchantment.LUCK, 1, true);
+    //        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+    //        darkDoor.setItemMeta(meta);
+    //    }
+//
+    //    inventory.setItem(slot, darkDoor);
+    //    DarkDoorState.put(player.getUniqueId(), true);
+    //}
+//
+    //public void resetDarkDoor(Player player, Inventory inventory, int slot) {
+    //    ItemStack darkDoor = new ItemStack(Material.DARK_OAK_DOOR);
+    //    ItemMeta meta = darkDoor.getItemMeta();
+    //    if (meta != null) {
+    //        meta.displayName(); //Добавить описание
+    //        meta.lore(); //Добавить описание
+//
+    //        meta.getEnchants().keySet().forEach(meta::removeEnchant);
+    //        darkDoor.setItemMeta(meta);
+    //    }
+    //    DarkDoorState.remove(player.getUniqueId());
+    //}
+//
+    //private String getDisplayNameAsString(ItemStack item) {
+    //    if (item != null) {
+    //        ItemMeta meta = item.getItemMeta();
+    //        Component displayNameComponent = meta.displayName();
+    //        if (displayNameComponent == null) {
+    //            return "Без названия";
+    //        }
+    //        return PlainTextComponentSerializer.plainText().serialize(displayNameComponent);
+    //    }
+    //    return "xvk";
+    //}
 
-
-        if (confirmationManagerShareHome.requiresConfirmation(targetPlayer)) {
-            String confirmedHome = confirmationManagerShareHome.getConfirmedHomeName(targetPlayer);
-            if (confirmedHome != null && confirmedHome.equals(displayName)) {
-                confirmationManagerShareHome.confirm(targetPlayer);
-                resetDarkDoor(player, inventory, slot);
-                // Реализация отправки запроса
-            } else {
-                confirmationManagerShareHome.cancelConfirmation(targetPlayer);
-                resetDarkDoor(player, inventory, slot);
-                player.sendMessage("Подтверждение отменено. Выберите дом заново.");
-            }
-        } else {
-            confirmationManagerShareHome.startConfirmation(targetPlayer, displayName);
-            setConfirmationMode(player, inventory, slot, displayName);
-        }
-    }
-
-    public void setConfirmationMode(Player player, Inventory inventory, int slot, String displayName) {
-        ItemStack darkDoor = new ItemStack(Material.DARK_OAK_DOOR);
-        ItemMeta meta = darkDoor.getItemMeta();
-
-        if (meta != null ) {
-            meta.displayName(Component.text(displayName)
-                    .color(TextColor.color(0xFFD700)));
-            meta.lore(List.of(
-                    Component.text("Нажмите еще раз для подтверждения")));
-            meta.addEnchant(Enchantment.LUCK, 1, true);
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            darkDoor.setItemMeta(meta);
-        }
-
-        inventory.setItem(slot, darkDoor);
-        DarkDoorState.put(player.getUniqueId(), true);
-    }
-
-    public void resetDarkDoor(Player player, Inventory inventory, int slot) {
-        ItemStack darkDoor = new ItemStack(Material.DARK_OAK_DOOR);
-        ItemMeta meta = darkDoor.getItemMeta();
-        if (meta != null) {
-            meta.displayName(); //Добавить описание
-            meta.lore(); //Добавить описание
-
-            meta.getEnchants().keySet().forEach(meta::removeEnchant);
-            darkDoor.setItemMeta(meta);
-        }
-        DarkDoorState.remove(player.getUniqueId());
-    }
-
-    private String getDisplayNameAsString(ItemStack item) {
-        if (item != null) {
-            ItemMeta meta = item.getItemMeta();
-            Component displayNameComponent = meta.displayName();
-            if (displayNameComponent == null) {
-                return "Без названия";
-            }
-            return PlainTextComponentSerializer.plainText().serialize(displayNameComponent);
-        }
-        return "xvk";
-    }
-}
 

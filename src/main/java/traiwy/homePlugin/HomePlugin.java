@@ -1,74 +1,33 @@
 package traiwy.homePlugin;
 
-import traiwy.homePlugin.command.*;
-import traiwy.homePlugin.listener.*;
-import traiwy.homePlugin.gui.delayHolder.DelayMenuBuilder;
-import traiwy.homePlugin.gui.deleteHolder.DeleteHomeListener;
-import traiwy.homePlugin.gui.deleteHolder.DeleteHomeMenuBuilder;
-import traiwy.homePlugin.gui.homeHolder.MainMenuHomeBuilder;
-import traiwy.homePlugin.gui.homeHolder.MainMenuHomeListener;
-import traiwy.homePlugin.gui.listHomeHolder.ListHomeListener;
-import traiwy.homePlugin.gui.listHomeHolder.ListHomeMenuBuilder;
-import traiwy.homePlugin.gui.settingHolder.SettingsHomeListener;
-import traiwy.homePlugin.gui.settingHolder.SettingsHomeMenuBuilder;
-import traiwy.homePlugin.gui.shareHolder.ShareHomeMenuBuilder;
-import traiwy.homePlugin.gui.shareHolder.ShareHomeMenuListener;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
-import traiwy.homePlugin.util.*;
+import org.checkerframework.checker.units.qual.C;
+import traiwy.homePlugin.command.HomeCommand;
+import traiwy.homePlugin.config.Config;
+import traiwy.homePlugin.config.data.ConfigData;
+import traiwy.homePlugin.gui.menu.HomeMenu;
+import traiwy.homePlugin.gui.menu.ListMenu;
+import traiwy.homePlugin.gui.menu.SettingsMenu;
 
 public final class HomePlugin extends JavaPlugin {
 
-
-    public ConfigManager configManager;
-    public HomeManager homeManager;
-    public ListHomeMenuBuilder listHomeMenuBuilder;
-    public DeleteHomeMenuBuilder deleteHomeMenuBuilder;
-    public MainMenuHomeBuilder mainMenuHomeBuilder;
-    public DeleteMapManager deleteMapManager;
-    public SettingsHomeMenuBuilder settingsHomeMenuBuilder;
-    public DelayMenuBuilder delayMenu;
-    public ConfirmationManagerDeleteHome confirmationManagerDeleteHome;
-    public ShareHomeMenuBuilder shareHomeMenuBuilder;
-    public ConfirmationManagerShareHome confirmationManagerShareHome;
-    public ConfirmationManagerShareMessagePlayer confirmationManagerShareMessagePlayer;
-
     @Override
     public void onEnable() {
-
-        this.configManager = new ConfigManager(this);
-        configManager.forceReplaceConfig();
-        this.homeManager = new HomeManager(this);
-        this.listHomeMenuBuilder = new ListHomeMenuBuilder(homeManager, configManager);
-        this.deleteHomeMenuBuilder = new DeleteHomeMenuBuilder(homeManager, this, configManager);
-        this.mainMenuHomeBuilder = new MainMenuHomeBuilder(this, configManager);
-        this.deleteMapManager = new DeleteMapManager();
-        this.settingsHomeMenuBuilder = new SettingsHomeMenuBuilder(configManager);
-        this.delayMenu = new DelayMenuBuilder();
-        this.confirmationManagerDeleteHome = new ConfirmationManagerDeleteHome();
-        this.shareHomeMenuBuilder = new ShareHomeMenuBuilder(homeManager, configManager);
-        this.confirmationManagerShareHome = new ConfirmationManagerShareHome();
-        this.confirmationManagerShareMessagePlayer = new ConfirmationManagerShareMessagePlayer();
-        //регистрация команд
-        getCommand("home").setExecutor(new HomeCommand());
-        getCommand("homeaccept").setExecutor(new HomeAcceptCommand(homeManager, confirmationManagerShareMessagePlayer));
-        getCommand("homecancel").setExecutor(new HomeCancelCommand(confirmationManagerShareMessagePlayer));
-        //регистрация ивентов
-        getServer().getPluginManager().registerEvents(new CanselClickInventoryListener(), this);
-        getServer().getPluginManager().registerEvents(new ListHomeListener(deleteHomeMenuBuilder, homeManager, mainMenuHomeBuilder), this);
-        getServer().getPluginManager().registerEvents(new MainMenuHomeListener(listHomeMenuBuilder, settingsHomeMenuBuilder), this);
-        getServer().getPluginManager().registerEvents(new PlayerChatListener(this, homeManager), this);
-        getServer().getPluginManager().registerEvents(new DeleteHomeListener(deleteMapManager, listHomeMenuBuilder, homeManager), this);
-        getServer().getPluginManager().registerEvents(new CloseInventoryListener(deleteMapManager), this);
-        getServer().getPluginManager().registerEvents(new SettingsHomeListener(mainMenuHomeBuilder, confirmationManagerDeleteHome, this, homeManager, shareHomeMenuBuilder), this);
-        getServer().getPluginManager().registerEvents(new ShareHomeMenuListener(settingsHomeMenuBuilder, confirmationManagerShareHome, confirmationManagerShareMessagePlayer), this);
+        Config config = new Config(this);
+        SettingsMenu settingsMenu = new SettingsMenu();
+        ListMenu listMenu = new ListMenu(config.getConfigData(), settingsMenu);
+        HomeMenu homeMenu = new HomeMenu(config.getConfigData(), listMenu, settingsMenu);
+        PluginCommand command = getCommand("home");
+        if(command != null) {
+            command.setExecutor(new HomeCommand(homeMenu));
+        } else {
+            throw new RuntimeException("No command found!");
+        }
 
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
-    }
-    public HomeManager getHomeManager() {
-        return homeManager;
     }
 }

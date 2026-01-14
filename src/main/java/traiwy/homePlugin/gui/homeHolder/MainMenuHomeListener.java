@@ -15,27 +15,27 @@ public class MainMenuHomeListener implements Listener {
         this.listHomeMenuBuilder = listHomeMenuBuilder;
         this.settingsHomeMenuBuilder = settingsHomeMenuBuilder;
     }
-    @EventHandler
-    public void onInventoryClickEvent(InventoryClickEvent e){
-        var player = (Player)e.getWhoClicked();
-        var inv = e.getClickedInventory();
-        var item = e.getCurrentItem();
-
-        if(inv == null ||!(inv.getHolder() instanceof HomeHolder) || item == null) return;
-        if(inv != null && inv.getHolder() instanceof HomeHolder && item != null){
-            switch (item.getType()){
-                 case ELYTRA: player.performCommand("home set");
-                inv.close();
-                break;
-                case APPLE:
-                    listHomeMenuBuilder.ListHomeGUI(player);
-                    break;
-                case DIAMOND:
-                    settingsHomeMenuBuilder.getSettingsGUI(player);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+   // @EventHandler
+   // public void onInventoryClickEvent(InventoryClickEvent e){
+   //     var player = (Player)e.getWhoClicked();
+   //     var inv = e.getClickedInventory();
+   //     var item = e.getCurrentItem();
+//
+   //     if(inv == null ||!(inv.getHolder() instanceof HomeHolder) || item == null) return;
+   //     if(inv != null && inv.getHolder() instanceof HomeHolder && item != null){
+   //         switch (item.getType()){
+   //              case ELYTRA: player.performCommand("home set");
+   //             inv.close();
+   //             break;
+   //             case APPLE:
+   //                 listHomeMenuBuilder.ListHomeGUI(player);
+   //                 break;
+   //             case DIAMOND:
+   //                 settingsHomeMenuBuilder.getSettingsGUI(player);
+   //                 break;
+   //             default:
+   //                 break;
+   //         }
+   //     }
+   // }
 }

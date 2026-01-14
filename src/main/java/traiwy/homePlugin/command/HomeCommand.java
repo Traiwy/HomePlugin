@@ -1,7 +1,11 @@
 package traiwy.homePlugin.command;
 
+import lombok.AllArgsConstructor;
 import traiwy.homePlugin.command.impl.AcceptCommand;
 import traiwy.homePlugin.command.impl.CancelCommand;
+import traiwy.homePlugin.command.impl.CreateCommand;
+import traiwy.homePlugin.command.impl.MenuCommand;
+import traiwy.homePlugin.gui.menu.HomeMenu;
 import traiwy.homePlugin.listener.PlayerChatListener;
 import traiwy.homePlugin.gui.homeHolder.MainMenuHomeBuilder;
 import traiwy.homePlugin.gui.listHomeHolder.ListHomeMenuBuilder;
@@ -25,14 +29,30 @@ import java.util.stream.Collectors;
 public class HomeCommand implements CommandExecutor, TabExecutor {
     private final Map<String, SubCommand> commands = new HashMap<>();
 
-    public HomeCommand() {
+    public HomeCommand(HomeMenu homeMenu) {
+        commands.put("menu", new MenuCommand(homeMenu));
         commands.put("accept", new AcceptCommand());
         commands.put("cancel", new CancelCommand());
+        commands.put("create", new CreateCommand());
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-   // if (!(sender instanceof Player)) return false;
+        if (!(sender instanceof Player player)) return false;
+
+        if(args.length == 0) return false;
+
+        String subCommandName = args[0].toLowerCase();
+        SubCommand subCommand = commands.get(subCommandName);
+
+        if (subCommand == null) {
+            player.sendMessage("Неизвестная подкоманда: " + subCommandName);
+            return true;
+        }
+
+        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+        subCommand.execute(player, subArgs);
+        return true;
 
    // Player player = (Player) sender;
    // if (args.length == 0) {
@@ -87,12 +107,11 @@ public class HomeCommand implements CommandExecutor, TabExecutor {
 
    //         break;
    // }
-        return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        String[] SUBCOMMAND = {"menu", "list", "delete", "settings", "set", "share"};
+        String[] SUBCOMMAND = command.getAliases().toArray(new String[0]);
         if (strings.length == 1) {
             return Arrays.stream(SUBCOMMAND)
                     .filter(sub -> sub.startsWith(strings[0].toLowerCase()))

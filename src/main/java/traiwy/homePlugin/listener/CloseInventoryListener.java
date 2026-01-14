@@ -1,6 +1,5 @@
 package traiwy.homePlugin.listener;
 
-import traiwy.homePlugin.gui.deleteHolder.DeleteMenuHolder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,8 +18,8 @@ public class CloseInventoryListener implements Listener {
         Player player = (Player) event.getPlayer();
         UUID target = player.getUniqueId();
 
-        if(event.getInventory().getHolder() instanceof DeleteMenuHolder){
-            deleteMapManager.removeAwaitingClickDeleteHome(player);
-        }
+        //if(event.getInventory().getHolder() instanceof DeleteMenuHolder){
+        //    deleteMapManager.removeAwaitingClickDeleteHome(player);
+        //}
     }
 }
