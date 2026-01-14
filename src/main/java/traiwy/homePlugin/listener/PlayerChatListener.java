@@ -1,5 +1,6 @@
 package traiwy.homePlugin.listener;
 
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -11,34 +12,36 @@ import traiwy.homePlugin.util.HomeManager;
 
 import java.util.*;
 
+@AllArgsConstructor
 public class PlayerChatListener implements Listener {
     private final JavaPlugin plugin;
     private final HomeManager homeManager;
-    public static Map<UUID, String> awaitingHomeName   = new HashMap();
-    public static Set<UUID> readyToSetHome = new HashSet<>();
-    public PlayerChatListener(JavaPlugin plugin, HomeManager homeManager){
-        this.plugin = plugin;
-        this.homeManager = homeManager;
-    }
+    private final Set<UUID> awaitingHomeName  = new HashSet<>();
 
+    public void startHomeNaming(Player player) {
+        awaitingHomeName.add(player.getUniqueId());
+        player.sendMessage("Введите название дома в чат...");
+    }
     @EventHandler
     public void ChatListener(AsyncPlayerChatEvent  event){
-        Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
-        if(!readyToSetHome.contains(uuid))return;
-        String nameHome = event.getMessage();
+        final Player player = event.getPlayer();
+        final UUID uuid = player.getUniqueId();
 
-        Bukkit.getScheduler().runTask(plugin, ()->{
-            Location loc = player.getLocation();
-            homeManager.setHome(player.getName(), nameHome, loc, player.getName());
-            player.sendMessage("Дом с названием  " + nameHome +" установлен");
-        });
-        Bukkit.getScheduler().runTask(plugin, () -> {
-            awaitingHomeName.remove(uuid);
-            readyToSetHome.remove(uuid);
-        });
+
+        if(!awaitingHomeName.contains(uuid))return;
         event.setCancelled(true);
 
+        String nameHome = event.getMessage().trim();
+        if(nameHome.isEmpty()){
+            player.sendMessage("Название точки не может быть пустым");
+            return;
+        }
+
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            final Location loc = player.getLocation();
+            homeManager.setHome(player.getName(), nameHome, loc, player.getName());
+            awaitingHomeName.remove(uuid);
+        });
     }
 
 }

@@ -1,0 +1,10 @@
+package traiwy.homePlugin.home;
+
+public record LocationData(
+        String world,
+        double x,
+        double y,
+        double z,
+        float yaw,
+        float pitch
+) {}

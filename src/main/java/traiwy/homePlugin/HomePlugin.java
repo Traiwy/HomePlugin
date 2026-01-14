@@ -10,6 +10,8 @@ import traiwy.homePlugin.gui.MenuClickListener;
 import traiwy.homePlugin.gui.menu.HomeMenu;
 import traiwy.homePlugin.gui.menu.ListMenu;
 import traiwy.homePlugin.gui.menu.SettingsMenu;
+import traiwy.homePlugin.listener.PlayerChatListener;
+import traiwy.homePlugin.util.HomeManager;
 
 public final class HomePlugin extends JavaPlugin {
 
@@ -18,6 +20,7 @@ public final class HomePlugin extends JavaPlugin {
         Config config = new Config(this);
         SettingsMenu settingsMenu = new SettingsMenu();
         ListMenu listMenu = new ListMenu(config.getConfigData(), settingsMenu);
+        //HomeManager homeManager = new HomeManager();
         HomeMenu homeMenu = new HomeMenu(config.getConfigData(), listMenu, settingsMenu);
         PluginCommand command = getCommand("home");
         if(command != null) {
@@ -27,9 +30,11 @@ public final class HomePlugin extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new MenuClickListener(), this);
+        //getServer().getPluginManager().registerEvents(new PlayerChatListener(this), this);
     }
 
     @Override
     public void onDisable() {
+
     }
 }

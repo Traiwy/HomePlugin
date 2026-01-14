@@ -1,13 +1,19 @@
 package traiwy.homePlugin.command.impl;
 
+import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import traiwy.homePlugin.command.SubCommand;
+import traiwy.homePlugin.listener.PlayerChatListener;
 
+@AllArgsConstructor
 public class CreateCommand implements SubCommand {
+    //private final PlayerChatListener playerChatListener;
+
     @Override
     public @NotNull String getName() {
-        return "";
+        return "create";
     }
 
     @Override
@@ -22,6 +28,7 @@ public class CreateCommand implements SubCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String[] args) {
-
+        final Player player = (Player) sender;
+        //playerChatListener.startHomeNaming(player);
     }
 }
