@@ -6,6 +6,7 @@ import org.checkerframework.checker.units.qual.C;
 import traiwy.homePlugin.command.HomeCommand;
 import traiwy.homePlugin.config.Config;
 import traiwy.homePlugin.config.data.ConfigData;
+import traiwy.homePlugin.gui.MenuClickListener;
 import traiwy.homePlugin.gui.menu.HomeMenu;
 import traiwy.homePlugin.gui.menu.ListMenu;
 import traiwy.homePlugin.gui.menu.SettingsMenu;
@@ -25,6 +26,7 @@ public final class HomePlugin extends JavaPlugin {
             throw new RuntimeException("No command found!");
         }
 
+        getServer().getPluginManager().registerEvents(new MenuClickListener(), this);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class Menu implements InventoryHolder {
 
     public Menu(String id, String title, int size) {
         this.id = id;
-        this.inventory = Bukkit.createInventory(null, size, title);
+        this.inventory = Bukkit.createInventory(this, size, title);
     }
 
     public void open(Player player) {
