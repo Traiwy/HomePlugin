@@ -1,4 +1,4 @@
-package traiwy.homePlugin.util;
+package traiwy.homePlugin.manager;
 
 import org.bukkit.entity.Player;
 

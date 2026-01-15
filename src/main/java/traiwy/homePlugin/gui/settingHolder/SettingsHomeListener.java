@@ -1,6 +1,5 @@
 package traiwy.homePlugin.gui.settingHolder;
 
-import traiwy.homePlugin.gui.delayHolder.DelayMenuBuilder;
 import traiwy.homePlugin.gui.homeHolder.MainMenuHomeBuilder;
 import traiwy.homePlugin.gui.shareHolder.ShareHomeMenuBuilder;
 import net.kyori.adventure.text.Component;
@@ -19,7 +18,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import traiwy.homePlugin.util.ConfirmationManagerDeleteHome;
-import traiwy.homePlugin.util.HomeManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,17 +28,16 @@ public class SettingsHomeListener implements Listener {
     private final MainMenuHomeBuilder mainMenuHomeBuilder;
     private final ConfirmationManagerDeleteHome confirmationManagerDeleteHome;
     private final JavaPlugin plugin;
-    private final HomeManager homeManager;
     private final ShareHomeMenuBuilder shareHomeMenuBuilder;
 
     private static final Map<UUID, Boolean> tripwireHookState = new HashMap<>();
     private static final Map<UUID, Boolean> redstoneBlockState = new HashMap<>();
 
-    public SettingsHomeListener(MainMenuHomeBuilder mainMenuHomeBuilder, ConfirmationManagerDeleteHome confirmationManagerDeleteHome, JavaPlugin plugin, HomeManager homeManager, ShareHomeMenuBuilder shareHomeMenuBuilder) {
+    public SettingsHomeListener(MainMenuHomeBuilder mainMenuHomeBuilder, ConfirmationManagerDeleteHome confirmationManagerDeleteHome, JavaPlugin plugin,  ShareHomeMenuBuilder shareHomeMenuBuilder) {
         this.mainMenuHomeBuilder = mainMenuHomeBuilder;
         this.confirmationManagerDeleteHome = confirmationManagerDeleteHome;
         this.plugin = plugin;
-        this.homeManager = homeManager;
+
         this.shareHomeMenuBuilder = shareHomeMenuBuilder;
         new BukkitRunnable() {
             @Override
@@ -120,7 +117,6 @@ public class SettingsHomeListener implements Listener {
 
         if (ConfirmationManagerDeleteHome.requiresConfirmation(playerId)) {
             ConfirmationManagerDeleteHome.cancelConfirmation(playerId);
-            homeManager.deleteAllHomes(player);
             resetRedstoneBlock(player, inventory, slot);
             player.sendMessage(Component.text("Все дома успешно удалены!")
                     .color(TextColor.color(0x00FF00)));

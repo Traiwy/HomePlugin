@@ -1,16 +1,6 @@
 package traiwy.homePlugin.gui.deleteHolder;
 
-import traiwy.homePlugin.gui.listHomeHolder.ListHomeMenuBuilder;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import traiwy.homePlugin.util.DeleteMapManager;
-import traiwy.homePlugin.util.HomeManager;
 
 public class DeleteHomeListener implements Listener {
     //private final DeleteMapManager deleteMapManager;

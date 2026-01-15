@@ -4,12 +4,15 @@ import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import traiwy.homePlugin.HomePlugin;
+import traiwy.homePlugin.cache.home.CacheHome;
 import traiwy.homePlugin.command.SubCommand;
 import traiwy.homePlugin.listener.PlayerChatListener;
 
 @AllArgsConstructor
 public class CreateCommand implements SubCommand {
-    //private final PlayerChatListener playerChatListener;
+    private PlayerChatListener playerChatListener;
+
 
     @Override
     public @NotNull String getName() {
@@ -29,6 +32,6 @@ public class CreateCommand implements SubCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String[] args) {
         final Player player = (Player) sender;
-        //playerChatListener.startHomeNaming(player);
+        playerChatListener.startHomeNaming(player);
     }
 }

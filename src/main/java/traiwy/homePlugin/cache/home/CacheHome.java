@@ -2,6 +2,7 @@ package traiwy.homePlugin.cache.home;
 
 import org.jetbrains.annotations.NotNull;
 import traiwy.homePlugin.home.Home;
+import traiwy.homePlugin.home.LocationData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public class CacheHome {
     public Home get(@NotNull String name) {
         return homes.get(name);
     }
+
 
     public List<Home> getAllHome(@NotNull String name) {
         return new ArrayList<>(homes.values());

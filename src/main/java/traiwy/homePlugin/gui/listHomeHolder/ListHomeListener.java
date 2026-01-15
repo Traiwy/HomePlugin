@@ -2,26 +2,16 @@ package traiwy.homePlugin.gui.listHomeHolder;
 
 import traiwy.homePlugin.gui.deleteHolder.DeleteHomeMenuBuilder;
 import traiwy.homePlugin.gui.homeHolder.MainMenuHomeBuilder;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import traiwy.homePlugin.util.HomeManager;
 
 
 public class ListHomeListener implements Listener {
     private final DeleteHomeMenuBuilder deleteHomeMenuBuilder;
     private final MainMenuHomeBuilder mainMenuHomeBuilder;
-    private final HomeManager homeManager;
-    public ListHomeListener(DeleteHomeMenuBuilder deleteHomeMenuBuilder,  HomeManager homeManager, MainMenuHomeBuilder mainMenuHomeBuilder){
+
+    public ListHomeListener(DeleteHomeMenuBuilder deleteHomeMenuBuilder,MainMenuHomeBuilder mainMenuHomeBuilder){
         this.mainMenuHomeBuilder = mainMenuHomeBuilder;
         this.deleteHomeMenuBuilder = deleteHomeMenuBuilder;
-        this.homeManager = homeManager;
     }
    //@EventHandler
    //public void onInventoryClickEvent(InventoryClickEvent e){

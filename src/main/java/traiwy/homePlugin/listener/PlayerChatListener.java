@@ -8,39 +8,82 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import traiwy.homePlugin.util.HomeManager;
+import traiwy.homePlugin.cache.home.CacheHome;
+import traiwy.homePlugin.home.Home;
+import traiwy.homePlugin.home.LocationData;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @AllArgsConstructor
 public class PlayerChatListener implements Listener {
     private final JavaPlugin plugin;
-    private final HomeManager homeManager;
-    private final Set<UUID> awaitingHomeName  = new HashSet<>();
+    private final CacheHome cache;
+
+    private final Set<UUID> awaitingHomeName =
+            Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final Map<UUID, Integer> reminderTasks = new ConcurrentHashMap<>();
 
     public void startHomeNaming(Player player) {
-        awaitingHomeName.add(player.getUniqueId());
-        player.sendMessage("Введите название дома в чат...");
+        UUID uuid = player.getUniqueId();
+
+        if (awaitingHomeName.contains(uuid)) return;
+
+        awaitingHomeName.add(uuid);
+        player.sendMessage("§eВведите название дома в чат...");
+
+        int taskId = Bukkit.getScheduler().runTaskTimer(
+                plugin,
+                () -> {
+                    if (!player.isOnline() || !awaitingHomeName.contains(uuid)) {
+                        stopReminder(uuid);
+                        return;
+                    }
+                    player.sendMessage("§7Введите название дома в чат...");
+                },
+                40L,
+                60L
+        ).getTaskId();
+
+        reminderTasks.put(uuid, taskId);
     }
+
+    private void stopReminder(UUID uuid) {
+        Integer taskId = reminderTasks.remove(uuid);
+        if (taskId != null) {
+            Bukkit.getScheduler().cancelTask(taskId);
+        }
+        awaitingHomeName.remove(uuid);
+    }
+
     @EventHandler
-    public void ChatListener(AsyncPlayerChatEvent  event){
-        final Player player = event.getPlayer();
-        final UUID uuid = player.getUniqueId();
+    public void onChat(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
 
+        if (!awaitingHomeName.contains(uuid)) return;
 
-        if(!awaitingHomeName.contains(uuid))return;
         event.setCancelled(true);
 
         String nameHome = event.getMessage().trim();
-        if(nameHome.isEmpty()){
-            player.sendMessage("Название точки не может быть пустым");
+        if (nameHome.isEmpty()) {
+            Bukkit.getScheduler().runTask(plugin,
+                    () -> player.sendMessage("§cНазвание не может быть пустым"));
             return;
         }
 
         Bukkit.getScheduler().runTask(plugin, () -> {
-            final Location loc = player.getLocation();
-            homeManager.setHome(player.getName(), nameHome, loc, player.getName());
-            awaitingHomeName.remove(uuid);
+            LocationData loc = new LocationData(
+                    player.getWorld().getName(),
+                    player.getX(), player.getY(),
+                    player.getZ(),
+                    player.getYaw(),
+                    player.getPitch()
+            );
+
+            cache.add(nameHome, new Home(player.getName(), nameHome, loc));
+            stopReminder(uuid);
+            player.sendMessage("§aДом успешно сохранён!");
         });
     }
 

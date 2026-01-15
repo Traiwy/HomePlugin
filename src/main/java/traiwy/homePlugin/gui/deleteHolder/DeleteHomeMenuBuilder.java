@@ -1,20 +1,5 @@
 package traiwy.homePlugin.gui.deleteHolder;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import traiwy.homePlugin.util.HomeManager;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
 public class DeleteHomeMenuBuilder {
     //private final HomeManager homeManager;
     //private final JavaPlugin plugin;

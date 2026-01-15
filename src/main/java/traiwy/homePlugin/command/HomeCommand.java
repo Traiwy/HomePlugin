@@ -13,6 +13,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import traiwy.homePlugin.listener.PlayerChatListener;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,11 +21,11 @@ import java.util.stream.Collectors;
 public class HomeCommand implements CommandExecutor, TabExecutor {
     private final Map<String, SubCommand> commands = new HashMap<>();
 
-    public HomeCommand(MainMenu mainMenu) {
+    public HomeCommand(MainMenu mainMenu, PlayerChatListener playerChatListener) {
         commands.put("menu", new MenuCommand(mainMenu));
         commands.put("accept", new AcceptCommand());
         commands.put("cancel", new CancelCommand());
-        commands.put("create", new CreateCommand());
+        commands.put("create", new CreateCommand(playerChatListener));
     }
 
     @Override

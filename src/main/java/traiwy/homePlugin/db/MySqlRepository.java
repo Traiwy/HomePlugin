@@ -3,18 +3,16 @@ package traiwy.homePlugin.db;
 import traiwy.homePlugin.home.Home;
 import traiwy.homePlugin.home.LocationData;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class MySqlRepository implements Repository {
     private final DatabaseManager dataSource;
-    private Executor executor = Executors.newFixedThreadPool(3);
+    private final Executor executor = Executors.newFixedThreadPool(3);
 
     public MySqlRepository(DatabaseManager dataSource) {
         this.dataSource = dataSource;
