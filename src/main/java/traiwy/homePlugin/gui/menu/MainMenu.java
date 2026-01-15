@@ -1,8 +1,6 @@
 package traiwy.homePlugin.gui.menu;
 
-import lombok.AllArgsConstructor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import traiwy.homePlugin.config.data.ConfigData;
 import traiwy.homePlugin.gui.Menu;
@@ -11,10 +9,10 @@ import traiwy.homePlugin.gui.button.action.CommandAction;
 import traiwy.homePlugin.gui.button.action.OpenMenuAction;
 import traiwy.homePlugin.util.ItemFactory;
 
-public class HomeMenu extends Menu {
+public class MainMenu extends Menu {
     public static final int[] GRAY_PANEL = {0,1,2,3,4,5,6,7,8,9,17, 18,19,20,21,22,23,24,25,26};
-    public  HomeMenu(ConfigData configData, Menu listMenu, Menu settingsMenu) {
-        super("homemenu", "Main menu", 27);
+    public MainMenu(ConfigData configData, Menu listMenu, Menu settingsMenu) {
+        super("meinnmenu", "Main menu", 27);
 
         var mainMenuItems = configData.menu().get("mainmenu").items();
 

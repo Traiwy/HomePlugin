@@ -1,27 +1,18 @@
 package traiwy.homePlugin.command;
 
-import lombok.AllArgsConstructor;
 import traiwy.homePlugin.command.impl.AcceptCommand;
 import traiwy.homePlugin.command.impl.CancelCommand;
 import traiwy.homePlugin.command.impl.CreateCommand;
 import traiwy.homePlugin.command.impl.MenuCommand;
-import traiwy.homePlugin.gui.menu.HomeMenu;
-import traiwy.homePlugin.listener.PlayerChatListener;
-import traiwy.homePlugin.gui.homeHolder.MainMenuHomeBuilder;
-import traiwy.homePlugin.gui.listHomeHolder.ListHomeMenuBuilder;
-import traiwy.homePlugin.gui.settingHolder.SettingsHomeMenuBuilder;
-import traiwy.homePlugin.gui.shareHolder.ShareHomeMenuBuilder;
+import traiwy.homePlugin.gui.menu.MainMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import traiwy.homePlugin.util.HomeManager;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,8 +20,8 @@ import java.util.stream.Collectors;
 public class HomeCommand implements CommandExecutor, TabExecutor {
     private final Map<String, SubCommand> commands = new HashMap<>();
 
-    public HomeCommand(HomeMenu homeMenu) {
-        commands.put("menu", new MenuCommand(homeMenu));
+    public HomeCommand(MainMenu mainMenu) {
+        commands.put("menu", new MenuCommand(mainMenu));
         commands.put("accept", new AcceptCommand());
         commands.put("cancel", new CancelCommand());
         commands.put("create", new CreateCommand());
@@ -53,60 +44,6 @@ public class HomeCommand implements CommandExecutor, TabExecutor {
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
         subCommand.execute(player, subArgs);
         return true;
-
-   // Player player = (Player) sender;
-   // if (args.length == 0) {
-   //     return false;
-   // }
-   // String subcommand = args[0].toLowerCase();
-
-   // switch (subcommand) {
-   //     case "menu":
-   //         mainMenuHomeBuilder.HomeGUI(player);
-   //         break;
-   //     case "list":
-   //         listHomeMenuBuilder.ListHomeGUI(player);
-   //         break;
-   //     case "delete":
-   //         if (args.length < 2) {
-   //             player.sendMessage("Введите корректную команду: /home delete <название точки дома>");
-   //             return true;
-   //         }
-   //         String homeName = args[1].toLowerCase();
-   //         Set<String> homes = homeManager.getHomeNames(player);
-   //         if ((homeManager.getHome(player, homeName)) != null) {
-   //             homeManager.deleteHome(player, homeName);
-   //             player.sendMessage("Вы удалили точку дома: " + homeName);
-   //         } else {
-   //             player.sendMessage("Введите корректное название точки дома");
-   //         }
-   //         return true;
-   //     case "settings":
-   //         settingsHomeMenuBuilder.getSettingsGUI(player);
-   //         break;
-   //     case "set":
-   //         setHomeCommand(player);
-   //         break;
-   //     case "share":
-   //         if (args.length < 2) {
-   //             player.sendMessage("Введите корректную команду: /home share <ник игрока>");
-   //             return true;
-   //         }
-   //         String namePlayer = args[1].toLowerCase();
-   //         sharedPlayerName = namePlayer;
-   //         Player sharePlayer = Bukkit.getPlayer(args[1]);
-   //         if (namePlayer != null && player.getName().equalsIgnoreCase(namePlayer)) {
-   //             player.sendMessage("Ошибка: Вы не можете отправить точку дома самому себе.");
-   //             return true;
-   //         }
-   //         if (sharePlayer == null) {
-   //             player.sendMessage("§cИгрок " + args[1] + " не найден или не в сети!");
-   //             return true;
-   //         }
-   //         shareHomeMenuBuilder.getShareHomeMenu(player);
-
-   //         break;
-   // }
     }
 
     @Override
