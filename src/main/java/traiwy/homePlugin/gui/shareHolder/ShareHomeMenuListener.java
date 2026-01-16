@@ -1,23 +1,12 @@
 package traiwy.homePlugin.gui.shareHolder;
 
-import traiwy.homePlugin.command.HomeCommand;
 import traiwy.homePlugin.gui.settingHolder.SettingsHomeMenuBuilder;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import traiwy.homePlugin.util.ConfirmationManagerShareHome;
-import traiwy.homePlugin.util.ConfirmationManagerShareMessagePlayer;
 
 import java.util.*;
 

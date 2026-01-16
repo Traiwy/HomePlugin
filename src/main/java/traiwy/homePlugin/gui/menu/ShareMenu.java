@@ -1,4 +1,9 @@
 package traiwy.homePlugin.gui.menu;
 
-public class ShareMenu {
+import traiwy.homePlugin.gui.Menu;
+
+public class ShareMenu extends Menu {
+    public ShareMenu(String id, String title, int size) {
+        super(id, title, size);
+    }
 }

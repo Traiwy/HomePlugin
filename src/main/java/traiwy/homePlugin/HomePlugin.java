@@ -12,8 +12,7 @@ import traiwy.homePlugin.gui.menu.MainMenu;
 import traiwy.homePlugin.gui.menu.ListMenu;
 import traiwy.homePlugin.gui.menu.SettingsMenu;
 import traiwy.homePlugin.listener.PlayerChatListener;
-import traiwy.homePlugin.listener.PlayerJoinListener;
-import traiwy.homePlugin.listener.PlayerLeaveListener;
+import traiwy.homePlugin.listener.PlayerCacheListener;
 
 public final class HomePlugin extends JavaPlugin {
     private DatabaseManager databaseManager;
@@ -25,7 +24,7 @@ public final class HomePlugin extends JavaPlugin {
         databaseManager =  new DatabaseManager(config.getMySqlData());
         MySqlRepository mySqlRepository = new MySqlRepository(databaseManager);
         SettingsMenu settingsMenu = new SettingsMenu();
-        ListMenu listMenu = new ListMenu(config.getConfigData(), settingsMenu);
+        ListMenu listMenu = new ListMenu(config.getConfigData(), settingsMenu, cache);
         PlayerChatListener playerChatListener = new PlayerChatListener(this, cache);
         MainMenu mainMenu = new MainMenu(config.getConfigData(), listMenu, settingsMenu);
         PluginCommand command = getCommand("home");
@@ -37,7 +36,7 @@ public final class HomePlugin extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new MenuClickListener(), this);
         getServer().getPluginManager().registerEvents(playerChatListener, this);
-        getServer().getPluginManager().registerEvents(new PlayerJoinListener(cache, mySqlRepository), this);
+        getServer().getPluginManager().registerEvents(new PlayerCacheListener(cache, mySqlRepository), this);
         getServer().getPluginManager().registerEvents(new PlayerLeaveListener(mySqlRepository, cache), this);
     }
 

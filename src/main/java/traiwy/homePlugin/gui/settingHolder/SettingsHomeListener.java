@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import traiwy.homePlugin.util.ConfirmationManagerDeleteHome;
 
 import java.util.HashMap;
 import java.util.List;
