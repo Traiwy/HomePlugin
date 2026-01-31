@@ -26,31 +26,37 @@ public class DeleteMenu extends Menu {
     @Override
     public void setup(Player player) {
         final List<Home> homes = service.getCacheHome().getAllHome(player.getName());
-        int slotIndex = 0;
 
-        for (Home home : homes) {
+        for (int slotIndex = 0; slotIndex < homes.size() && slotIndex < COUNT_PLAYER_HEAD.length; slotIndex++) {
+            Home home = homes.get(slotIndex);
             final List<String> lore = new ArrayList<>();
 
             lore.add(" ");
-            lore.add("§b❙ §fНажмите ШИФТ + ПКМ, чтобы удалить точку дома §b" + home.homeName());
+            lore.add("§b❙ §fВладелец: §b" + home.ownerName());
 
-            if (home.members().isEmpty()) break;
-            for (Member member : home.members()) {
-                if (member != null) {
-                    final String members = String.join(", ", member.name());
-                    lore.add("§b❙ §fУчастники: §b" + members);
+            if (!home.members().isEmpty()) {
+                final List<String> memberNames = new ArrayList<>();
+                for (Member member : home.members()) {
+                    if (member != null) memberNames.add(member.name());
                 }
+                lore.add("§b❙ §fУчастники: §b" + String.join(", ", memberNames));
             }
 
+            lore.add(" ");
+            lore.add("§b❙ §fКоординаты:");
+            lore.add("§7  World: §b" + home.location().world());
+            lore.add("§7  X: §b" + home.location().x());
+            lore.add("§7  Y: §b" + home.location().y());
+            lore.add("§7  Z: §b" + home.location().z());
+            lore.add(" ");
 
             final ItemStack item = ItemBuilder.of(Material.PLAYER_HEAD)
                     .name(home.homeName())
                     .lore(lore)
                     .build();
 
-
-            setItem(COUNT_PLAYER_HEAD[slotIndex], new MenuItem(item, InventoryClickEvent -> {
-
+            setItem(COUNT_PLAYER_HEAD[slotIndex], new MenuItem(item, e -> {
+                // TODO: обработка клика
             }));
         }
 

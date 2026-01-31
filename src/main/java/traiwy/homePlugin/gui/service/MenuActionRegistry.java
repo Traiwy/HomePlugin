@@ -15,6 +15,7 @@ public class MenuActionRegistry {
     public void execute(String action, Player player) {
         switch (action) {
             case "open_list" -> menuManager.openMenu(player, service.getListMenu());
+            case "toggle_delete_mode" -> menuManager.openMenu(player, service.getDeleteMenu());
             case "open_settings" -> menuManager.openMenu(player, service.getSettingsMenu());
             case "create_home" -> player.performCommand("home create");
         }

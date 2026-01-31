@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ListMenu extends Menu {
     private static final int[] GRAY_PANEL = {0,1,2,3,4,5,6,7,8,9,17, 18, 36, 26, 44,46,47, 48, 50, 51, 52, 53};
-    private static final int[] COUNT_PLAYER_HEAD = {10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34,28,29,30,31,32,33,34,37,38,39,40,41,42,43};
+    private static final int[] COUNT_PLAYER_HEAD = {10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34};
 
     private final MenuService service;
 
@@ -53,42 +53,40 @@ public class ListMenu extends Menu {
 
     private void setSlotsHomes(Player player) {
         final List<Home> homes = service.getCacheHome().getAllHome(player.getName());
-        int slotIndex = 0;
+        System.out.println(homes.size());
 
-        for (Home home : homes) {
+        for (int slotIndex = 0; slotIndex < homes.size() && slotIndex < COUNT_PLAYER_HEAD.length; slotIndex++) {
+            final Home home = homes.get(slotIndex);
             System.out.println(home.homeName());
             final List<String> lore = new ArrayList<>();
 
             lore.add(" ");
-            lore.add("§b❙ §fВладелец: §b" + home.homeName());
+            lore.add("§b❙ §fВладелец: §b" + home.ownerName());
 
-            //if (home.members().isEmpty()) break;
-            for (Member member : home.members()) {
-                if (member != null) {
-                    final String members = String.join(", ", member.name());
-                    lore.add("§b❙ §fУчастники: §b" + members);
+            if (!home.members().isEmpty()) {
+                final List<String> memberNames = new ArrayList<>();
+                for (Member member : home.members()) {
+                    if (member != null) memberNames.add(member.name());
                 }
+                lore.add("§b❙ §fУчастники: §b" + String.join(", ", memberNames));
             }
 
             lore.add(" ");
             lore.add("§b❙ §fКоординаты:");
             lore.add("§7  World: §b" + home.location().world());
             lore.add("§7  X: §b" + home.location().x());
-            lore.add("§7  Y: §b" + home.location().x());
-            lore.add("§7  Z: §b" + home.location().y());
+            lore.add("§7  Y: §b" + home.location().y());
+            lore.add("§7  Z: §b" + home.location().z());
             lore.add(" ");
-
 
             final ItemStack item = ItemBuilder.of(Material.PLAYER_HEAD)
                     .name(home.homeName())
                     .lore(lore)
                     .build();
 
-
-            setItem(COUNT_PLAYER_HEAD[slotIndex], new MenuItem(item, InventoryClickEvent -> {
-
+            setItem(COUNT_PLAYER_HEAD[slotIndex], new MenuItem(item, e -> {
+                // TODO: обработка клика
             }));
-
         }
 
     }

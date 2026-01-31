@@ -58,14 +58,14 @@ public class PlayerChatListener implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
+        final Player player = event.getPlayer();
+        final UUID uuid = player.getUniqueId();
 
         if (!awaitingHomeName.contains(uuid)) return;
 
         event.setCancelled(true);
 
-        String nameHome = event.getMessage().trim();
+        final String nameHome = event.getMessage().trim();
         if (nameHome.isEmpty()) {
             Bukkit.getScheduler().runTask(plugin,
                     () -> player.sendMessage("§cНазвание не может быть пустым"));

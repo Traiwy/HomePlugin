@@ -10,23 +10,18 @@ import java.util.List;
 import java.util.Map;
 
 public class CacheHome {
-    private final Map<String, Home> homes = new HashMap<>();
+    private final Map<String, List<Home>> homes = new HashMap<>();
 
-    public void add(@NotNull String name, @NotNull Home home) {
-        homes.put(name, home);
+    public void add(@NotNull String playerName, @NotNull Home home) {
+        homes.computeIfAbsent(playerName, k -> new ArrayList<>()).add(home);
     }
 
-    public Home get(@NotNull String name) {
-        return homes.get(name);
+    public List<Home> getAllHome(@NotNull String playerName) {
+        return homes.getOrDefault(playerName, new ArrayList<>());
     }
 
-
-    public List<Home> getAllHome(@NotNull String name) {
-        return new ArrayList<>(homes.values());
-    }
-
-    public void remove(@NotNull String name) {
-        homes.remove(name);
+    public void remove(@NotNull String playerName) {
+        homes.remove(playerName);
     }
 
     public void clear() {
