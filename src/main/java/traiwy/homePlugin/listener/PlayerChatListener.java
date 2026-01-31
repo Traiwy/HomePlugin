@@ -2,15 +2,15 @@ package traiwy.homePlugin.listener;
 
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import traiwy.homePlugin.cache.home.CacheHome;
+import traiwy.homePlugin.cache.CacheHome;
 import traiwy.homePlugin.home.Home;
 import traiwy.homePlugin.home.LocationData;
+import traiwy.homePlugin.home.Member;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -72,6 +72,8 @@ public class PlayerChatListener implements Listener {
             return;
         }
 
+        List<Member> members = List.of();
+
         Bukkit.getScheduler().runTask(plugin, () -> {
             LocationData loc = new LocationData(
                     player.getWorld().getName(),
@@ -81,7 +83,7 @@ public class PlayerChatListener implements Listener {
                     player.getPitch()
             );
 
-            cache.add(nameHome, new Home(player.getName(), nameHome, loc));
+            cache.add(nameHome, new Home(player.getName(), nameHome, loc, members));
             stopReminder(uuid);
             player.sendMessage("§aДом успешно сохранён!");
         });

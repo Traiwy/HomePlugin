@@ -1,9 +1,15 @@
 package traiwy.homePlugin.gui.menu;
 
+import org.bukkit.entity.Player;
 import traiwy.homePlugin.gui.Menu;
 
 public class ShareMenu extends Menu {
-    public ShareMenu(String id, String title, int size) {
-        super(id, title, size);
+    public ShareMenu() {
+        super("share_menu", "Share Menu", 54);
+    }
+
+    @Override
+    public void setup(Player player) {
+
     }
 }

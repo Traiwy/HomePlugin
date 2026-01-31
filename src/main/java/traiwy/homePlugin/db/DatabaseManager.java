@@ -3,7 +3,7 @@ package traiwy.homePlugin.db;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Getter;
-import traiwy.homePlugin.config.data.MySqlData;
+import traiwy.homePlugin.configuration.dto.MySqlData;
 
 
 import java.sql.Connection;
@@ -45,11 +45,15 @@ public class DatabaseManager {
     }
 
     private void setupHikari() {
-        String jdbcUrl = "jdbc:mysql://" + config.getHost() + ":" + config.getPort() + "/" +
-                config.getDatabase() + "?useSSL=false&serverTimezone=UTC";
-
+        String url = "jdbc:mysql://" + config.getHost() + ":" + config.getPort() +
+                "/" + config.getDatabase() +
+                "?useSSL=false" +
+                "&allowPublicKeyRetrieval=true" +
+                "&useUnicode=true" +
+                "&characterEncoding=UTF-8" +
+                "&serverTimezone=UTC";
         HikariConfig hikari = new HikariConfig();
-        hikari.setJdbcUrl(jdbcUrl);
+        hikari.setJdbcUrl(url);
         hikari.setUsername(config.getUser());
         hikari.setPassword(config.getPassword());
 
@@ -61,7 +65,7 @@ public class DatabaseManager {
     }
 
     private void createTables() {
-        String sql = """
+        String home = """
             CREATE TABLE IF NOT EXISTS homes (
                 id BIGINT AUTO_INCREMENT PRIMARY KEY,
             
@@ -81,10 +85,21 @@ public class DatabaseManager {
             );
         """;
 
+        String members = """
+                CREATE TABLE IF NOT EXISTS members ( 
+                id BIGINT AUTO_INCREMENT PRIMARY KEY, 
+                home_id BIGINT NOT NULL, 
+                member VARCHAR(16) NOT NULL,
+                role VARCHAR(16) NOT NULL DEFAULT 'MEMBER'
+                );
+              
+                """;
+
         try (Connection conn = ds.getConnection();
              Statement stmt = conn.createStatement()) {
 
-            stmt.executeUpdate(sql);
+            stmt.executeUpdate(home);
+            stmt.executeUpdate(members);
 
         } catch (SQLException e) {
             throw new RuntimeException("Failed to create tables", e);

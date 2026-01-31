@@ -1,39 +1,47 @@
 package traiwy.homePlugin.gui.menu;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import traiwy.homePlugin.config.data.ConfigData;
 import traiwy.homePlugin.gui.Menu;
-import traiwy.homePlugin.gui.button.MenuButton;
-import traiwy.homePlugin.gui.button.action.CommandAction;
-import traiwy.homePlugin.gui.button.action.OpenMenuAction;
-import traiwy.homePlugin.util.ItemFactory;
+import traiwy.homePlugin.gui.button.MenuItem;
+import traiwy.homePlugin.gui.service.MenuService;
+import traiwy.homePlugin.util.ItemBuilder;
 
 public class MainMenu extends Menu {
     public static final int[] GRAY_PANEL = {0,1,2,3,4,5,6,7,8,9,17, 18,19,20,21,22,23,24,25,26};
-    public MainMenu(ConfigData configData, Menu listMenu, Menu settingsMenu) {
+    private final MenuService service;
+
+
+    public MainMenu(MenuService service) {
         super("meinnmenu", "Main menu", 27);
+        this.service = service;
+    }
 
-        var mainMenuItems = configData.menu().get("mainmenu").items();
+    @Override
+    public void setup(Player player) {
 
-        addButton(11, new MenuButton(
-                ItemFactory.create(mainMenuItems.get("elytra")),
-                new CommandAction("home create")
-        ));
-
-        addButton(13, new MenuButton(
-                ItemFactory.create(mainMenuItems.get("apple")),
-                new OpenMenuAction(listMenu)
-        ));
-
-        addButton(15, new MenuButton(
-                ItemFactory.create(mainMenuItems.get("diamond")),
-                new OpenMenuAction(settingsMenu)
-        ));
+        var menuConfig = service.getCfgData().menus().get("main");
 
         for(int i = 0; i < GRAY_PANEL.length; i++){
-            addButton(GRAY_PANEL[i], new MenuButton(new ItemStack(Material.GRAY_STAINED_GLASS_PANE), null));
+            setItem(GRAY_PANEL[i], new MenuItem(new ItemStack(Material.GRAY_STAINED_GLASS_PANE), null));
         }
+
+        menuConfig.layout().forEach((slot, itemId) -> {
+            var itemCfg = service.getCfgData().items().get(itemId);
+            ItemBuilder builder = ItemBuilder.of(Material.valueOf(itemCfg.material()));
+            if (itemCfg.name() != null)
+                builder.name(itemCfg.name());
+            if (itemCfg.lore() != null)
+                builder.lore(itemCfg.lore());
+            final ItemStack item = builder.build();
+            setItem(slot, new MenuItem(item, e ->
+                    service.getMenuActionRegistry().execute(itemId, player)
+            ));
+        });
+
+
+
     }
 }
 
