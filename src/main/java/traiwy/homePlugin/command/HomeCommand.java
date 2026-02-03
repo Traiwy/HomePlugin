@@ -1,9 +1,6 @@
 package traiwy.homePlugin.command;
 
-import traiwy.homePlugin.command.impl.AcceptCommand;
-import traiwy.homePlugin.command.impl.CancelCommand;
-import traiwy.homePlugin.command.impl.CreateCommand;
-import traiwy.homePlugin.command.impl.MenuCommand;
+import traiwy.homePlugin.command.impl.*;
 import traiwy.homePlugin.gui.MenuManager;
 import traiwy.homePlugin.gui.menu.MainMenu;
 import org.bukkit.Bukkit;
@@ -16,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import traiwy.homePlugin.gui.service.MenuService;
 import traiwy.homePlugin.listener.PlayerChatListener;
+import traiwy.homePlugin.manager.RequestManager;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,11 +21,12 @@ import java.util.stream.Collectors;
 public class HomeCommand implements CommandExecutor, TabExecutor {
     private final Map<String, SubCommand> commands = new HashMap<>();
 
-    public HomeCommand(MenuService menuService, MenuManager menuManager, PlayerChatListener playerChatListener) {
+    public HomeCommand(MenuService menuService, MenuManager menuManager, PlayerChatListener playerChatListener, RequestManager requestManager) {
         commands.put("menu", new MenuCommand(menuService, menuManager));
         commands.put("accept", new AcceptCommand());
         commands.put("cancel", new CancelCommand());
         commands.put("create", new CreateCommand(playerChatListener));
+        commands.put("invite", new InviteCommand(requestManager));
     }
 
     @Override

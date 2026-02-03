@@ -1,4 +1,4 @@
-package traiwy.homePlugin.gui.menu;
+package traiwy.homePlugin.gui.menu.settings;
 
 import org.bukkit.entity.Player;
 import traiwy.homePlugin.gui.Menu;

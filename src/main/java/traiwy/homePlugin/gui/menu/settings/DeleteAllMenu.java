@@ -1,4 +1,4 @@
-package traiwy.homePlugin.gui.menu;
+package traiwy.homePlugin.gui.menu.settings;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,24 +8,16 @@ import traiwy.homePlugin.gui.button.MenuItem;
 import traiwy.homePlugin.gui.service.MenuService;
 import traiwy.homePlugin.util.ItemBuilder;
 
-public class MainMenu extends Menu {
-    public static final int[] GRAY_PANEL = {0,1,2,3,4,5,6,7,8,9,17, 18,19,20,21,22,23,24,25,26};
+public class DeleteAllMenu extends Menu {
     private final MenuService service;
-
-
-    public MainMenu(MenuService service) {
-        super("meinnmenu", "Main menu", 27);
+    public DeleteAllMenu( MenuService service) {
+        super("remove_menu", "Remove Menu", 27);
         this.service = service;
     }
 
     @Override
     public void setup(Player player) {
-
-        final var menuConfig = service.getCfgData().menus().get("main");
-
-        for (int j : GRAY_PANEL) {
-            setItem(j, new MenuItem(new ItemStack(Material.GRAY_STAINED_GLASS_PANE), null));
-        }
+        final var menuConfig = service.getCfgData().menus().get("delete_all_home");
 
         menuConfig.layout().forEach((slot, itemId) -> {
             var itemCfg = service.getCfgData().items().get(itemId);
@@ -39,9 +31,5 @@ public class MainMenu extends Menu {
                     service.getMenuActionRegistry().execute(itemId, player)
             ));
         });
-
-
-
     }
 }
-

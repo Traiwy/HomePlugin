@@ -11,6 +11,7 @@ import traiwy.homePlugin.db.member.MySqlMemberRepository;
 import traiwy.homePlugin.gui.service.MenuService;
 import traiwy.homePlugin.listener.PlayerCacheListener;
 import traiwy.homePlugin.listener.PlayerChatListener;
+import traiwy.homePlugin.manager.RequestManager;
 
 
 public final class HomePlugin extends JavaPlugin {
@@ -26,13 +27,14 @@ public final class HomePlugin extends JavaPlugin {
         PlayerChatListener playerChatListener = new PlayerChatListener(this, cache);
         final MySqlHomeRepository mySqlHomeRepository = new MySqlHomeRepository(databaseManager);
         final MySqlMemberRepository mySqlMemberRepository = new MySqlMemberRepository(databaseManager);
+        final RequestManager requestManager = new RequestManager();
 
 
 
         PluginCommand command = getCommand("home");
         if(command != null) {
-            command.setExecutor(new HomeCommand(menuService, menuService.getMenuManager(), playerChatListener));
-            command.setTabCompleter(new HomeCommand(menuService, menuService.getMenuManager(), playerChatListener));
+            command.setExecutor(new HomeCommand(menuService, menuService.getMenuManager(), playerChatListener, requestManager));
+            command.setTabCompleter(new HomeCommand(menuService, menuService.getMenuManager(), playerChatListener, requestManager));
         } else {
             throw new RuntimeException("No command found!");
         }
