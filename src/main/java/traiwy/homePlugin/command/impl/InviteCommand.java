@@ -1,14 +1,13 @@
 package traiwy.homePlugin.command.impl;
 
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import traiwy.homePlugin.command.SubCommand;
 
-public class CancelCommand implements SubCommand{
+public class InviteCommand implements SubCommand {
     @Override
     public @NotNull String getName() {
-        return "cansel";
+        return "invite";
     }
 
     @Override

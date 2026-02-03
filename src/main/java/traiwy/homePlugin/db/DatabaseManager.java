@@ -21,8 +21,8 @@ public class DatabaseManager {
     }
 
     public void setup() {
-        createDatabase();
         setupHikari();
+        createDatabase();
         createTables();
     }
 

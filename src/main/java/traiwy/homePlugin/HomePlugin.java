@@ -8,11 +8,10 @@ import traiwy.homePlugin.configuration.Config;
 import traiwy.homePlugin.db.DatabaseManager;
 import traiwy.homePlugin.db.home.MySqlHomeRepository;
 import traiwy.homePlugin.db.member.MySqlMemberRepository;
-import traiwy.homePlugin.gui.MenuManager;
-import traiwy.homePlugin.gui.service.MenuActionRegistry;
 import traiwy.homePlugin.gui.service.MenuService;
-import traiwy.homePlugin.listener.PlayerChatListener;
 import traiwy.homePlugin.listener.PlayerCacheListener;
+import traiwy.homePlugin.listener.PlayerChatListener;
+
 
 public final class HomePlugin extends JavaPlugin {
     private DatabaseManager databaseManager;
@@ -28,9 +27,12 @@ public final class HomePlugin extends JavaPlugin {
         final MySqlHomeRepository mySqlHomeRepository = new MySqlHomeRepository(databaseManager);
         final MySqlMemberRepository mySqlMemberRepository = new MySqlMemberRepository(databaseManager);
 
+
+
         PluginCommand command = getCommand("home");
         if(command != null) {
             command.setExecutor(new HomeCommand(menuService, menuService.getMenuManager(), playerChatListener));
+            command.setTabCompleter(new HomeCommand(menuService, menuService.getMenuManager(), playerChatListener));
         } else {
             throw new RuntimeException("No command found!");
         }
@@ -46,4 +48,6 @@ public final class HomePlugin extends JavaPlugin {
         }
         cache.clear();
     }
+
+
 }

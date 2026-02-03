@@ -7,7 +7,7 @@ import traiwy.homePlugin.command.SubCommand;
 public class AcceptCommand implements SubCommand {
     @Override
     public @NotNull String getName() {
-        return "";
+        return "accept";
     }
 
     @Override

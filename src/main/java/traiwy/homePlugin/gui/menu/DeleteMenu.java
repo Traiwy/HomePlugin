@@ -15,8 +15,8 @@ import java.util.List;
 
 public class DeleteMenu extends Menu {
     private final MenuService service;
-    public static final int[] RED_PANEL = {0,1,2,3,4,5,6,7,8,9,17, 18, 36, 26, 44,46,47, 48, 50, 51, 52, 53, 27, 35};
-    private static final int[] COUNT_PLAYER_HEAD = {10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34,28,29,30,31,32,33,34,37,38,39,40,41,42,43};
+    public static final int[] RED_PANEL = {0,1,2,3,5,6,7,8,9,17, 18, 36, 26, 44,46,47, 48, 50, 51, 52, 53, 27, 35};
+    private static final int[] COUNT_PLAYER_HEAD = {10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34};
     public DeleteMenu(MenuService service) {
         super("deletemenu", "Delete Menu", 54);
 
@@ -26,6 +26,30 @@ public class DeleteMenu extends Menu {
     @Override
     public void setup(Player player) {
         final List<Home> homes = service.getCacheHome().getAllHome(player.getName());
+
+        for (int slot : RED_PANEL) {
+            if (!getItems().containsKey(slot)) {
+                setItem(slot, new MenuItem(
+                        new ItemStack(Material.RED_STAINED_GLASS_PANE), null
+                ));
+            }
+        }
+
+        var menuConfig = service.getCfgData().menus().get("delete");
+        menuConfig.layout().forEach((slot, itemId) -> {
+            var itemCfg = service.getCfgData().items().get(itemId);
+            ItemBuilder builder = ItemBuilder.of(Material.valueOf(itemCfg.material()));
+            if (itemCfg.name() != null)
+                builder.name(itemCfg.name());
+            if (itemCfg.lore() != null)
+                builder.lore(itemCfg.lore());
+            final ItemStack item = builder.build();
+            setItem(slot, new MenuItem(item, e ->{
+                service.getMenuActionRegistry().execute(itemId, player);
+            }
+            ));
+        });
+
 
         for (int slotIndex = 0; slotIndex < homes.size() && slotIndex < COUNT_PLAYER_HEAD.length; slotIndex++) {
             Home home = homes.get(slotIndex);
@@ -55,18 +79,15 @@ public class DeleteMenu extends Menu {
                     .lore(lore)
                     .build();
 
-            setItem(COUNT_PLAYER_HEAD[slotIndex], new MenuItem(item, e -> {
-                // TODO: обработка клика
+            final int slot = COUNT_PLAYER_HEAD[slotIndex];
+            setItem(slot, new MenuItem(item, e -> {
+                service.getCacheHome().remove(player.getName(), home);
+                player.getOpenInventory().getTopInventory().setItem(slot, null);
             }));
-        }
-
-        for (int i = 0; i < RED_PANEL.length; i++) {
-            setItem(RED_PANEL[i], new MenuItem(new ItemStack(Material.RED_STAINED_GLASS_PANE), null));
         }
 
         setItem(49, new  MenuItem(new ItemStack(Material.RED_DYE), InventoryClickEvent -> {
             player.openInventory(service.getListMenu().getInventory());
         }));
     }
-
 }

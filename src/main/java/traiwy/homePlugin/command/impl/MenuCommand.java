@@ -16,7 +16,7 @@ public class MenuCommand implements SubCommand {
 
     @Override
     public @NotNull String getName() {
-        return "";
+        return "menu";
     }
 
     @Override

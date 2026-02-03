@@ -51,47 +51,14 @@ public class HomeCommand implements CommandExecutor, TabExecutor {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        String[] SUBCOMMAND = command.getAliases().toArray(new String[0]);
         if (strings.length == 1) {
-            return Arrays.stream(SUBCOMMAND)
+            return commands.keySet().stream()
                     .filter(sub -> sub.startsWith(strings[0].toLowerCase()))
                     .collect(Collectors.toList());
         }
-        if (strings.length == 2 && strings[0].equalsIgnoreCase("share")) {
-            List<String> players = Bukkit.getOnlinePlayers().stream()
-                    .map(Player::getName)
-                    .collect(Collectors.toList());
 
-            return players.stream()
-                    .filter(name -> name.toLowerCase().startsWith(strings[1].toLowerCase()))
-                    .collect(Collectors.toList());
-        }
         return Collections.emptyList();
+
     }
 
-    //public boolean setHomeCommand(Player player) {
-    //    UUID uuid = player.getUniqueId();
-    //    if (PlayerChatListener.awaitingHomeName.containsKey(uuid)) {
-    //        player.sendMessage("Вы уже вводите название дома");
-    //        return true;
-    //    }
-    //    PlayerChatListener.readyToSetHome.add(uuid);
-    //    BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-    //        if (!PlayerChatListener.readyToSetHome.contains(uuid)) {
-    //            PlayerChatListener.awaitingHomeName.get(uuid);
-    //            PlayerChatListener.awaitingHomeName.remove(uuid);
-    //            return;
-    //        }
-    //        for (int i = 0; i < 10; i++) {
-    //            player.sendMessage(" ");
-    //        }
-    //        player.sendMessage("Введите название дома в чат...");
-    //    }, 0L, 20L);
-    //    PlayerChatListener.awaitingHomeName.put(uuid, task.toString());
-    //    return true;
-    //}
-//
-    //public static String getSharedPlayerName() {
-    //    return sharedPlayerName;
-    //}
 }

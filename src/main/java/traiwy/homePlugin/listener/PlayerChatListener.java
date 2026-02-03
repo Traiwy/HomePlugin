@@ -72,7 +72,7 @@ public class PlayerChatListener implements Listener {
             return;
         }
 
-        List<Member> members = List.of();
+        final List<Member> members = List.of();
 
         Bukkit.getScheduler().runTask(plugin, () -> {
             LocationData loc = new LocationData(

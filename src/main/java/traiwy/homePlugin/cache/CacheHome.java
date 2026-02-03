@@ -17,11 +17,26 @@ public class CacheHome {
     }
 
     public List<Home> getAllHome(@NotNull String playerName) {
+        List<Home> playerHomes = homes.getOrDefault(playerName, new ArrayList<>());
+
+
+        for (Home home : playerHomes) {
+            System.out.println(home);
+        }
+
         return homes.getOrDefault(playerName, new ArrayList<>());
     }
 
-    public void remove(@NotNull String playerName) {
+    public void removeAllHome(@NotNull String playerName) {
         homes.remove(playerName);
+    }
+
+    public void remove(@NotNull String playerName, @NotNull Home home) {
+        final List<Home> playerHomes = homes.get(playerName);
+        if(playerHomes != null) {
+            playerHomes.remove(home);
+        }
+
     }
 
     public void clear() {

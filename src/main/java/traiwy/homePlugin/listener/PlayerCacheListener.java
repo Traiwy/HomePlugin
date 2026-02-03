@@ -25,20 +25,31 @@ public class PlayerCacheListener implements Listener {
                 cache.add(player.getName(), home);
             }
         });
-
         player.sendMessage("Дома игрока загружены");
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent e){
         final Player player = e.getPlayer();
-        List<Home> homes = cache.getAllHome(player.getName());
+        final List<Home> homes = cache.getAllHome(player.getName());
+        mySqlHomeRepository.findByOwner(player.getName()).thenAccept(dbHomes-> {
+            for(Home home : dbHomes) {
+                mySqlHomeRepository.save(home);
+            }
+
+            for(Home dbHome : dbHomes) {
+                boolean exists = homes.stream().anyMatch(h -> h.homeName().equalsIgnoreCase(dbHome.homeName()));
+                if(!exists) {
+                    mySqlHomeRepository.delete(dbHome);
+                }
+            }
+        });
         if(homes.isEmpty()) return;
         for(Home home : homes){
             mySqlHomeRepository.save(home);
             System.out.println(home.homeName());
         }
-        cache.remove(player.getName());
+        cache.removeAllHome(player.getName());
         System.out.println("Все дома игрока: " + player.getName() + " сохранены!");
 
     }

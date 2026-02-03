@@ -28,6 +28,7 @@ public abstract class Menu implements InventoryHolder {
     public abstract void setup(Player player);
 
     public void open(Player player) {
+        inventory.clear();
         setup(player);
         player.openInventory(inventory);
     }

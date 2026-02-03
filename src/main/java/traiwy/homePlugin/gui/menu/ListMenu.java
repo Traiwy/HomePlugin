@@ -1,5 +1,7 @@
 package traiwy.homePlugin.gui.menu;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -84,8 +86,13 @@ public class ListMenu extends Menu {
                     .lore(lore)
                     .build();
 
+            final Location location = new Location(Bukkit.getWorld(home.location().world()),
+                    home.location().x(),
+                    home.location().y(),
+                    home.location().z());
+
             setItem(COUNT_PLAYER_HEAD[slotIndex], new MenuItem(item, e -> {
-                // TODO: обработка клика
+                player.teleport(location);
             }));
         }
 
