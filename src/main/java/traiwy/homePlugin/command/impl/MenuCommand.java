@@ -5,6 +5,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import traiwy.homePlugin.command.SubCommand;
+import traiwy.homePlugin.error.CommandError;
+import traiwy.homePlugin.error.provider.CommandErrorMessageProvider;
 import traiwy.homePlugin.gui.MenuManager;
 import traiwy.homePlugin.gui.menu.MainMenu;
 import traiwy.homePlugin.gui.service.MenuService;
@@ -31,7 +33,20 @@ public class MenuCommand implements SubCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String[] args) {
-        Player player = (Player) sender;
-       menuManager.openMenu(player, menuService.getMainMenu());
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(
+                    CommandErrorMessageProvider.getMessage(CommandError.CONSOLE)
+            );
+            return;
+        }
+
+        if (!permission().isEmpty() && !player.hasPermission(permission())) {
+            player.sendMessage(
+                    CommandErrorMessageProvider.getMessage(CommandError.NO_PERMISSION)
+            );
+            return;
+        }
+
+        menuManager.openMenu(player, menuService.getMainMenu());
     }
 }

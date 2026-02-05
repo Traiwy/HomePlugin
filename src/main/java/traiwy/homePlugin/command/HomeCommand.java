@@ -1,6 +1,8 @@
 package traiwy.homePlugin.command;
 
 import traiwy.homePlugin.command.impl.*;
+import traiwy.homePlugin.error.CommandError;
+import traiwy.homePlugin.error.provider.CommandErrorMessageProvider;
 import traiwy.homePlugin.gui.MenuManager;
 import traiwy.homePlugin.gui.menu.MainMenu;
 import org.bukkit.Bukkit;
@@ -31,20 +33,27 @@ public class HomeCommand implements CommandExecutor, TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) return false;
-
-        if(args.length == 0) return false;
+        if (args.length == 0) {
+            sender.sendMessage(
+                    CommandErrorMessageProvider.getMessage(CommandError.ARGS)
+            );
+            return true;
+        }
 
         String subCommandName = args[0].toLowerCase();
         SubCommand subCommand = commands.get(subCommandName);
 
         if (subCommand == null) {
-            player.sendMessage("Неизвестная подкоманда: " + subCommandName);
+            sender.sendMessage(
+                    CommandErrorMessageProvider.getMessage(
+                            CommandError.UNKNOWN_SUBCOMMAND
+                    )
+            );
             return true;
         }
 
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-        subCommand.execute(player, subArgs);
+        subCommand.execute(sender, subArgs);
         return true;
     }
 

@@ -1,0 +1,13 @@
+package traiwy.homePlugin.error;
+
+public enum RequestError {
+    REQUEST_ALREADY_SENT,
+    REQUEST_ALREADY_EXISTS,
+    REQUEST_NOT_FOUND,
+    REQUEST_EXPIRED,
+    REQUEST_CANCELLED,
+
+    REQUEST_COOLDOWN,
+    REQUEST_BLOCKED,
+    TOO_MANY_REQUESTS
+}
