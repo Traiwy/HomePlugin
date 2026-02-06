@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import traiwy.homePlugin.cache.CacheHome;
 import traiwy.homePlugin.db.home.MySqlHomeRepository;
+import traiwy.homePlugin.gui.MenuManager;
 import traiwy.homePlugin.home.Home;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 public class PlayerCacheListener implements Listener {
     private final CacheHome cache;
     private final MySqlHomeRepository mySqlHomeRepository;
+    private final MenuManager menuManager;
     private final JavaPlugin plugin;
 
     @EventHandler
@@ -48,5 +50,6 @@ public class PlayerCacheListener implements Listener {
                 ));
 
         cache.removeAllHome(player.getName());
+        menuManager.clear(player);
     }
 }

@@ -19,6 +19,7 @@ public class MenuActionRegistry {
             case "open_settings" -> menuManager.openMenu(player, service.getSettingsMenu());
             case "create_home" -> player.performCommand("home create");
             case "redstone" -> menuManager.openMenu(player, service.getDeleteAllMenu());
+            case "back" -> menuManager.openPrevious(player);
         }
     }
 }

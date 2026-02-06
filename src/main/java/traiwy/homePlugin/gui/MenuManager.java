@@ -11,25 +11,49 @@ import java.util.Map;
 import java.util.UUID;
 
 public class MenuManager implements Listener {
-    private final Map<UUID, Menu> openedMenus = new HashMap<>();
+    private final Map<UUID, MenuHistory> histories = new HashMap<>();
+
+    private MenuHistory history(Player player) {
+        return histories.computeIfAbsent(
+                player.getUniqueId(),
+                k -> new MenuHistory()
+        );
+    }
 
     public void openMenu(Player player, Menu menu) {
+        history(player).push(menu);
         menu.open(player);
-        openedMenus.put(player.getUniqueId(), menu);
+    }
+
+    public void openPrevious(Player player) {
+        MenuHistory history = history(player);
+
+        history.pop();
+        Menu previous = history.peek();
+
+        if (previous != null) {
+            previous.open(player);
+        } else {
+            player.closeInventory();
+        }
     }
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if(!(event.getWhoClicked() instanceof Player)) return;
+        if (!(event.getWhoClicked() instanceof Player player)) return;
 
-        final Player player = (Player) event.getWhoClicked();
-        final Menu menu = openedMenus.get(player.getUniqueId());
+        MenuHistory history = histories.get(player.getUniqueId());
+        if (history == null || history.isEmpty()) return;
 
-        if(menu != null && menu.getInventory().equals(menu.getInventory())) menu.onClick(event);
+        Menu current = history.peek();
+        if (!event.getInventory().equals(current.getInventory())) return;
+
+        event.setCancelled(true);
+        current.onClick(event);
     }
 
-    @EventHandler
-    public void onClose(InventoryCloseEvent event) {
-        openedMenus.remove(event.getPlayer().getUniqueId());
+
+    public void clear(Player player) {
+        histories.remove(player.getUniqueId());
     }
 }
