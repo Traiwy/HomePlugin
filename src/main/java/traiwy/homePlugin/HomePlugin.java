@@ -11,6 +11,7 @@ import traiwy.homePlugin.db.member.MySqlMemberRepository;
 import traiwy.homePlugin.gui.service.MenuService;
 import traiwy.homePlugin.listener.PlayerCacheListener;
 import traiwy.homePlugin.listener.PlayerChatListener;
+import traiwy.homePlugin.manager.ClickHomeManager;
 import traiwy.homePlugin.manager.RequestManager;
 
 
@@ -39,7 +40,7 @@ public final class HomePlugin extends JavaPlugin {
             throw new RuntimeException("No command found!");
         }
         getServer().getPluginManager().registerEvents(playerChatListener, this);
-        getServer().getPluginManager().registerEvents(new PlayerCacheListener(cache, mySqlHomeRepository), this);
+        getServer().getPluginManager().registerEvents(new PlayerCacheListener(cache, mySqlHomeRepository, this), this);
         getServer().getPluginManager().registerEvents(menuService.getMenuManager(), this);
     }
 

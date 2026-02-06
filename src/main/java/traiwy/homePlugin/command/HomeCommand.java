@@ -23,12 +23,15 @@ import java.util.stream.Collectors;
 public class HomeCommand implements CommandExecutor, TabExecutor {
     private final Map<String, SubCommand> commands = new HashMap<>();
 
-    public HomeCommand(MenuService menuService, MenuManager menuManager, PlayerChatListener playerChatListener, RequestManager requestManager) {
+    public HomeCommand(MenuService menuService,
+                       MenuManager menuManager,
+                       PlayerChatListener playerChatListener,
+                       RequestManager requestManager) {
         commands.put("menu", new MenuCommand(menuService, menuManager));
         commands.put("accept", new AcceptCommand());
         commands.put("cancel", new CancelCommand());
         commands.put("create", new CreateCommand(playerChatListener));
-        commands.put("invite", new InviteCommand(requestManager));
+        commands.put("invite", new InviteCommand(requestManager, menuService));
     }
 
     @Override

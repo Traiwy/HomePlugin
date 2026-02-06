@@ -83,7 +83,8 @@ public class PlayerChatListener implements Listener {
                     player.getPitch()
             );
 
-            cache.add(nameHome, new Home(player.getName(), nameHome, loc, members));
+            cache.add(player.getName(), new Home(player.getName(), nameHome, loc, members));
+            player.sendMessage("Дом: " + nameHome);
             stopReminder(uuid);
             player.sendMessage("§aДом успешно сохранён!");
         });

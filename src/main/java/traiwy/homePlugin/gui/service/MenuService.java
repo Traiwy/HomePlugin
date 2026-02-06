@@ -5,9 +5,11 @@ import traiwy.homePlugin.cache.CacheHome;
 import traiwy.homePlugin.configuration.dto.ConfigData;
 import traiwy.homePlugin.gui.MenuManager;
 import traiwy.homePlugin.gui.menu.*;
+import traiwy.homePlugin.gui.menu.choose.ChooseHomeMenu;
 import traiwy.homePlugin.gui.menu.settings.DeleteAllMenu;
 import traiwy.homePlugin.gui.menu.settings.SettingsMenu;
 import traiwy.homePlugin.gui.menu.settings.DelayMenu;
+import traiwy.homePlugin.manager.ClickHomeManager;
 
 @Getter
 public class MenuService {
@@ -18,14 +20,17 @@ public class MenuService {
     private final DelayMenu delayMenu;
     private final ShareMenu shareMenu;
     private final DeleteAllMenu deleteAllMenu;
+    private final ChooseHomeMenu chooseHomeMenu;
 
     private final ConfigData cfgData;
     private final CacheHome cacheHome;
     private final MenuActionRegistry menuActionRegistry;
     private final MenuManager menuManager;
+    private final ClickHomeManager clickHomeManager;
 
     public MenuService(CacheHome cacheHome, ConfigData cfgData) {
         this.cacheHome = cacheHome;
+        this.clickHomeManager = new ClickHomeManager();
         this.menuManager = new MenuManager();
         this.menuActionRegistry = new MenuActionRegistry(this, menuManager);
         this.cfgData = cfgData;
@@ -36,5 +41,6 @@ public class MenuService {
         this.delayMenu = new DelayMenu();
         this.shareMenu = new ShareMenu();
         this.deleteAllMenu = new DeleteAllMenu(this);
+        this.chooseHomeMenu = new ChooseHomeMenu(this);
     }
 }

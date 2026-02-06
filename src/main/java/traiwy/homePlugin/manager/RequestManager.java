@@ -16,5 +16,8 @@ public class RequestManager {
     public void  removeRequest(Request request) {
         requests.remove(request);
     }
+    public boolean hasRequest(Request request) {
+        return requests.contains(request);
+    }
 
 }

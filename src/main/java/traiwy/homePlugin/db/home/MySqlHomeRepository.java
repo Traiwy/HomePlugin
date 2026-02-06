@@ -115,5 +115,44 @@ public class MySqlHomeRepository implements HomeRepository {
             }
         }, executor);
     }
+
+    @Override
+    public CompletableFuture<Void> replaceAll(String owner, List<Home> homes) {
+        return CompletableFuture.runAsync(() -> {
+            String deleteSql = "DELETE FROM homes WHERE owner = ?";
+            String insertSql = """
+            INSERT INTO homes (owner, name, world, x, y, z, yaw, pitch)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """;
+
+            try (Connection conn = dataSource.getDs().getConnection()) {
+                conn.setAutoCommit(false);
+
+                try (PreparedStatement deletePs = conn.prepareStatement(deleteSql)) {
+                    deletePs.setString(1, owner);
+                    deletePs.executeUpdate();
+                }
+
+                try (PreparedStatement insertPs = conn.prepareStatement(insertSql)) {
+                    for (Home home : homes) {
+                        insertPs.setString(1, home.ownerName());
+                        insertPs.setString(2, home.homeName());
+                        insertPs.setString(3, home.location().world());
+                        insertPs.setDouble(4, home.location().x());
+                        insertPs.setDouble(5, home.location().y());
+                        insertPs.setDouble(6, home.location().z());
+                        insertPs.setFloat(7, home.location().yaw());
+                        insertPs.setFloat(8, home.location().pitch());
+                        insertPs.addBatch();
+                    }
+                    insertPs.executeBatch();
+                }
+
+                conn.commit();
+            } catch (SQLException e) {
+                throw new RuntimeException("Failed to replace homes for " + owner, e);
+            }
+        }, executor);
+    }
 }
 

@@ -14,14 +14,14 @@ public class CacheHome {
 
     public void add(@NotNull String playerName, @NotNull Home home) {
         homes.computeIfAbsent(playerName, k -> new ArrayList<>()).add(home);
+        System.out.println("Дом доб");
     }
 
     public List<Home> getAllHome(@NotNull String playerName) {
         List<Home> playerHomes = homes.getOrDefault(playerName, new ArrayList<>());
 
-
         for (Home home : playerHomes) {
-            System.out.println(home);
+            System.out.println(home.homeName());
         }
 
         return homes.getOrDefault(playerName, new ArrayList<>());

@@ -7,15 +7,15 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import traiwy.homePlugin.command.SubCommand;
 import traiwy.homePlugin.error.CommandError;
-import traiwy.homePlugin.error.RequestError;
 import traiwy.homePlugin.error.provider.CommandErrorMessageProvider;
-import traiwy.homePlugin.error.provider.RequestErrorMessageProvider;
+import traiwy.homePlugin.gui.service.MenuService;
 import traiwy.homePlugin.manager.RequestManager;
 import traiwy.homePlugin.share.Request;
 
 @AllArgsConstructor
 public class InviteCommand implements SubCommand {
     private final RequestManager requestManager;
+    private final MenuService menuService;
 
     @Override
     public @NotNull String getName() {
@@ -38,7 +38,7 @@ public class InviteCommand implements SubCommand {
             sender.sendMessage(CommandErrorMessageProvider.getMessage(CommandError.CONSOLE));
             return;
         }
-        if (args.length < 2) {
+        if (args.length < 1) {
             player.sendMessage(
                     CommandErrorMessageProvider.getMessage(CommandError.ARGS)
             );
@@ -57,11 +57,13 @@ public class InviteCommand implements SubCommand {
             );
             return;
         }
+        menuService.getMenuManager().openMenu(player, menuService.getChooseHomeMenu());
 
-        final Request request = new Request(player, target, 100);
 
-        requestManager.addRequest(request);
-        player.sendMessage("Вы отправили заявку игроку: " + target.getName());
-        player.sendMessage("У него есть " + request.getFormattedTime() + " времени, чтобы принять заявку");
+        //final Request request = new Request(player, target, 100);
+//
+        //requestManager.addRequest(request);
+        //player.sendMessage("Вы отправили заявку игроку: " + target.getName());
+        //player.sendMessage("У него есть " + request.getFormattedTime() + " времени, чтобы принять заявку");
     }
 }
