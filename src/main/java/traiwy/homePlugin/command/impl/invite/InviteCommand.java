@@ -1,4 +1,4 @@
-package traiwy.homePlugin.command.impl;
+package traiwy.homePlugin.command.impl.invite;
 
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
@@ -6,15 +6,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import traiwy.homePlugin.command.SubCommand;
+import traiwy.homePlugin.command.impl.invite.context.InviteContextManager;
 import traiwy.homePlugin.error.CommandError;
 import traiwy.homePlugin.error.provider.CommandErrorMessageProvider;
 import traiwy.homePlugin.gui.service.MenuService;
 import traiwy.homePlugin.manager.RequestManager;
-import traiwy.homePlugin.share.Request;
 
 @AllArgsConstructor
 public class InviteCommand implements SubCommand {
     private final RequestManager requestManager;
+    private final InviteContextManager inviteContextManager;
     private final MenuService menuService;
 
     @Override
@@ -57,13 +58,9 @@ public class InviteCommand implements SubCommand {
             );
             return;
         }
+        inviteContextManager.create(player, target);
         menuService.getMenuManager().openMenu(player, menuService.getChooseHomeMenu());
 
 
-        //final Request request = new Request(player, target, 100);
-//
-        //requestManager.addRequest(request);
-        //player.sendMessage("Вы отправили заявку игроку: " + target.getName());
-        //player.sendMessage("У него есть " + request.getFormattedTime() + " времени, чтобы принять заявку");
     }
 }

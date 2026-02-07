@@ -1,16 +1,15 @@
 package traiwy.homePlugin.command;
 
 import traiwy.homePlugin.command.impl.*;
+import traiwy.homePlugin.command.impl.invite.InviteCommand;
+import traiwy.homePlugin.command.impl.invite.context.InviteContextManager;
 import traiwy.homePlugin.error.CommandError;
 import traiwy.homePlugin.error.provider.CommandErrorMessageProvider;
 import traiwy.homePlugin.gui.MenuManager;
-import traiwy.homePlugin.gui.menu.MainMenu;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import traiwy.homePlugin.gui.service.MenuService;
@@ -26,12 +25,13 @@ public class HomeCommand implements CommandExecutor, TabExecutor {
     public HomeCommand(MenuService menuService,
                        MenuManager menuManager,
                        PlayerChatListener playerChatListener,
-                       RequestManager requestManager) {
+                       RequestManager requestManager,
+                       InviteContextManager inviteContextManager) {
         commands.put("menu", new MenuCommand(menuService, menuManager));
         commands.put("accept", new AcceptCommand());
         commands.put("cancel", new CancelCommand());
         commands.put("create", new CreateCommand(playerChatListener));
-        commands.put("invite", new InviteCommand(requestManager, menuService));
+        commands.put("invite", new InviteCommand(requestManager, inviteContextManager, menuService));
     }
 
     @Override

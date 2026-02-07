@@ -1,10 +1,11 @@
 package traiwy.homePlugin.share;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import traiwy.homePlugin.home.Home;
 
 
-public record Request(Player sender, Player receiver, int time, Home home) {
+public record Request(@NotNull Player sender, Player receiver, int time, @NotNull Home home) {
     public String getFormattedTime() {
         int minutes = time / 60;
         int seconds = time % 60;

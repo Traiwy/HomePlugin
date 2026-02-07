@@ -2,6 +2,7 @@ package traiwy.homePlugin.gui.service;
 
 import lombok.Getter;
 import traiwy.homePlugin.cache.CacheHome;
+import traiwy.homePlugin.command.impl.invite.context.InviteContextManager;
 import traiwy.homePlugin.configuration.dto.ConfigData;
 import traiwy.homePlugin.gui.MenuManager;
 import traiwy.homePlugin.gui.menu.*;
@@ -10,6 +11,7 @@ import traiwy.homePlugin.gui.menu.settings.DeleteAllMenu;
 import traiwy.homePlugin.gui.menu.settings.SettingsMenu;
 import traiwy.homePlugin.gui.menu.settings.DelayMenu;
 import traiwy.homePlugin.manager.ClickHomeManager;
+import traiwy.homePlugin.manager.RequestManager;
 
 @Getter
 public class MenuService {
@@ -27,9 +29,13 @@ public class MenuService {
     private final MenuActionRegistry menuActionRegistry;
     private final MenuManager menuManager;
     private final ClickHomeManager clickHomeManager;
+    private final RequestManager requestManager;
+    private final InviteContextManager inviteContextManager;
 
     public MenuService(CacheHome cacheHome, ConfigData cfgData) {
         this.cacheHome = cacheHome;
+        this.requestManager = new RequestManager();
+        this.inviteContextManager = new InviteContextManager();
         this.clickHomeManager = new ClickHomeManager();
         this.menuManager = new MenuManager();
         this.menuActionRegistry = new MenuActionRegistry(this, menuManager);

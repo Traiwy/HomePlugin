@@ -34,13 +34,13 @@ public final class HomePlugin extends JavaPlugin {
 
         PluginCommand command = getCommand("home");
         if(command != null) {
-            command.setExecutor(new HomeCommand(menuService, menuService.getMenuManager(), playerChatListener, requestManager));
-            command.setTabCompleter(new HomeCommand(menuService, menuService.getMenuManager(), playerChatListener, requestManager));
+            command.setExecutor(new HomeCommand(menuService, menuService.getMenuManager(), playerChatListener, requestManager, menuService.getInviteContextManager()));
+            command.setTabCompleter(new HomeCommand(menuService, menuService.getMenuManager(), playerChatListener, requestManager, menuService.getInviteContextManager()));
         } else {
             throw new RuntimeException("No command found!");
         }
         getServer().getPluginManager().registerEvents(playerChatListener, this);
-        getServer().getPluginManager().registerEvents(new PlayerCacheListener(cache, mySqlHomeRepository, this), this);
+        getServer().getPluginManager().registerEvents(new PlayerCacheListener(cache, mySqlHomeRepository, menuService.getMenuManager(), this), this);
         getServer().getPluginManager().registerEvents(menuService.getMenuManager(), this);
     }
 

@@ -1,22 +1,23 @@
 package traiwy.homePlugin.gui.menu.choose;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import traiwy.homePlugin.command.impl.invite.context.InviteContext;
 import traiwy.homePlugin.gui.Menu;
 import traiwy.homePlugin.gui.button.MenuItem;
 import traiwy.homePlugin.gui.service.MenuService;
 import traiwy.homePlugin.home.Home;
 import traiwy.homePlugin.home.Member;
+import traiwy.homePlugin.manager.RequestManager;
+import traiwy.homePlugin.share.Request;
 import traiwy.homePlugin.util.ItemBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChooseHomeMenu extends Menu {
-    private static final int[] GREEN_PANEL = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 36, 26, 44, 46, 47, 48, 50, 51, 52, 53};
+    private static final int[] GREEN_PANEL = {0, 1, 2, 3,5, 6, 7, 8, 9, 17, 18, 36, 26, 44, 46, 47, 48, 50, 51, 52, 53};
     private static final int[] COUNT_PLAYER_HEAD = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
 
     private final MenuService service;
@@ -83,14 +84,14 @@ public class ChooseHomeMenu extends Menu {
                     .lore(lore)
                     .build();
 
-            //final Location location = new Location(Bukkit.getWorld(home.location().world()),
-            //        home.location().x(),
-            //        home.location().y(),
-            //        home.location().z());
-//
             setItem(COUNT_PLAYER_HEAD[slotIndex], new MenuItem(item, e -> {
                 service.getClickHomeManager().addHome(player, home);
-                player.sendMessage("Вы кликнули на дом: " + home.homeName());
+                final InviteContext context = service.getInviteContextManager().get(player);
+                final Request request = new Request(context.sender(), context.receiver(), 100, home);
+                service.getRequestManager().addRequest(request);
+                context.sender().sendMessage("Вы отправили заявку");
+                context.receiver().sendMessage("Вам отправили заявку, чтобы её принять пропиши /home accept");
+                getInventory().close();
             }));
         }
 
