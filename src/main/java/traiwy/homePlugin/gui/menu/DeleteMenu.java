@@ -25,7 +25,7 @@ public class DeleteMenu extends Menu {
 
     @Override
     public void setup(Player player) {
-        final List<Home> homes = service.getCacheHome().getAllHome(player.getName());
+        final List<Home> homes = service.getHomeCache().getAllHome(player.getName());
 
         for (int slot : RED_PANEL) {
             if (!getItems().containsKey(slot)) {
@@ -58,11 +58,10 @@ public class DeleteMenu extends Menu {
             lore.add(" ");
             lore.add("§b❙ §fВладелец: §b" + home.ownerName());
 
-            if (!home.members().isEmpty()) {
+            List<Member> members = service.getHomeFacade().getMembers(home);
+            if (!members.isEmpty()) {
                 final List<String> memberNames = new ArrayList<>();
-                for (Member member : home.members()) {
-                    if (member != null) memberNames.add(member.name());
-                }
+                for (Member member : members) memberNames.add(member.name());
                 lore.add("§b❙ §fУчастники: §b" + String.join(", ", memberNames));
             }
 
@@ -81,7 +80,7 @@ public class DeleteMenu extends Menu {
 
             final int slot = COUNT_PLAYER_HEAD[slotIndex];
             setItem(slot, new MenuItem(item, e -> {
-                service.getCacheHome().remove(player.getName(), home);
+                service.getHomeCache().remove(player.getName(), home);
                 player.getOpenInventory().getTopInventory().setItem(slot, null);
             }));
         }

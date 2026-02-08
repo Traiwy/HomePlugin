@@ -1,6 +1,7 @@
 package traiwy.homePlugin.manager;
 
 import lombok.Getter;
+import org.bukkit.entity.Player;
 import traiwy.homePlugin.share.Request;
 
 import java.util.HashSet;
@@ -18,6 +19,15 @@ public class RequestManager {
     }
     public boolean hasRequest(Request request) {
         return requests.contains(request);
+    }
+
+    public Request getRequestFor(Player receiver) {
+        for (Request r : requests) {
+            if (r.receiver().equals(receiver)) {
+                return r;
+            }
+        }
+        return null;
     }
 
 }

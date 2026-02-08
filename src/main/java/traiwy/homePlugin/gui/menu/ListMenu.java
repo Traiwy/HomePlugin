@@ -54,7 +54,7 @@ public class ListMenu extends Menu {
     }
 
     private void setSlotsHomes(Player player) {
-        final List<Home> homes = service.getCacheHome().getAllHome(player.getName());
+        final List<Home> homes = service.getHomeCache().getAllHome(player.getName());
         System.out.println(homes.size());
 
         for (int slotIndex = 0; slotIndex < homes.size() && slotIndex < COUNT_PLAYER_HEAD.length; slotIndex++) {
@@ -65,13 +65,13 @@ public class ListMenu extends Menu {
             lore.add(" ");
             lore.add("§b❙ §fВладелец: §b" + home.ownerName());
 
-            if (!home.members().isEmpty()) {
-                final List<String> memberNames = new ArrayList<>();
-                for (Member member : home.members()) {
-                    if (member != null) memberNames.add(member.name());
+
+            List<Member> members = service.getHomeFacade().getMembers(home);
+                if (!members.isEmpty()) {
+                    final List<String> memberNames = new ArrayList<>();
+                    for (Member member : members) memberNames.add(member.name());
+                    lore.add("§b❙ §fУчастники: §b" + String.join(", ", memberNames));
                 }
-                lore.add("§b❙ §fУчастники: §b" + String.join(", ", memberNames));
-            }
 
             lore.add(" ");
             lore.add("§b❙ §fКоординаты:");

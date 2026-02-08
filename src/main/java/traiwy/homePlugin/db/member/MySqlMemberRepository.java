@@ -98,5 +98,74 @@ public class MySqlMemberRepository implements MemberRepository{
             }
         }, executor);
     }
+
+    @Override
+    public CompletableFuture<List<Member>> findAllByHome(long homeId) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<Member> members = new ArrayList<>();
+            String sql = "SELECT member, role FROM members WHERE home_id = ?";
+
+            try (Connection connection = database.getDs().getConnection();
+                 PreparedStatement ps = connection.prepareStatement(sql)) {
+
+                ps.setLong(1, homeId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        members.add(new Member(
+                                0L,
+                                rs.getString("member"),
+                                Role.valueOf(rs.getString("role"))
+                        ));
+                    }
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Ошибка загрузки мемберов для дома " + homeId, e);
+            }
+
+            return members;
+        }, executor);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> isMember(long homeId, String playerName) {
+        return CompletableFuture.supplyAsync(() -> {
+            String sql = "SELECT COUNT(*) FROM members WHERE home_id = ? AND member = ?";
+            try (Connection connection = database.getDs().getConnection();
+                 PreparedStatement ps = connection.prepareStatement(sql)) {
+
+                ps.setLong(1, homeId);
+                ps.setString(2, playerName);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getInt(1) > 0;
+                    }
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Ошибка проверки мембера", e);
+            }
+
+            return false;
+        }, executor);
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteAllByHome(long homeId) {
+        return CompletableFuture.runAsync(() -> {
+            String sql = "DELETE FROM members WHERE home_id = ?";
+            try (Connection connection = database.getDs().getConnection();
+                 PreparedStatement ps = connection.prepareStatement(sql)) {
+
+                ps.setLong(1, homeId);
+                ps.executeUpdate();
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Ошибка удаления всех мемберов дома " + homeId, e);
+            }
+        }, executor);
+    }
+
 }
 

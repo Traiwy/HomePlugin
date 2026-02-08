@@ -9,7 +9,6 @@ import traiwy.homePlugin.gui.button.MenuItem;
 import traiwy.homePlugin.gui.service.MenuService;
 import traiwy.homePlugin.home.Home;
 import traiwy.homePlugin.home.Member;
-import traiwy.homePlugin.manager.RequestManager;
 import traiwy.homePlugin.share.Request;
 import traiwy.homePlugin.util.ItemBuilder;
 
@@ -52,7 +51,7 @@ public class ChooseHomeMenu extends Menu {
     }
 
     private void setSlotsHomes(Player player) {
-        final List<Home> homes = service.getCacheHome().getAllHome(player.getName());
+        final List<Home> homes = service.getHomeCache().getAllHome(player.getName());
         System.out.println(homes.size());
 
         for (int slotIndex = 0; slotIndex < homes.size() && slotIndex < COUNT_PLAYER_HEAD.length; slotIndex++) {
@@ -63,11 +62,10 @@ public class ChooseHomeMenu extends Menu {
             lore.add(" ");
             lore.add("§b❙ §fВладелец: §b" + home.ownerName());
 
-            if (!home.members().isEmpty()) {
+            List<Member> members = service.getHomeFacade().getMembers(home);
+            if (!members.isEmpty()) {
                 final List<String> memberNames = new ArrayList<>();
-                for (Member member : home.members()) {
-                    if (member != null) memberNames.add(member.name());
-                }
+                for (Member member : members) memberNames.add(member.name());
                 lore.add("§b❙ §fУчастники: §b" + String.join(", ", memberNames));
             }
 
@@ -91,7 +89,7 @@ public class ChooseHomeMenu extends Menu {
                 service.getRequestManager().addRequest(request);
                 context.sender().sendMessage("Вы отправили заявку");
                 context.receiver().sendMessage("Вам отправили заявку, чтобы её принять пропиши /home accept");
-                getInventory().close();
+                player.closeInventory();
             }));
         }
 

@@ -7,9 +7,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import traiwy.homePlugin.cache.CacheHome;
+import traiwy.homePlugin.cache.HomeCache;
 import traiwy.homePlugin.home.Home;
-import traiwy.homePlugin.home.LocationData;
+import traiwy.homePlugin.home.Location;
 import traiwy.homePlugin.home.Member;
 
 import java.util.*;
@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @AllArgsConstructor
 public class PlayerChatListener implements Listener {
     private final JavaPlugin plugin;
-    private final CacheHome cache;
+    private final HomeCache cache;
 
     private final Set<UUID> awaitingHomeName =
             Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -72,10 +72,10 @@ public class PlayerChatListener implements Listener {
             return;
         }
 
-        final List<Member> members = List.of();
+        final List<Member> members = new ArrayList<>();
 
         Bukkit.getScheduler().runTask(plugin, () -> {
-            LocationData loc = new LocationData(
+            Location loc = new Location(
                     player.getWorld().getName(),
                     player.getX(), player.getY(),
                     player.getZ(),
@@ -83,7 +83,7 @@ public class PlayerChatListener implements Listener {
                     player.getPitch()
             );
 
-            cache.add(player.getName(), new Home(player.getName(), nameHome, loc, members));
+            cache.add(player.getName(), new Home(0L, player.getName(), nameHome, loc));
             player.sendMessage("Дом: " + nameHome);
             stopReminder(uuid);
             player.sendMessage("§aДом успешно сохранён!");

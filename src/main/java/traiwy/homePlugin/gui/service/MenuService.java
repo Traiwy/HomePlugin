@@ -1,9 +1,10 @@
 package traiwy.homePlugin.gui.service;
 
 import lombok.Getter;
-import traiwy.homePlugin.cache.CacheHome;
+import traiwy.homePlugin.cache.HomeCache;
 import traiwy.homePlugin.command.impl.invite.context.InviteContextManager;
 import traiwy.homePlugin.configuration.dto.ConfigData;
+import traiwy.homePlugin.facade.HomeFacade;
 import traiwy.homePlugin.gui.MenuManager;
 import traiwy.homePlugin.gui.menu.*;
 import traiwy.homePlugin.gui.menu.choose.ChooseHomeMenu;
@@ -25,15 +26,17 @@ public class MenuService {
     private final ChooseHomeMenu chooseHomeMenu;
 
     private final ConfigData cfgData;
-    private final CacheHome cacheHome;
+    private final HomeCache homeCache;
     private final MenuActionRegistry menuActionRegistry;
     private final MenuManager menuManager;
     private final ClickHomeManager clickHomeManager;
     private final RequestManager requestManager;
     private final InviteContextManager inviteContextManager;
+    private final HomeFacade homeFacade;
 
-    public MenuService(CacheHome cacheHome, ConfigData cfgData) {
-        this.cacheHome = cacheHome;
+    public MenuService(HomeCache homeCache, ConfigData cfgData, HomeFacade homeFacade) {
+        this.homeCache = homeCache;
+        this.homeFacade = homeFacade;
         this.requestManager = new RequestManager();
         this.inviteContextManager = new InviteContextManager();
         this.clickHomeManager = new ClickHomeManager();

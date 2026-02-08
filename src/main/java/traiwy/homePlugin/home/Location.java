@@ -1,6 +1,6 @@
 package traiwy.homePlugin.home;
 
-public record LocationData(
+public record Location(
         String world,
         double x,
         double y,

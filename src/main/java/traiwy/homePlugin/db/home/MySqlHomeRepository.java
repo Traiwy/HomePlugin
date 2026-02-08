@@ -3,7 +3,7 @@ package traiwy.homePlugin.db.home;
 
 import traiwy.homePlugin.db.DatabaseManager;
 import traiwy.homePlugin.home.Home;
-import traiwy.homePlugin.home.LocationData;
+import traiwy.homePlugin.home.Location;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,6 +46,12 @@ public class MySqlHomeRepository implements HomeRepository {
 
                 ps.executeUpdate();
 
+                try(ResultSet rs = ps.getGeneratedKeys()) {
+                    if(rs.next()) {
+                        long id = rs.getLong(1);
+                    }
+                }
+
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -63,7 +69,7 @@ public class MySqlHomeRepository implements HomeRepository {
             List<Home> homes = new ArrayList<>();
 
             String sql = """
-                SELECT name, world, x, y, z, yaw, pitch
+                SELECT id, name, world, x, y, z, yaw, pitch
                 FROM homes
                 WHERE owner = ?
             """;
@@ -76,17 +82,17 @@ public class MySqlHomeRepository implements HomeRepository {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         homes.add(new Home(
+                                rs.getLong("id"),
                                 owner,
                                 rs.getString("name"),
-                                new LocationData(
+                                new Location(
                                         rs.getString("world"),
                                         rs.getDouble("x"),
                                         rs.getDouble("y"),
                                         rs.getDouble("z"),
                                         rs.getFloat("yaw"),
                                         rs.getFloat("pitch")
-                                ),
-                                List.of()
+                                )
                         ));
                     }
                 }
@@ -101,7 +107,7 @@ public class MySqlHomeRepository implements HomeRepository {
     @Override
     public CompletableFuture<Void> delete(Home home) {
         return CompletableFuture.runAsync(() -> {
-            String sql = "DELETE FROM homes WHERE owner = ? AND name = ?";
+            String sql = "DELETE FROM homes WHERE id = ?";
 
             try (Connection con = dataSource.getDs().getConnection();
                  PreparedStatement ps = con.prepareStatement(sql)) {
