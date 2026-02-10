@@ -98,4 +98,8 @@ public class HomeFacade {
         return memberCache.getMembers(home.id());
     }
 
+    public void clearCache(Player player) {
+        cache.removeAllHome(player.getName());
+    }
+
 }

@@ -34,6 +34,10 @@ public class HomeCache {
 
     }
 
+    public void removeAllHome(@NotNull String playerName) {
+        homes.remove(playerName);
+    }
+
     public void clear() {
         homes.clear();
     }

@@ -46,7 +46,7 @@ public final class HomePlugin extends JavaPlugin {
             throw new RuntimeException("No command found!");
         }
         getServer().getPluginManager().registerEvents(playerChatListener, this);
-        getServer().getPluginManager().registerEvents(new PlayerCacheListener(cache, homeFacade, menuService.getMenuManager()), this);
+        getServer().getPluginManager().registerEvents(new PlayerCacheListener(homeFacade, menuService.getMenuManager()), this);
         getServer().getPluginManager().registerEvents(menuService.getMenuManager(), this);
     }
 

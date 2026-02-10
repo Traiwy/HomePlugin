@@ -16,14 +16,12 @@ import java.util.List;
 
 @AllArgsConstructor
 public class PlayerCacheListener implements Listener {
-    private final HomeCache cache;
     private final HomeFacade homeFacade;
     private final MenuManager menuManager;
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-
         homeFacade.load(player);
 
         Bukkit.getLogger().info("Загрузка домов игрока инициирована: " + player.getName());
@@ -34,8 +32,8 @@ public class PlayerCacheListener implements Listener {
         final Player player = event.getPlayer();
 
         homeFacade.save(player);
-
         menuManager.clear(player);
+        homeFacade.clearCache(player);
         Bukkit.getLogger().info("Сохранение домов игрока инициировано: " + player.getName());
     }
 }

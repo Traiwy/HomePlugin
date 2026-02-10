@@ -14,28 +14,29 @@ import java.util.Map;
 @Getter
 public abstract class Menu implements InventoryHolder {
     private final String id;
-    private final Inventory inventory;
+    private Inventory inventory;
     private final int size;
+    private final String title;
     private final Map<Integer, MenuItem> items = new HashMap<>();
 
     protected Menu(String id, String title, int size) {
         this.id = id;
         this.size = size;
-        this.inventory = Bukkit.createInventory(this, size, title);
-
+        this.title = title;
     }
 
     public abstract void setup(Player player);
 
     public void open(Player player) {
+        inventory = Bukkit.createInventory(this, size, title);
         inventory.clear();
         setup(player);
         player.openInventory(inventory);
     }
 
+
     public void onClick(InventoryClickEvent event) {
         event.setCancelled(true);
-
         final MenuItem item = items.get(event.getRawSlot());
         if(item != null) item.click(event);
     }
