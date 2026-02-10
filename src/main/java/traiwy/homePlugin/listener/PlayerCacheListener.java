@@ -23,23 +23,18 @@ public class PlayerCacheListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        cache.removeAllHome(player.getName());
 
-        homeFacade.loadHomesForPlayer(player);
+        homeFacade.load(player);
 
         Bukkit.getLogger().info("Загрузка домов игрока инициирована: " + player.getName());
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        List<Home> homes = cache.getAllHome(player.getName());
+        final Player player = event.getPlayer();
 
-        if (homes.isEmpty()) return;
+        homeFacade.save(player);
 
-        homeFacade.saveHomesForPlayer(player);
-
-        cache.removeAllHome(player.getName());
         menuManager.clear(player);
         Bukkit.getLogger().info("Сохранение домов игрока инициировано: " + player.getName());
     }

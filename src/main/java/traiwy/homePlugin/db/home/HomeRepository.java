@@ -8,5 +8,4 @@ import java.util.concurrent.CompletableFuture;
 
 public interface HomeRepository extends Repository<Home> {
     CompletableFuture<List<Home>> findByOwner(String owner);
-    CompletableFuture<Void> replaceAll(String owner, List<Home> homes);
 }

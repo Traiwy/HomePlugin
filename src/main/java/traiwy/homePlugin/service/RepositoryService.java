@@ -7,6 +7,7 @@ import traiwy.homePlugin.home.Home;
 import traiwy.homePlugin.home.Member;
 import traiwy.homePlugin.home.Role;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -16,45 +17,46 @@ public class RepositoryService {
     private final MemberRepository memberRepo;
 
 
-    public CompletableFuture<Void> createHome(Home home) {
+    public CompletableFuture<Home> save(Home home) {
         return homeRepo.save(home);
     }
 
-    public CompletableFuture<Void> deleteHome(Home home) {
+    public CompletableFuture<List<Home>> get(String owner) {
+        return homeRepo.findByOwner(owner);
+    }
+
+    public CompletableFuture<Void> delete(Home home) {
         return memberRepo.deleteAllByHome(home.id())
                 .thenCompose(v -> homeRepo.delete(home));
     }
 
-    public CompletableFuture<List<Home>> getHomesForPlayer(String playerName) {
-        return homeRepo.findByOwner(playerName);
-    }
-
-    public CompletableFuture<Void> addMember(Home home, String playerName) {
-        Member member = new Member(home.id(), playerName, Role.MEMBER);
-        return memberRepo.save(member);
+    public CompletableFuture<Member> addMember(Home home, String playerName) {
+        return memberRepo.save(
+                new Member(home.id(), playerName, Role.MEMBER)
+        );
     }
 
     public CompletableFuture<Void> removeMember(Home home, String playerName) {
-        Member member = new Member(home.id(), playerName, Role.MEMBER);
-        return memberRepo.delete(member);
+        return memberRepo.delete(
+                new Member(home.id(), playerName, Role.MEMBER)
+        );
     }
 
     public CompletableFuture<List<Member>> getMembers(Home home) {
-        return memberRepo.findAllBy(String.valueOf(home.id()));
+        return memberRepo.findAllByHome(home.id());
     }
 
-    public CompletableFuture<Boolean> isMember(Home home, String playerName) {
-        return memberRepo.isMember(home.id(), playerName);
-    }
-
-    public CompletableFuture<Void> replaceMembers(Home home, List<Member> members) {
-        return memberRepo.deleteAllByHome(home.id())
+    public CompletableFuture<Void> replaceMembers(long homeId, List<Member> members) {
+        return memberRepo.deleteAllByHome(homeId)
                 .thenCompose(v -> {
-                    CompletableFuture<?>[] futures = members.stream()
-                            .map(memberRepo::save)
-                            .toArray(CompletableFuture[]::new);
-                    return CompletableFuture.allOf(futures);
+                    final List<CompletableFuture<Member>> saves = new ArrayList<>();
+                    for (Member m : members) {
+                        saves.add(memberRepo.save(m));
+                    }
+                    return CompletableFuture.allOf(
+                            saves.toArray(new CompletableFuture[0])
+                    );
                 });
     }
-
 }
+

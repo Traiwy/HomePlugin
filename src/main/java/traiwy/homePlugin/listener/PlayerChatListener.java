@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import traiwy.homePlugin.cache.HomeCache;
+import traiwy.homePlugin.facade.HomeFacade;
 import traiwy.homePlugin.home.Home;
 import traiwy.homePlugin.home.Location;
 import traiwy.homePlugin.home.Member;
@@ -18,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @AllArgsConstructor
 public class PlayerChatListener implements Listener {
     private final JavaPlugin plugin;
-    private final HomeCache cache;
+    private final HomeFacade homeFacade;
 
     private final Set<UUID> awaitingHomeName =
             Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -58,35 +59,37 @@ public class PlayerChatListener implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        final Player player = event.getPlayer();
-        final UUID uuid = player.getUniqueId();
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
 
         if (!awaitingHomeName.contains(uuid)) return;
 
         event.setCancelled(true);
 
-        final String nameHome = event.getMessage().trim();
+        String nameHome = event.getMessage().trim();
         if (nameHome.isEmpty()) {
             Bukkit.getScheduler().runTask(plugin,
                     () -> player.sendMessage("§cНазвание не может быть пустым"));
             return;
         }
 
-        final List<Member> members = new ArrayList<>();
+        stopReminder(uuid);
 
         Bukkit.getScheduler().runTask(plugin, () -> {
             Location loc = new Location(
                     player.getWorld().getName(),
-                    player.getX(), player.getY(),
-                    player.getZ(),
-                    player.getYaw(),
-                    player.getPitch()
+                    player.getX(), player.getY(), player.getZ(),
+                    player.getYaw(), player.getPitch()
             );
 
-            cache.add(player.getName(), new Home(0L, player.getName(), nameHome, loc));
-            player.sendMessage("Дом: " + nameHome);
-            stopReminder(uuid);
-            player.sendMessage("§aДом успешно сохранён!");
+            homeFacade.createHome(player, nameHome, loc)
+                    .thenAccept(home ->
+                            player.sendMessage("§aДом '" + home.homeName() + "' сохранён!"))
+                    .exceptionally(ex -> {
+                        player.sendMessage("§cОшибка сохранения дома");
+                        ex.printStackTrace();
+                        return null;
+                    });
         });
     }
 

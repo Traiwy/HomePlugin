@@ -25,15 +25,16 @@ public class MySqlHomeRepository implements HomeRepository {
     }
 
     @Override
-    public CompletableFuture<Void> save(Home home) {
-        return CompletableFuture.runAsync(() -> {
+    public CompletableFuture<Home> save(Home home) {
+        return CompletableFuture.supplyAsync(() -> {
             String sql = """
-                INSERT INTO homes (owner, name, world, x, y, z, yaw, pitch)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """;
+            INSERT INTO homes (owner, name, world, x, y, z, yaw, pitch)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """;
 
             try (Connection conn = dataSource.getDs().getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
+                 PreparedStatement ps =
+                         conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
                 ps.setString(1, home.ownerName());
                 ps.setString(2, home.homeName());
@@ -46,11 +47,36 @@ public class MySqlHomeRepository implements HomeRepository {
 
                 ps.executeUpdate();
 
-                try(ResultSet rs = ps.getGeneratedKeys()) {
-                    if(rs.next()) {
-                        long id = rs.getLong(1);
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return new Home(
+                                rs.getLong(1),
+                                home.ownerName(),
+                                home.homeName(),
+                                home.location()
+                        );
                     }
                 }
+
+                throw new IllegalStateException("Home ID not generated");
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }, executor);
+    }
+
+
+    @Override
+    public CompletableFuture<Void> delete(Home home) {
+        return CompletableFuture.runAsync(() -> {
+            String sql = "DELETE FROM homes WHERE id = ?";
+
+            try (Connection con = dataSource.getDs().getConnection();
+                 PreparedStatement ps = con.prepareStatement(sql)) {
+
+                ps.setLong(1, home.id());
+                ps.executeUpdate();
 
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -59,8 +85,32 @@ public class MySqlHomeRepository implements HomeRepository {
     }
 
     @Override
-    public CompletableFuture<List<Home>> findAllBy(String key) {
-        return null;
+    public CompletableFuture<Void> update(Home home) {
+        return CompletableFuture.runAsync(() -> {
+            String sql = """
+            UPDATE homes
+            SET name = ?, world = ?, x = ?, y = ?, z = ?, yaw = ?, pitch = ?
+            WHERE id = ?
+        """;
+
+            try (Connection con = dataSource.getDs().getConnection();
+                 PreparedStatement ps = con.prepareStatement(sql)) {
+
+                ps.setString(1, home.homeName());
+                ps.setString(2, home.location().world());
+                ps.setDouble(3, home.location().x());
+                ps.setDouble(4, home.location().y());
+                ps.setDouble(5, home.location().z());
+                ps.setFloat(6, home.location().yaw());
+                ps.setFloat(7, home.location().pitch());
+                ps.setLong(8, home.id());
+
+                ps.executeUpdate();
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Ошибка обновления дома", e);
+            }
+        }, executor);
     }
 
     @Override
@@ -104,61 +154,5 @@ public class MySqlHomeRepository implements HomeRepository {
         }, executor);
     }
 
-    @Override
-    public CompletableFuture<Void> delete(Home home) {
-        return CompletableFuture.runAsync(() -> {
-            String sql = "DELETE FROM homes WHERE id = ?";
-
-            try (Connection con = dataSource.getDs().getConnection();
-                 PreparedStatement ps = con.prepareStatement(sql)) {
-
-                ps.setString(1, home.ownerName());
-                ps.setString(2, home.homeName());
-                ps.executeUpdate();
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }, executor);
-    }
-
-    @Override
-    public CompletableFuture<Void> replaceAll(String owner, List<Home> homes) {
-        return CompletableFuture.runAsync(() -> {
-            String deleteSql = "DELETE FROM homes WHERE owner = ?";
-            String insertSql = """
-            INSERT INTO homes (owner, name, world, x, y, z, yaw, pitch)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """;
-
-            try (Connection conn = dataSource.getDs().getConnection()) {
-                conn.setAutoCommit(false);
-
-                try (PreparedStatement deletePs = conn.prepareStatement(deleteSql)) {
-                    deletePs.setString(1, owner);
-                    deletePs.executeUpdate();
-                }
-
-                try (PreparedStatement insertPs = conn.prepareStatement(insertSql)) {
-                    for (Home home : homes) {
-                        insertPs.setString(1, home.ownerName());
-                        insertPs.setString(2, home.homeName());
-                        insertPs.setString(3, home.location().world());
-                        insertPs.setDouble(4, home.location().x());
-                        insertPs.setDouble(5, home.location().y());
-                        insertPs.setDouble(6, home.location().z());
-                        insertPs.setFloat(7, home.location().yaw());
-                        insertPs.setFloat(8, home.location().pitch());
-                        insertPs.addBatch();
-                    }
-                    insertPs.executeBatch();
-                }
-
-                conn.commit();
-            } catch (SQLException e) {
-                throw new RuntimeException("Failed to replace homes for " + owner, e);
-            }
-        }, executor);
-    }
 }
 

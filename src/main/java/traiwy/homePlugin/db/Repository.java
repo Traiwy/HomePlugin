@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface Repository<T>{
-    CompletableFuture<Void> save(T entity);
-    CompletableFuture<List<T>> findAllBy(String key);
+    CompletableFuture<T> save(T entity);
     CompletableFuture<Void> delete(T entity);
+    CompletableFuture<Void> update(T entity);
 }

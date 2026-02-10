@@ -25,9 +25,6 @@ public class HomeCache {
         return homes.getOrDefault(playerName, new ArrayList<>());
     }
 
-    public void removeAllHome(@NotNull String playerName) {
-        homes.remove(playerName);
-    }
 
     public void remove(@NotNull String playerName, @NotNull Home home) {
         final List<Home> playerHomes = homes.get(playerName);

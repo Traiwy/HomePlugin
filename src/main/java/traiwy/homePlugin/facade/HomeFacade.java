@@ -10,6 +10,7 @@ import traiwy.homePlugin.home.Member;
 import traiwy.homePlugin.home.Role;
 import traiwy.homePlugin.service.RepositoryService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -20,50 +21,62 @@ public class HomeFacade {
     private final MemberCache memberCache;
 
 
-    public void loadHomesForPlayer(Player player) {
-        repositoryService.getHomesForPlayer(player.getName())
+    public void load(Player player) {
+        repositoryService.get(player.getName())
                 .thenAccept(homes -> {
                     for (Home home : homes) {
                         cache.add(player.getName(), home);
+                        System.out.println(home.homeName() + " был добавлен");
 
                         repositoryService.getMembers(home).thenAccept(members -> memberCache.addMembers(home.id(), members));
                     }
+
+                    if(homes.isEmpty()) System.out.println("Дома не найдены");
                 });
 
     }
 
-    public void saveHomesForPlayer(Player player) {
-        List<Home> homes = cache.getAllHome(player.getName());
+    public void save(Player player) {
+        final List<Home> homes = cache.getAllHome(player.getName());
+
         if (homes.isEmpty()) return;
 
-        CompletableFuture<?>[] futures = homes.stream()
-                .map(home -> {
-                    CompletableFuture<Void> saveHome = repositoryService.createHome(home);
+        final List<CompletableFuture<Void>> futures = new ArrayList<>();
 
-                    List<Member> members = memberCache.getMembers(home.id());
-                    CompletableFuture<Void> saveMembers = repositoryService.replaceMembers(home, members);
+        for (Home cachedHome : homes) {
+            CompletableFuture<Void> future =
+                    repositoryService.save(cachedHome)
+                            .thenCompose(savedHome -> {
+                                List<Member> members = memberCache.getMembers(cachedHome.id());
 
-                    return CompletableFuture.allOf(saveHome, saveMembers);
-                })
-                .toArray(CompletableFuture[]::new);
+                                List<Member> fixedMembers = members.stream()
+                                        .map(m -> new Member(
+                                                savedHome.id(),
+                                                m.name(),
+                                                m.role()
+                                        ))
+                                        .toList();
 
-        CompletableFuture.allOf(futures)
-                .thenRun(() -> {
-                    cache.removeAllHome(player.getName());
-                    homes.forEach(h -> memberCache.removeAllMembers(h.id()));
-                });
+                                return repositoryService.replaceMembers(
+                                        savedHome.id(),
+                                        fixedMembers
+                                );
+                            });
+
+            futures.add(future);
+        }
+
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+                .thenRun(() -> System.out.println("Сохранение всех домов и их членов завершено для игрока " + player.getName()));
     }
 
     public CompletableFuture<Home> createHome(Player player, String homeName, Location loc) {
-        final Home home = new Home(0L, player.getName(), homeName, loc);
+        final Home temp = new Home(0L, player.getName(), homeName, loc);
 
-        cache.add(player.getName(), home);
-
-        return repositoryService.createHome(home)
-                .thenApply(v -> {
-                    cache.remove(player.getName(), home);
-                    cache.add(player.getName(), home);
-                    return home;
+        return repositoryService.save(temp)
+                .thenApply(savedHome -> {
+                    cache.add(player.getName(), savedHome);
+                    return savedHome;
                 });
     }
 
@@ -75,7 +88,7 @@ public class HomeFacade {
 
 
     public CompletableFuture<Void> removeMember(Home home, String playerName) {
-        Member member = new Member(home.id(), playerName, Role.MEMBER);
+        final Member member = new Member(home.id(), playerName, Role.MEMBER);
 
         memberCache.removeMember(home.id(), member);
         return repositoryService.removeMember(home, playerName);

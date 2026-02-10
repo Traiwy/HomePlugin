@@ -27,13 +27,13 @@ public final class HomePlugin extends JavaPlugin {
         cache = new HomeCache();
         memberCache = new MemberCache();
         final Config config = new Config(this);
+        databaseManager =  new DatabaseManager(config.getMySqlData());
         final MySqlHomeRepository mySqlHomeRepository = new MySqlHomeRepository(databaseManager);
         final MySqlMemberRepository mySqlMemberRepository = new MySqlMemberRepository(databaseManager);
         final RepositoryService repositoryService = new RepositoryService(mySqlHomeRepository, mySqlMemberRepository);
         final HomeFacade homeFacade = new HomeFacade(repositoryService, cache, memberCache);
         final MenuService menuService = new MenuService(cache, config.getConfigData(), homeFacade);
-        databaseManager =  new DatabaseManager(config.getMySqlData());
-        PlayerChatListener playerChatListener = new PlayerChatListener(this, cache);
+        PlayerChatListener playerChatListener = new PlayerChatListener(this, homeFacade);
 
 
 
