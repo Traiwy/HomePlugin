@@ -31,11 +31,6 @@ public class AcceptCommand implements SubCommand {
     }
 
     @Override
-    public @NotNull String getDescription() {
-        return "";
-    }
-
-    @Override
     public @NotNull String permission() {
         return "";
     }

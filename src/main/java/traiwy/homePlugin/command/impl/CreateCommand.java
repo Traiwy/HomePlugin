@@ -19,10 +19,6 @@ public class CreateCommand implements SubCommand {
         return "create";
     }
 
-    @Override
-    public @NotNull String getDescription() {
-        return "";
-    }
 
     @Override
     public @NotNull String permission() {

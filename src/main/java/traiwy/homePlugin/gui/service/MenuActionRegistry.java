@@ -17,7 +17,11 @@ public class MenuActionRegistry {
             case "open_list" -> menuManager.openMenu(player, service.getListMenu());
             case "toggle_delete_mode" -> menuManager.openMenu(player, service.getDeleteMenu());
             case "open_settings" -> menuManager.openMenu(player, service.getSettingsMenu());
-            case "create_home" -> player.performCommand("home create");
+            case "create_home" -> {
+                player.performCommand("home create");
+                menuManager.clear(player);
+                player.closeInventory();
+            }
             case "redstone" -> menuManager.openMenu(player, service.getDeleteAllMenu());
             case "back" -> menuManager.openPrevious(player);
         }

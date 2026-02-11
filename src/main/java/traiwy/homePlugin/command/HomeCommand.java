@@ -32,6 +32,7 @@ public class HomeCommand implements CommandExecutor, TabExecutor {
         commands.put("cancel", new CancelCommand());
         commands.put("create", new CreateCommand(playerChatListener));
         commands.put("invite", new InviteCommand(requestManager, inviteContextManager, menuService));
+        commands.put("list",  new ListCommand(menuService, menuManager));
     }
 
     @Override

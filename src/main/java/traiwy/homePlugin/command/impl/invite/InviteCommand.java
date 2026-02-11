@@ -23,10 +23,6 @@ public class InviteCommand implements SubCommand {
         return "invite";
     }
 
-    @Override
-    public @NotNull String getDescription() {
-        return "";
-    }
 
     @Override
     public @NotNull String permission() {

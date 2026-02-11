@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 public interface SubCommand {
     @NotNull String getName();
-    @NotNull String getDescription();
     @NotNull String permission();
     void execute(@NotNull CommandSender sender, @NotNull String[] args);
 }

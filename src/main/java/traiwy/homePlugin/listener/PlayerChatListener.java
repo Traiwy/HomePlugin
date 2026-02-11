@@ -9,6 +9,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import traiwy.homePlugin.cache.HomeCache;
 import traiwy.homePlugin.facade.HomeFacade;
+import traiwy.homePlugin.gui.MenuManager;
 import traiwy.homePlugin.home.Home;
 import traiwy.homePlugin.home.Location;
 import traiwy.homePlugin.home.Member;
@@ -90,6 +91,8 @@ public class PlayerChatListener implements Listener {
                         ex.printStackTrace();
                         return null;
                     });
+
+
         });
     }
 
