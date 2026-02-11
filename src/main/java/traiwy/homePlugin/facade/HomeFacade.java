@@ -36,54 +36,50 @@ public class HomeFacade {
 
     }
 
-    public void save(Player player) {
-        final List<Home> homes = cache.getAllHome(player.getName());
+    public CompletableFuture<Void> save(Player player) {
+        List<Home> homes = cache.getAllHome(player.getName());
+        if (homes.isEmpty()) return CompletableFuture.completedFuture(null);
 
-        if (homes.isEmpty()) return;
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
 
-        final List<CompletableFuture<Void>> futures = new ArrayList<>();
+        for (Home home : homes) {
+            CompletableFuture<Void> future = repositoryService.add(home)
+                    .thenCompose(savedHome -> {
+                        List<Member> members = memberCache.getMembers(home.id());
+                        List<CompletableFuture<Void>> memberFutures = new ArrayList<>();
 
-        for (Home cachedHome : homes) {
-            CompletableFuture<Void> future =
-                    repositoryService.save(cachedHome)
-                            .thenCompose(savedHome -> {
-                                List<Member> members = memberCache.getMembers(cachedHome.id());
+                        for (Member m : members) {
+                            memberFutures.add(repositoryService.addMember(savedHome, m.name())
+                                    .thenAccept(saved -> {}));
+                        }
 
-                                List<Member> fixedMembers = members.stream()
-                                        .map(m -> new Member(
-                                                savedHome.id(),
-                                                m.name(),
-                                                m.role()
-                                        ))
-                                        .toList();
-
-                                return repositoryService.replaceMembers(
-                                        savedHome.id(),
-                                        fixedMembers
-                                );
-                            });
+                        return CompletableFuture.allOf(memberFutures.toArray(new CompletableFuture[0]));
+                    });
 
             futures.add(future);
         }
 
-        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
-                .thenRun(() -> System.out.println("Сохранение всех домов и их членов завершено для игрока " + player.getName()));
+        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+                .thenRun(() -> System.out.println("Сохранение домов и мемберов завершено для " + player.getName()));
     }
 
     public CompletableFuture<Home> createHome(Player player, String homeName, Location loc) {
         final Home temp = new Home(0L, player.getName(), homeName, loc);
 
-        return repositoryService.save(temp)
+        return repositoryService.add(temp)
                 .thenApply(savedHome -> {
                     cache.add(player.getName(), savedHome);
                     return savedHome;
                 });
     }
 
-    public void addMember(Home home, String playerName) {
-        final Member member = new Member(home.id(), playerName, Role.MEMBER);
+    public CompletableFuture<Void> addMember(Home home, String playerName) {
+        Member member = new Member(home.id(), playerName, Role.MEMBER);
 
         memberCache.addMember(home.id(), member);
+
+        return repositoryService.addMember(home, playerName)
+                .thenAccept(saved -> {});
     }
 
 
@@ -91,7 +87,7 @@ public class HomeFacade {
         final Member member = new Member(home.id(), playerName, Role.MEMBER);
 
         memberCache.removeMember(home.id(), member);
-        return repositoryService.removeMember(home, playerName);
+        return repositoryService.deleteMember(home, playerName);
     }
 
     public List<Member> getMembers(Home home) {

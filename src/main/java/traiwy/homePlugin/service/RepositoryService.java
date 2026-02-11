@@ -17,7 +17,7 @@ public class RepositoryService {
     private final MemberRepository memberRepo;
 
 
-    public CompletableFuture<Home> save(Home home) {
+    public CompletableFuture<Home> add(Home home) {
         return homeRepo.save(home);
     }
 
@@ -36,7 +36,7 @@ public class RepositoryService {
         );
     }
 
-    public CompletableFuture<Void> removeMember(Home home, String playerName) {
+    public CompletableFuture<Void> deleteMember(Home home, String playerName) {
         return memberRepo.delete(
                 new Member(home.id(), playerName, Role.MEMBER)
         );
@@ -46,17 +46,10 @@ public class RepositoryService {
         return memberRepo.findAllByHome(home.id());
     }
 
-    public CompletableFuture<Void> replaceMembers(long homeId, List<Member> members) {
-        return memberRepo.deleteAllByHome(homeId)
-                .thenCompose(v -> {
-                    final List<CompletableFuture<Member>> saves = new ArrayList<>();
-                    for (Member m : members) {
-                        saves.add(memberRepo.save(m));
-                    }
-                    return CompletableFuture.allOf(
-                            saves.toArray(new CompletableFuture[0])
-                    );
-                });
+    public void updateMember(Home home, Member member) {
+        memberRepo.update(member);
     }
+
+
 }
 
