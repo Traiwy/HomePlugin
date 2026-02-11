@@ -10,4 +10,5 @@ public interface MemberRepository extends Repository<Member> {
     CompletableFuture<List<Member>> findAllByHome(long homeId);
     CompletableFuture<Boolean> isMember(long homeId, String playerName);
     CompletableFuture<Void> deleteAllByHome(long homeId);
+    CompletableFuture<List<Long>> findHomesByMember(String playerName);
 }

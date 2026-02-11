@@ -154,5 +154,45 @@ public class MySqlHomeRepository implements HomeRepository {
         }, executor);
     }
 
+    @Override
+    public CompletableFuture<Home> findById(long id) {
+        return CompletableFuture.supplyAsync(() -> {
+            String sql = """
+            SELECT owner, name, world, x, y, z, yaw, pitch
+            FROM homes
+            WHERE id = ?
+        """;
+
+            try (Connection conn = dataSource.getDs().getConnection();
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+
+                ps.setLong(1, id);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return new Home(
+                                id,
+                                rs.getString("owner"),
+                                rs.getString("name"),
+                                new Location(
+                                        rs.getString("world"),
+                                        rs.getDouble("x"),
+                                        rs.getDouble("y"),
+                                        rs.getDouble("z"),
+                                        rs.getFloat("yaw"),
+                                        rs.getFloat("pitch")
+                                )
+                        );
+                    }
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Ошибка поиска дома по id: " + id, e);
+            }
+
+            throw new IllegalArgumentException("Дом с id " + id + " не найден");
+        }, executor);
+    }
+
 }
 

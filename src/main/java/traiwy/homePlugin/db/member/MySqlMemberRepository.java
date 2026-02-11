@@ -155,5 +155,30 @@ public class MySqlMemberRepository implements MemberRepository{
         }, executor);
     }
 
+    @Override
+    public CompletableFuture<List<Long>> findHomesByMember(String playerName) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<Long> homeIds = new ArrayList<>();
+            String sql = "SELECT home_id FROM members WHERE member = ?";
+
+            try (Connection conn = database.getDs().getConnection();
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+
+                ps.setString(1, playerName);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        homeIds.add(rs.getLong("home_id"));
+                    }
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Ошибка получения домов для мембера " + playerName, e);
+            }
+
+            return homeIds;
+        }, executor);
+    }
+
 }
 

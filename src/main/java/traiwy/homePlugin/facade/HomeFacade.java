@@ -34,6 +34,15 @@ public class HomeFacade {
                     if(homes.isEmpty()) System.out.println("Дома не найдены");
                 });
 
+        repositoryService.getHomesWhereMember(player.getName())
+                .thenAccept(memberHomes -> {
+                    for (Home home : memberHomes) {
+                        if (!cache.getAllHome(player.getName()).contains(home)) {
+                            cache.add(player.getName(), home);
+                        }
+                    }
+                });
+
     }
 
     public CompletableFuture<Void> save(Player player) {
@@ -77,6 +86,7 @@ public class HomeFacade {
         Member member = new Member(home.id(), playerName, Role.MEMBER);
 
         memberCache.addMember(home.id(), member);
+        cache.add(playerName, home);
 
         return repositoryService.addMember(home, playerName)
                 .thenAccept(saved -> {});

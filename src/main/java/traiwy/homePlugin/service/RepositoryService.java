@@ -50,6 +50,22 @@ public class RepositoryService {
         memberRepo.update(member);
     }
 
+    public CompletableFuture<List<Home>> getHomesWhereMember(String playerName) {
+        return memberRepo.findHomesByMember(playerName)
+                .thenCompose(homeIds -> {
+                    List<CompletableFuture<Home>> futures = new ArrayList<>();
+                    for (Long homeId : homeIds) {
+                        futures.add(homeRepo.findById(homeId));
+                    }
+                    return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+                            .thenApply(v -> futures.stream()
+                                    .map(CompletableFuture::join)
+                                    .toList());
+                });
+    }
+
+
+
 
 }
 
