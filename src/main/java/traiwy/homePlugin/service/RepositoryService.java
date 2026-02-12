@@ -1,8 +1,11 @@
 package traiwy.homePlugin.service;
 
 import lombok.AllArgsConstructor;
+import org.bukkit.Bukkit;
 import traiwy.homePlugin.db.home.HomeRepository;
 import traiwy.homePlugin.db.member.MemberRepository;
+import traiwy.homePlugin.error.RequestError;
+import traiwy.homePlugin.error.provider.RequestErrorMessageProvider;
 import traiwy.homePlugin.home.Home;
 import traiwy.homePlugin.home.Member;
 import traiwy.homePlugin.home.Role;
@@ -31,9 +34,9 @@ public class RepositoryService {
     }
 
     public CompletableFuture<Member> addMember(Home home, String playerName) {
-        return memberRepo.save(
-                new Member(home.id(), playerName, Role.MEMBER)
-        );
+        Member member = new Member(home.id(), playerName, Role.MEMBER);
+
+        return memberRepo.save(member);
     }
 
     public CompletableFuture<Void> deleteMember(Home home, String playerName) {

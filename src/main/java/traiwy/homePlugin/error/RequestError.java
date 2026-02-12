@@ -9,5 +9,7 @@ public enum RequestError {
 
     REQUEST_COOLDOWN,
     REQUEST_BLOCKED,
-    TOO_MANY_REQUESTS
+    TOO_MANY_REQUESTS,
+
+    MEMBER_ALREADY_EXISTS
 }

@@ -26,10 +26,12 @@ public class MySqlMemberRepository implements MemberRepository{
     @Override
     public CompletableFuture<Member> save(Member member) {
         return CompletableFuture.supplyAsync(() -> {
+
             String sql = """
-            INSERT INTO members (home_id, member, role)
-            VALUES (?, ?, ?)
-        """;
+                INSERT INTO members (home_id, member, role)
+                VALUES (?, ?, ?)
+                ON DUPLICATE KEY UPDATE role = VALUES(role)
+            """;
 
             try (Connection connection = database.getDs().getConnection();
                  PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -50,6 +52,7 @@ public class MySqlMemberRepository implements MemberRepository{
     @Override
     public CompletableFuture<Void> delete(Member member) {
         return CompletableFuture.runAsync(() -> {
+
             String sql = """
                 DELETE FROM members
                 WHERE home_id = ? AND member = ?
@@ -65,16 +68,22 @@ public class MySqlMemberRepository implements MemberRepository{
             } catch (SQLException e) {
                 throw new RuntimeException("Ошибка удаления мембера", e);
             }
+
         }, executor);
     }
 
     @Override
     public CompletableFuture<Void> update(Member member) {
         return CompletableFuture.runAsync(() -> {
-            String sql = "UPDATE members SET role = ? WHERE home_id = ? AND member = ?";
 
-            try (Connection conn = database.getDs().getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
+            String sql = """
+                UPDATE members
+                SET role = ?
+                WHERE home_id = ? AND member = ?
+            """;
+
+            try (Connection connection = database.getDs().getConnection();
+                 PreparedStatement ps = connection.prepareStatement(sql)) {
 
                 ps.setString(1, member.role().name());
                 ps.setLong(2, member.homeId());
@@ -82,14 +91,16 @@ public class MySqlMemberRepository implements MemberRepository{
                 ps.executeUpdate();
 
             } catch (SQLException e) {
-                throw new RuntimeException("Ошибка обновления мембера: " + member.name(), e);
+                throw new RuntimeException("Ошибка обновления мембера", e);
             }
+
         }, executor);
     }
 
     @Override
     public CompletableFuture<List<Member>> findAllByHome(long homeId) {
         return CompletableFuture.supplyAsync(() -> {
+
             List<Member> members = new ArrayList<>();
             String sql = "SELECT member, role FROM members WHERE home_id = ?";
 
@@ -97,10 +108,11 @@ public class MySqlMemberRepository implements MemberRepository{
                  PreparedStatement ps = connection.prepareStatement(sql)) {
 
                 ps.setLong(1, homeId);
+
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         members.add(new Member(
-                                0L,
+                                homeId,
                                 rs.getString("member"),
                                 Role.valueOf(rs.getString("role"))
                         ));
@@ -108,17 +120,24 @@ public class MySqlMemberRepository implements MemberRepository{
                 }
 
             } catch (SQLException e) {
-                throw new RuntimeException("Ошибка загрузки мемберов для дома " + homeId, e);
+                throw new RuntimeException("Ошибка загрузки мемберов", e);
             }
 
             return members;
+
         }, executor);
     }
 
     @Override
     public CompletableFuture<Boolean> isMember(long homeId, String playerName) {
         return CompletableFuture.supplyAsync(() -> {
-            String sql = "SELECT COUNT(*) FROM members WHERE home_id = ? AND member = ?";
+
+            String sql = """
+                SELECT 1 FROM members
+                WHERE home_id = ? AND member = ?
+                LIMIT 1
+            """;
+
             try (Connection connection = database.getDs().getConnection();
                  PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -126,23 +145,22 @@ public class MySqlMemberRepository implements MemberRepository{
                 ps.setString(2, playerName);
 
                 try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        return rs.getInt(1) > 0;
-                    }
+                    return rs.next();
                 }
 
             } catch (SQLException e) {
                 throw new RuntimeException("Ошибка проверки мембера", e);
             }
 
-            return false;
         }, executor);
     }
 
     @Override
     public CompletableFuture<Void> deleteAllByHome(long homeId) {
         return CompletableFuture.runAsync(() -> {
+
             String sql = "DELETE FROM members WHERE home_id = ?";
+
             try (Connection connection = database.getDs().getConnection();
                  PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -150,19 +168,21 @@ public class MySqlMemberRepository implements MemberRepository{
                 ps.executeUpdate();
 
             } catch (SQLException e) {
-                throw new RuntimeException("Ошибка удаления всех мемберов дома " + homeId, e);
+                throw new RuntimeException("Ошибка удаления всех мемберов", e);
             }
+
         }, executor);
     }
 
     @Override
     public CompletableFuture<List<Long>> findHomesByMember(String playerName) {
         return CompletableFuture.supplyAsync(() -> {
+
             List<Long> homeIds = new ArrayList<>();
             String sql = "SELECT home_id FROM members WHERE member = ?";
 
-            try (Connection conn = database.getDs().getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (Connection connection = database.getDs().getConnection();
+                 PreparedStatement ps = connection.prepareStatement(sql)) {
 
                 ps.setString(1, playerName);
 
@@ -173,10 +193,11 @@ public class MySqlMemberRepository implements MemberRepository{
                 }
 
             } catch (SQLException e) {
-                throw new RuntimeException("Ошибка получения домов для мембера " + playerName, e);
+                throw new RuntimeException("Ошибка получения домов мембера", e);
             }
 
             return homeIds;
+
         }, executor);
     }
 

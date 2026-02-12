@@ -1,9 +1,12 @@
 package traiwy.homePlugin.facade;
 
 import lombok.AllArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import traiwy.homePlugin.cache.HomeCache;
 import traiwy.homePlugin.cache.MemberCache;
+import traiwy.homePlugin.error.RequestError;
+import traiwy.homePlugin.error.provider.RequestErrorMessageProvider;
 import traiwy.homePlugin.home.Home;
 import traiwy.homePlugin.home.Location;
 import traiwy.homePlugin.home.Member;
@@ -85,11 +88,22 @@ public class HomeFacade {
     public CompletableFuture<Void> addMember(Home home, String playerName) {
         Member member = new Member(home.id(), playerName, Role.MEMBER);
 
-        memberCache.addMember(home.id(), member);
-        cache.add(playerName, home);
-
         return repositoryService.addMember(home, playerName)
-                .thenAccept(saved -> {});
+                .thenAccept(saved -> {
+                    memberCache.addMember(home.id(), member);
+                    cache.add(playerName, home);
+                })
+                .exceptionally(ex -> {
+                    Player player = Bukkit.getPlayer(playerName);
+                    if (player != null) {
+                        player.sendMessage(
+                                RequestErrorMessageProvider.getMessage(
+                                        RequestError.MEMBER_ALREADY_EXISTS
+                                )
+                        );
+                    }
+                    return null;
+                });
     }
 
 

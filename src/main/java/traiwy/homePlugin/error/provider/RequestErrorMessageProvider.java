@@ -29,6 +29,8 @@ public class RequestErrorMessageProvider {
 
             case TOO_MANY_REQUESTS ->
                     "У вас слишком много активных заявок.";
+            case MEMBER_ALREADY_EXISTS ->
+                "Вы уже находитесь в данной точке дома";
         };
     }
 }

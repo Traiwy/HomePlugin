@@ -50,10 +50,6 @@ public class AcceptCommand implements SubCommand {
             );
             return;
         }
-
-        final Home home = request.home();
-        service.getHomeFacade().addMember(home, receiver.getName());
-        receiver.sendMessage("§aВы приняли заявку от " + request.sender().getName());
         requestManager.removeRequest(request);
     }
 }

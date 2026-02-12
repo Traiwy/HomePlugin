@@ -86,12 +86,18 @@ public class DatabaseManager {
         """;
 
         String members = """
-                CREATE TABLE IF NOT EXISTS members ( 
-                id BIGINT AUTO_INCREMENT PRIMARY KEY, 
-                home_id BIGINT NOT NULL, 
-                member VARCHAR(16) NOT NULL,
-                role VARCHAR(16) NOT NULL DEFAULT 'MEMBER'
-                );
+
+                       CREATE TABLE IF NOT EXISTS members (
+                        home_id BIGINT NOT NULL,
+                        member VARCHAR(16) NOT NULL,
+                        role VARCHAR(16) NOT NULL DEFAULT 'MEMBER',
+                    
+                        PRIMARY KEY (home_id, member),
+                    
+                        FOREIGN KEY (home_id)\s
+                            REFERENCES homes(id)\s
+                            ON DELETE CASCADE
+                    );
               
                 """;
 
