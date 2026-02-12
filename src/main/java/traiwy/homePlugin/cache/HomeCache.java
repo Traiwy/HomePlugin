@@ -18,10 +18,6 @@ public class HomeCache {
     public List<Home> getAllHome(@NotNull String playerName) {
         List<Home> playerHomes = homes.getOrDefault(playerName, new ArrayList<>());
 
-        for (Home home : playerHomes) {
-            System.out.println(home.homeName());
-        }
-
         return homes.getOrDefault(playerName, new ArrayList<>());
     }
 

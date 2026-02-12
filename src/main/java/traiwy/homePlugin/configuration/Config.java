@@ -49,7 +49,7 @@ public class Config {
                     StandardCharsets.UTF_8
             )) {
                 configData = gson.fromJson(reader, ConfigData.class);
-                if (configData == null) configData = ConfigData.defaultConfig();
+                if (configData == null) configData = DefaultConfigFactory.create();
 
                 log.info("Config loaded successfully");
             }
@@ -70,14 +70,14 @@ public class Config {
             }
         } catch (Exception e) {
             log.error("Failed to load config, using fallback values", e);
-            configData = ConfigData.defaultConfig();
+            configData = DefaultConfigFactory.create();
             mySqlData = MySqlData.defaultConfig();
         }
     }
 
     private void createDefault() {
         try {
-            configData = ConfigData.defaultConfig();
+            configData = DefaultConfigFactory.create();
             mySqlData = MySqlData.defaultConfig();
 
             try (Writer writer = new OutputStreamWriter(

@@ -21,7 +21,13 @@ public class MenuManager implements Listener {
     }
 
     public void openMenu(Player player, Menu menu) {
-        history(player).push(menu);
+        MenuHistory history = history(player);
+        Menu current = history.peek();
+
+        if (!menu.equals(current)) {
+            history.push(menu);
+        }
+
         menu.open(player);
     }
 
@@ -46,7 +52,7 @@ public class MenuManager implements Listener {
         if (history == null || history.isEmpty()) return;
 
         Menu current = history.peek();
-        if (!event.getInventory().equals(current.getInventory())) return;
+        if (!event.getInventory().equals(current.getInventory()))return;
 
         event.setCancelled(true);
         current.onClick(event);

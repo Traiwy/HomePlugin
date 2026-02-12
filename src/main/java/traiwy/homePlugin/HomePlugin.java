@@ -22,42 +22,85 @@ public final class HomePlugin extends JavaPlugin {
     private HomeCache cache;
     private MemberCache memberCache;
 
+    private Config config;
+    private HomeFacade homeFacade;
+    private MenuService menuService;
+    private PlayerChatListener playerChatListener;
+
     @Override
     public void onEnable() {
-        cache = new HomeCache();
-        memberCache = new MemberCache();
-        final Config config = new Config(this);
-        databaseManager =  new DatabaseManager(config.getMySqlData());
-        final MySqlHomeRepository mySqlHomeRepository = new MySqlHomeRepository(databaseManager);
-        final MySqlMemberRepository mySqlMemberRepository = new MySqlMemberRepository(databaseManager);
-        final RepositoryService repositoryService = new RepositoryService(mySqlHomeRepository, mySqlMemberRepository);
-        final HomeFacade homeFacade = new HomeFacade(repositoryService, cache, memberCache);
-        final MenuService menuService = new MenuService(cache, config.getConfigData(), homeFacade);
-        PlayerChatListener playerChatListener = new PlayerChatListener(this, homeFacade);
-
-
-
-
-        PluginCommand command = getCommand("home");
-        if(command != null) {
-            command.setExecutor(new HomeCommand(menuService, menuService.getMenuManager(), playerChatListener, menuService.getRequestManager(), menuService.getInviteContextManager()));
-            command.setTabCompleter(new HomeCommand(menuService, menuService.getMenuManager(), playerChatListener, menuService.getRequestManager(), menuService.getInviteContextManager()));
-        } else {
-            throw new RuntimeException("No command found!");
-        }
-        getServer().getPluginManager().registerEvents(playerChatListener, this);
-        getServer().getPluginManager().registerEvents(new PlayerCacheListener(homeFacade, menuService.getMenuManager()), this);
-        getServer().getPluginManager().registerEvents(menuService.getMenuManager(), this);
+        initializeCore();
+        initializeServices();
+        registerCommand();
+        registerListeners();
     }
 
     @Override
     public void onDisable() {
+        shutdownDatabase();
+        clearCaches();
+    }
+
+    private void initializeCore() {
+        cache = new HomeCache();
+        memberCache = new MemberCache();
+        config = new Config(this);
+
+        databaseManager = new DatabaseManager(config.getMySqlData());
+    }
+
+    private void initializeServices() {
+        MySqlHomeRepository homeRepository = new MySqlHomeRepository(databaseManager);
+        MySqlMemberRepository memberRepository = new MySqlMemberRepository(databaseManager);
+
+        RepositoryService repositoryService =
+                new RepositoryService(homeRepository, memberRepository);
+
+        homeFacade = new HomeFacade(repositoryService, cache, memberCache);
+        menuService = new MenuService(cache, config.getConfigData(), homeFacade);
+        playerChatListener = new PlayerChatListener(this, homeFacade);
+    }
+
+    private void registerCommand() {
+        PluginCommand command = getCommand("home");
+
+        if (command == null) {
+            throw new IllegalStateException("Command 'home' not found in plugin.yml");
+        }
+
+        HomeCommand homeCommand = new HomeCommand(
+                menuService,
+                menuService.getMenuManager(),
+                playerChatListener,
+                menuService.getRequestManager(),
+                menuService.getInviteContextManager()
+        );
+
+        command.setExecutor(homeCommand);
+        command.setTabCompleter(homeCommand);
+    }
+
+    private void registerListeners() {
+        getServer().getPluginManager().registerEvents(playerChatListener, this);
+        getServer().getPluginManager().registerEvents(
+                new PlayerCacheListener(homeFacade, menuService.getMenuManager()), this);
+        getServer().getPluginManager().registerEvents(
+                menuService.getMenuManager(), this);
+    }
+
+    private void shutdownDatabase() {
         if (databaseManager != null) {
             databaseManager.shutdown();
         }
-        cache.clear();
-        memberCache.clear();
     }
 
+    private void clearCaches() {
+        if (cache != null) {
+            cache.clear();
+        }
 
+        if (memberCache != null) {
+            memberCache.clear();
+        }
+    }
 }

@@ -28,8 +28,12 @@ public abstract class Menu implements InventoryHolder {
     public abstract void setup(Player player);
 
     public void open(Player player) {
-        inventory = Bukkit.createInventory(this, size, title);
-        inventory.clear();
+        if (inventory == null) {
+            inventory = Bukkit.createInventory(this, size, title);
+        } else {
+            inventory.clear();
+        }
+        items.clear();
         setup(player);
         player.openInventory(inventory);
     }
@@ -46,5 +50,6 @@ public abstract class Menu implements InventoryHolder {
         items.put(slot, menuItem);
         inventory.setItem(slot, menuItem.item());
     }
+
 
 }

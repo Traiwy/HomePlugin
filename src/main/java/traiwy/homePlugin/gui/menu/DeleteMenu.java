@@ -85,8 +85,5 @@ public class DeleteMenu extends Menu {
             }));
         }
 
-        setItem(49, new  MenuItem(new ItemStack(Material.RED_DYE), InventoryClickEvent -> {
-            player.openInventory(service.getListMenu().getInventory());
-        }));
     }
 }
