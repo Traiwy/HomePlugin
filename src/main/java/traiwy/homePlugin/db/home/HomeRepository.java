@@ -9,4 +9,5 @@ import java.util.concurrent.CompletableFuture;
 public interface HomeRepository extends Repository<Home> {
     CompletableFuture<List<Home>> findByOwner(String owner);
     CompletableFuture<Home> findById(long id);
+    CompletableFuture<Void> deleteAll(String owner);
 }

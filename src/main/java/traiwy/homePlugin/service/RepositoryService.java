@@ -33,6 +33,10 @@ public class RepositoryService {
                 .thenCompose(v -> homeRepo.delete(home));
     }
 
+    public CompletableFuture<Void> deleteAll(String owner) {
+        return homeRepo.deleteAll(owner);
+    }
+
     public CompletableFuture<Member> addMember(Home home, String playerName) {
         Member member = new Member(home.id(), playerName, Role.MEMBER);
 

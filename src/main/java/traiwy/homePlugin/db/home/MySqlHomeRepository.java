@@ -85,6 +85,23 @@ public class MySqlHomeRepository implements HomeRepository {
     }
 
     @Override
+    public CompletableFuture<Void> deleteAll(String owner) {
+        return CompletableFuture.runAsync(() -> {
+            String sql = "DELETE FROM homes WHERE owner = ?";
+
+            try(Connection connection = dataSource.getDs().getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
+
+                ps.setString(1, owner);
+                ps.executeUpdate();
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }, executor);
+    }
+
+    @Override
     public CompletableFuture<Void> update(Home home) {
         return CompletableFuture.runAsync(() -> {
             String sql = """

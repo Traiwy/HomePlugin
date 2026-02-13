@@ -29,7 +29,6 @@ public class HomeFacade {
                 .thenAccept(homes -> {
                     for (Home home : homes) {
                         cache.add(player.getName(), home);
-                        System.out.println(home.homeName() + " был добавлен");
 
                         repositoryService.getMembers(home).thenAccept(members -> memberCache.addMembers(home.id(), members));
                     }
@@ -75,6 +74,20 @@ public class HomeFacade {
                 .thenRun(() -> System.out.println("Сохранение домов и мемберов завершено для " + player.getName()));
     }
 
+    public CompletableFuture<Void> deleteHome(Home home, Player player) {
+        cache.remove(player.getName(), home);
+        memberCache.removeAllMembers(home.id());
+
+        return repositoryService.delete(home);
+    }
+
+    public CompletableFuture<Void> deleteHomes(String playerName) {
+        cache.removeAllHome(playerName);
+
+        return repositoryService.deleteAll(playerName);
+    }
+
+
     public CompletableFuture<Home> createHome(Player player, String homeName, Location loc) {
         final Home temp = new Home(0L, player.getName(), homeName, loc);
 
@@ -113,6 +126,8 @@ public class HomeFacade {
         memberCache.removeMember(home.id(), member);
         return repositoryService.deleteMember(home, playerName);
     }
+
+
 
     public List<Member> getMembers(Home home) {
         return memberCache.getMembers(home.id());

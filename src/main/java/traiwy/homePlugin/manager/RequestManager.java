@@ -18,6 +18,10 @@ public class RequestManager {
         requests.remove(request);
     }
 
+    public boolean hasRequest(Request request) {
+        return requests.contains(request);
+    }
+
     public Request getRequestFor(Player receiver) {
         for (Request r : requests) {
             if (r.receiver().equals(receiver)) {

@@ -80,8 +80,10 @@ public class DeleteMenu extends Menu {
 
             final int slot = COUNT_PLAYER_HEAD[slotIndex];
             setItem(slot, new MenuItem(item, e -> {
-                service.getHomeCache().remove(player.getName(), home);
-                player.getOpenInventory().getTopInventory().setItem(slot, null);
+                service.getHomeFacade().deleteHome(home, player)
+                        .thenRun(() -> {
+                            player.getOpenInventory().getTopInventory().setItem(slot, null);
+                        });
             }));
         }
 

@@ -1,15 +1,35 @@
 package traiwy.homePlugin.gui.menu.settings;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import traiwy.homePlugin.gui.Menu;
+import traiwy.homePlugin.gui.button.MenuItem;
+import traiwy.homePlugin.gui.service.MenuService;
+import traiwy.homePlugin.util.ItemBuilder;
 
 public class EffectMenu extends Menu {
-    protected EffectMenu(String id, String title, int size) {
-        super(id, title, size);
+    private final MenuService service;
+    public EffectMenu(MenuService service) {
+        super("effect_menu", "Effect Menu", 27);
+        this.service = service;
     }
 
     @Override
     public void setup(Player player) {
-
+        var menuConfig = service.getCfgData().menus().get("effects");
+        menuConfig.layout().forEach((slot, itemId) -> {
+            var itemCfg = service.getCfgData().items().get(itemId);
+            ItemBuilder builder = ItemBuilder.of(Material.valueOf(itemCfg.material()));
+            if (itemCfg.name() != null)
+                builder.name(itemCfg.name());
+            if (itemCfg.lore() != null)
+                builder.lore(itemCfg.lore());
+            final ItemStack item = builder.build();
+            setItem(slot, new MenuItem(item, e ->{
+                service.getMenuActionRegistry().execute(itemId, player);
+            }
+            ));
+        });
     }
 }

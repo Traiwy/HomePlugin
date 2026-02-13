@@ -23,8 +23,16 @@ public class MenuActionRegistry {
                 menuManager.clear(player);
                 player.closeInventory();
             }
-            case "redstone" -> menuManager.openMenu(player, service.getDeleteAllMenu());
+            case "redstone" -> service.getHomeFacade().deleteHomes(player.getName());
             case "back" -> menuManager.openPrevious(player);
+            case "invisibility_potion" -> menuManager.openMenu(player, service.getEffectMenu());
+            case "speed" -> menuManager.openMenu(player, service.getEffectMenu());
+            case "strength" -> menuManager.openMenu(player, service.getEffectMenu());
+            case "regeneration" -> menuManager.openMenu(player, service.getEffectMenu());
+            case "resistance" -> menuManager.openMenu(player, service.getEffectMenu());
+            case "fire_resistance" -> menuManager.openMenu(player, service.getEffectMenu());
+            case "night_vision" -> menuManager.openMenu(player, service.getEffectMenu());
+            case "jump_boost" -> menuManager.openMenu(player, service.getEffectMenu());
         }
     }
 }

@@ -50,6 +50,7 @@ public class AcceptCommand implements SubCommand {
             );
             return;
         }
+        receiver.sendMessage("Заявка была принята");
         requestManager.removeRequest(request);
     }
 }

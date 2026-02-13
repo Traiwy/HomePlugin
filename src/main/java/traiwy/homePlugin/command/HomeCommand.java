@@ -29,7 +29,7 @@ public class HomeCommand implements CommandExecutor, TabExecutor {
                        InviteContextManager inviteContextManager) {
         commands.put("menu", new MenuCommand(menuService, menuManager));
         commands.put("accept", new AcceptCommand(requestManager, menuService));
-        commands.put("cancel", new CancelCommand());
+        commands.put("cancel", new CancelCommand(requestManager));
         commands.put("create", new CreateCommand(playerChatListener));
         commands.put("invite", new InviteCommand(requestManager, inviteContextManager, menuService));
         commands.put("list",  new ListCommand(menuService, menuManager));
