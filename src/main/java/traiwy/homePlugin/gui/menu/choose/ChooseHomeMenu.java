@@ -22,27 +22,13 @@ public class ChooseHomeMenu extends Menu {
     private final MenuService service;
 
     public ChooseHomeMenu(MenuService service) {
-        super("choose_menu", "Choose Menu", 54);
+        super(service);
         this.service = service;
     }
 
     @Override
     public void setup(Player player) {
-        var menuConfig = service.getCfgData().menus().get("list");
 
-
-        menuConfig.layout().forEach((slot, itemId) -> {
-            var itemCfg = service.getCfgData().items().get(itemId);
-            ItemBuilder builder = ItemBuilder.of(Material.valueOf(itemCfg.material()));
-            if (itemCfg.name() != null)
-                builder.name(itemCfg.name());
-            if (itemCfg.lore() != null)
-                builder.lore(itemCfg.lore());
-            final ItemStack item = builder.build();
-            setItem(slot, new MenuItem(item, e ->
-                    service.getMenuActionRegistry().execute(itemId, player)
-            ));
-        });
 
         for (int i = 0; i < GREEN_PANEL.length; i++) {
             setItem(GREEN_PANEL[i], new MenuItem(new ItemStack(Material.GRAY_STAINED_GLASS_PANE), null));

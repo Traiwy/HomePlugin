@@ -40,6 +40,6 @@ public class ListCommand implements SubCommand {
             return;
         }
 
-        menuManager.openMenu(player, menuService.getListMenu());
+        menuManager.openMenu(player, menuService.getListMenu(), "list");
     }
 }

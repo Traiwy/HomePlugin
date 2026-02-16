@@ -42,6 +42,6 @@ public class MenuCommand implements SubCommand {
             return;
         }
 
-        menuManager.openMenu(player, menuService.getMainMenu());
+        menuManager.openMenu(player, menuService.getMainMenu(), "main");
     }
 }

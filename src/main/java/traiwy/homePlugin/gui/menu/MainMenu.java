@@ -14,33 +14,17 @@ public class MainMenu extends Menu {
 
 
     public MainMenu(MenuService service) {
-        super("meinnmenu", "Main menu", 27);
+        super(service);
         this.service = service;
     }
 
     @Override
     public void setup(Player player) {
 
-        final var menuConfig = service.getCfgData().menus().get("main");
 
         for (int j : GRAY_PANEL) {
             setItem(j, new MenuItem(new ItemStack(Material.GRAY_STAINED_GLASS_PANE), null));
         }
-
-        menuConfig.layout().forEach((slot, itemId) -> {
-            var itemCfg = service.getCfgData().items().get(itemId);
-            ItemBuilder builder = ItemBuilder.of(Material.valueOf(itemCfg.material()));
-            if (itemCfg.name() != null)
-                builder.name(itemCfg.name());
-            if (itemCfg.lore() != null)
-                builder.lore(itemCfg.lore());
-            final ItemStack item = builder.build();
-            setItem(slot, new MenuItem(item, e ->
-                    service.getMenuActionRegistry().execute(itemId, player)
-            ));
-        });
-
-
 
     }
 }

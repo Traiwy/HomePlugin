@@ -25,7 +25,7 @@ public class ListMenu extends Menu {
     private final MenuService service;
 
     public ListMenu(MenuService service) {
-        super("listmenu", "List Home", 54);
+        super(service);
         this.service = service;
 
     }
@@ -33,21 +33,6 @@ public class ListMenu extends Menu {
     @Override
     public void setup(Player player) {
         System.out.println("меню создается2");
-        var menuConfig = service.getCfgData().menus().get("list");
-
-
-        menuConfig.layout().forEach((slot, itemId) -> {
-            var itemCfg = service.getCfgData().items().get(itemId);
-            ItemBuilder builder = ItemBuilder.of(Material.valueOf(itemCfg.material()));
-            if (itemCfg.name() != null)
-                builder.name(itemCfg.name());
-            if (itemCfg.lore() != null)
-                builder.lore(itemCfg.lore());
-            final ItemStack item = builder.build();
-            setItem(slot, new MenuItem(item, e ->
-                    service.getMenuActionRegistry().execute(itemId, player)
-            ));
-        });
 
         for (int i = 0; i < GRAY_PANEL.length; i++) {
             setItem(GRAY_PANEL[i], new MenuItem(new ItemStack(Material.GRAY_STAINED_GLASS_PANE), null));

@@ -5,10 +5,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import traiwy.homePlugin.cache.HomeCache;
 import traiwy.homePlugin.cache.MemberCache;
 import traiwy.homePlugin.command.HomeCommand;
-import traiwy.homePlugin.configuration.Config;
+import traiwy.homePlugin.configuration.Configuration;
 import traiwy.homePlugin.db.DatabaseManager;
 import traiwy.homePlugin.db.home.MySqlHomeRepository;
-import traiwy.homePlugin.db.member.MemberRepository;
 import traiwy.homePlugin.db.member.MySqlMemberRepository;
 import traiwy.homePlugin.facade.HomeFacade;
 import traiwy.homePlugin.gui.service.MenuService;
@@ -22,7 +21,7 @@ public final class HomePlugin extends JavaPlugin {
     private HomeCache cache;
     private MemberCache memberCache;
 
-    private Config config;
+    private Configuration configuration;
     private HomeFacade homeFacade;
     private MenuService menuService;
     private PlayerChatListener playerChatListener;
@@ -44,9 +43,9 @@ public final class HomePlugin extends JavaPlugin {
     private void initializeCore() {
         cache = new HomeCache();
         memberCache = new MemberCache();
-        config = new Config(this);
+        configuration = new Configuration(this);
 
-        databaseManager = new DatabaseManager(config.getMySqlData());
+        databaseManager = new DatabaseManager(configuration.getConfiguration().sql());
     }
 
     private void initializeServices() {
@@ -57,7 +56,7 @@ public final class HomePlugin extends JavaPlugin {
                 new RepositoryService(homeRepository, memberRepository);
 
         homeFacade = new HomeFacade(repositoryService, cache, memberCache);
-        menuService = new MenuService(cache, config.getConfigData(), homeFacade);
+        menuService = new MenuService(cache, configuration, homeFacade);
         playerChatListener = new PlayerChatListener(this, homeFacade);
     }
 

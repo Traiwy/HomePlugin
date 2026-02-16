@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,25 +21,25 @@ public class MenuManager implements Listener {
         );
     }
 
-    public void openMenu(Player player, Menu menu) {
-        MenuHistory history = history(player);
-        Menu current = history.peek();
+    public void openMenu(@NotNull Player player, Menu menu, @NotNull String nameMenu) {
+        final MenuHistory history = history(player);
+        final Menu current = history.peek();
 
         if (!menu.equals(current)) {
             history.push(menu);
         }
 
-        menu.open(player);
+        menu.open(player, nameMenu);
     }
 
-    public void openPrevious(Player player) {
-        MenuHistory history = history(player);
+    public void openPrevious(Player player, String nameMenu) {
+        final MenuHistory history = history(player);
 
         history.pop();
         Menu previous = history.peek();
 
         if (previous != null) {
-            previous.open(player);
+            previous.open(player, nameMenu);
         } else {
             player.closeInventory();
         }

@@ -2,10 +2,13 @@ package traiwy.homePlugin.gui.menu.settings;
 
 import org.bukkit.entity.Player;
 import traiwy.homePlugin.gui.Menu;
+import traiwy.homePlugin.gui.service.MenuService;
 
 public class DelayMenu extends Menu {
-    public DelayMenu() {
-        super("delay_menu", "Delay Menu", 54);
+    private final MenuService menuService;
+    public DelayMenu(MenuService menuService) {
+        super(menuService);
+        this.menuService = menuService;
     }
 
     @Override

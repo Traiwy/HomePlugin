@@ -3,7 +3,7 @@ package traiwy.homePlugin.db;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Getter;
-import traiwy.homePlugin.configuration.dto.MySqlData;
+import traiwy.homePlugin.configuration.SqlConfiguration;
 
 
 import java.sql.Connection;
@@ -13,9 +13,9 @@ import java.sql.Statement;
 public class DatabaseManager {
     @Getter
     private HikariDataSource ds;
-    private final MySqlData config;
+    private final SqlConfiguration config;
 
-    public DatabaseManager(MySqlData mysql) {
+    public DatabaseManager(SqlConfiguration mysql) {
         this.config = mysql;
         setup();
     }
@@ -27,15 +27,15 @@ public class DatabaseManager {
     }
 
     private void createDatabase() {
-        String url = "jdbc:mysql://" + config.getHost() + ":" + config.getPort() +
+        String url = "jdbc:mysql://" + config.host() + ":" + config.port() +
                 "/?useSSL=false&serverTimezone=UTC";
 
         try (Connection conn = java.sql.DriverManager.getConnection(
-                url, config.getUser(), config.getPassword());
+                url, config.user(), config.password());
              Statement stmt = conn.createStatement()) {
 
             stmt.executeUpdate(
-                    "CREATE DATABASE IF NOT EXISTS `" + config.getDatabase() + "` " +
+                    "CREATE DATABASE IF NOT EXISTS `" + config.database() + "` " +
                             "CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
             );
 
@@ -45,8 +45,8 @@ public class DatabaseManager {
     }
 
     private void setupHikari() {
-        String url = "jdbc:mysql://" + config.getHost() + ":" + config.getPort() +
-                "/" + config.getDatabase() +
+        String url = "jdbc:mysql://" + config.host() + ":" + config.port() +
+                "/" + config.database() +
                 "?useSSL=false" +
                 "&allowPublicKeyRetrieval=true" +
                 "&useUnicode=true" +
@@ -54,8 +54,8 @@ public class DatabaseManager {
                 "&serverTimezone=UTC";
         HikariConfig hikari = new HikariConfig();
         hikari.setJdbcUrl(url);
-        hikari.setUsername(config.getUser());
-        hikari.setPassword(config.getPassword());
+        hikari.setUsername(config.user());
+        hikari.setPassword(config.password());
 
         hikari.setMaximumPoolSize(10);
         hikari.setMinimumIdle(2);

@@ -55,7 +55,7 @@ public class InviteCommand implements SubCommand {
             return;
         }
         inviteContextManager.create(player, target);
-        menuService.getMenuManager().openMenu(player, menuService.getChooseHomeMenu());
+        menuService.getMenuManager().openMenu(player, menuService.getChooseHomeMenu(), "choose");
 
 
     }

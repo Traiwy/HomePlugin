@@ -3,7 +3,7 @@ package traiwy.homePlugin.gui.service;
 import lombok.Getter;
 import traiwy.homePlugin.cache.HomeCache;
 import traiwy.homePlugin.command.impl.invite.context.InviteContextManager;
-import traiwy.homePlugin.configuration.dto.ConfigData;
+import traiwy.homePlugin.configuration.Configuration;
 import traiwy.homePlugin.facade.HomeFacade;
 import traiwy.homePlugin.gui.MenuManager;
 import traiwy.homePlugin.gui.menu.*;
@@ -25,7 +25,7 @@ public class MenuService {
     private final DeleteAllMenu deleteAllMenu;
     private final ChooseHomeMenu chooseHomeMenu;
 
-    private final ConfigData cfgData;
+    private final Configuration cfgData;
     private final HomeCache homeCache;
     private final MenuActionRegistry menuActionRegistry;
     private final MenuManager menuManager;
@@ -34,7 +34,7 @@ public class MenuService {
     private final InviteContextManager inviteContextManager;
     private final HomeFacade homeFacade;
 
-    public MenuService(HomeCache homeCache, ConfigData cfgData, HomeFacade homeFacade) {
+    public MenuService(HomeCache homeCache, Configuration cfgData, HomeFacade homeFacade) {
         this.homeCache = homeCache;
         this.homeFacade = homeFacade;
         this.requestManager = new RequestManager();
@@ -47,8 +47,8 @@ public class MenuService {
         this.listMenu = new ListMenu(this);
         this.deleteMenu = new DeleteMenu(this);
         this.settingsMenu = new  SettingsMenu(this);
-        this.delayMenu = new DelayMenu();
-        this.shareMenu = new ShareMenu();
+        this.delayMenu = new DelayMenu(this);
+        this.shareMenu = new ShareMenu(this);
         this.deleteAllMenu = new DeleteAllMenu(this);
         this.chooseHomeMenu = new ChooseHomeMenu(this);
     }

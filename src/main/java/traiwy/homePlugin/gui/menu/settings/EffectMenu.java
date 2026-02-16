@@ -2,10 +2,13 @@ package traiwy.homePlugin.gui.menu.settings;
 
 import org.bukkit.entity.Player;
 import traiwy.homePlugin.gui.Menu;
+import traiwy.homePlugin.gui.service.MenuService;
 
 public class EffectMenu extends Menu {
-    protected EffectMenu(String id, String title, int size) {
-        super(id, title, size);
+    private final MenuService menuService;
+    protected EffectMenu(MenuService menuService) {
+        super(menuService);
+        this.menuService = menuService;
     }
 
     @Override
