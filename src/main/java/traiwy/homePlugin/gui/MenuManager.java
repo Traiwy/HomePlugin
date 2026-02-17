@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.jetbrains.annotations.NotNull;
+import traiwy.homePlugin.configuration.MenuConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;

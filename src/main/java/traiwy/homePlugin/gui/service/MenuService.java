@@ -5,6 +5,7 @@ import traiwy.homePlugin.cache.HomeCache;
 import traiwy.homePlugin.command.impl.invite.context.InviteContextManager;
 import traiwy.homePlugin.configuration.Configuration;
 import traiwy.homePlugin.facade.HomeFacade;
+import traiwy.homePlugin.gui.MainMenu;
 import traiwy.homePlugin.gui.MenuManager;
 import traiwy.homePlugin.gui.menu.*;
 import traiwy.homePlugin.gui.menu.choose.ChooseHomeMenu;
@@ -43,7 +44,6 @@ public class MenuService {
         this.menuManager = new MenuManager();
         this.menuActionRegistry = new MenuActionRegistry(this, menuManager);
         this.cfgData = cfgData;
-        this.mainMenu = new MainMenu(this);
         this.listMenu = new ListMenu(this);
         this.deleteMenu = new DeleteMenu(this);
         this.settingsMenu = new  SettingsMenu(this);
@@ -51,5 +51,6 @@ public class MenuService {
         this.shareMenu = new ShareMenu(this);
         this.deleteAllMenu = new DeleteAllMenu(this);
         this.chooseHomeMenu = new ChooseHomeMenu(this);
+        this.mainMenu = new MainMenu(this);
     }
 }

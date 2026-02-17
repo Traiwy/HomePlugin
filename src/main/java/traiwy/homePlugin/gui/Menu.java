@@ -12,7 +12,9 @@ import traiwy.homePlugin.configuration.MenuConfiguration;
 import traiwy.homePlugin.gui.button.MenuItem;
 import traiwy.homePlugin.gui.service.MenuService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -21,6 +23,7 @@ public abstract class Menu implements InventoryHolder {
     private Inventory inventory;
     protected Map<Integer, IconConfiguration> slotIcons = new HashMap<>();
     protected Map<Integer, MenuItem> items = new HashMap<>();
+    protected List<Integer> dynamicSlots = new ArrayList<>();
 
 
     protected Menu(MenuService menuService) {
@@ -43,8 +46,9 @@ public abstract class Menu implements InventoryHolder {
 
         BuiltMenu built = config.build();
 
-        this.inventory = built.inventory();
-        this.slotIcons = built.slotIcons();
+        this.inventory = built.getInventory();
+        this.slotIcons = built.getSlotIcons();
+        this.dynamicSlots = built.getDynamicSlots();
 
         this.items.clear();
         setup(player);

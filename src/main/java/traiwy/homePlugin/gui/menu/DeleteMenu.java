@@ -1,17 +1,25 @@
 package traiwy.homePlugin.gui.menu;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import traiwy.homePlugin.configuration.IconConfiguration;
+import traiwy.homePlugin.configuration.MenuConfiguration;
 import traiwy.homePlugin.gui.Menu;
 import traiwy.homePlugin.gui.button.MenuItem;
 import traiwy.homePlugin.gui.service.MenuService;
 import traiwy.homePlugin.home.Home;
 import traiwy.homePlugin.home.Member;
 import traiwy.homePlugin.util.ItemBuilder;
+import traiwy.homePlugin.util.PlaceholderUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DeleteMenu extends Menu {
     private final MenuService service;
@@ -24,36 +32,41 @@ public class DeleteMenu extends Menu {
     @Override
     public void setup(Player player) {
         final List<Home> homes = service.getHomeCache().getAllHome(player.getName());
+        final MenuConfiguration menu = service.getCfgData().getConfiguration().menus().get("delete");
+        final IconConfiguration icon = menu.icons().get("home");
 
+        for (int i = 0; i < homes.size() && i < dynamicSlots.size(); i++) {
 
-        for (int slotIndex = 0; slotIndex < homes.size() && slotIndex < COUNT_PLAYER_HEAD.length; slotIndex++) {
-            Home home = homes.get(slotIndex);
-            final List<String> lore = new ArrayList<>();
+            final int slot = dynamicSlots.get(i);
+            final Home home = homes.get(i);
 
-            lore.add(" ");
-            lore.add("§b❙ §fВладелец: §b" + home.ownerName());
+            Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("home", home.homeName());
+            placeholders.put("owner", home.ownerName());
+            placeholders.put("world", home.location().world());
+            placeholders.put("x", String.valueOf(home.location().x()));
+            placeholders.put("y", String.valueOf(home.location().y()));
+            placeholders.put("z", String.valueOf(home.location().z()));
 
             List<Member> members = service.getHomeFacade().getMembers(home);
-            if (!members.isEmpty()) {
-                final List<String> memberNames = new ArrayList<>();
-                for (Member member : members) memberNames.add(member.name());
-                lore.add("§b❙ §fУчастники: §b" + String.join(", ", memberNames));
-            }
+            placeholders.put("members",
+                    members.isEmpty()
+                            ? "Нет"
+                            : members.stream().map(Member::name).collect(Collectors.joining(", "))
+            );
 
-            lore.add(" ");
-            lore.add("§b❙ §fКоординаты:");
-            lore.add("§7  World: §b" + home.location().world());
-            lore.add("§7  X: §b" + home.location().x());
-            lore.add("§7  Y: §b" + home.location().y());
-            lore.add("§7  Z: §b" + home.location().z());
-            lore.add(" ");
+            List<String> lore = icon.lore().stream()
+                    .map(line -> PlaceholderUtil.apply(line, placeholders))
+                    .toList();
 
-            final ItemStack item = ItemBuilder.of(Material.PLAYER_HEAD)
-                    .name(home.homeName())
+            String name = PlaceholderUtil.apply(icon.name(), placeholders);
+
+            ItemStack item = ItemBuilder.of(Material.PLAYER_HEAD)
+                    .name(name)
                     .lore(lore)
                     .build();
 
-            final int slot = COUNT_PLAYER_HEAD[slotIndex];
+
             setItem(slot, new MenuItem(item, e -> {
                 service.getHomeCache().remove(player.getName(), home);
                 player.getOpenInventory().getTopInventory().setItem(slot, null);

@@ -34,6 +34,7 @@ public class MenuConfiguration {
 
         final Inventory inv = Bukkit.createInventory(null, rows * 9, title);
         Map<Integer, IconConfiguration> slotIcons = new HashMap<>();
+        List<Integer> dynamicSlots = new ArrayList<>();
 
         int slot = 0;
 
@@ -42,6 +43,7 @@ public class MenuConfiguration {
 
             for (String key : keys) {
                 if (key.equals("_")) {
+                    dynamicSlots.add(slot);
                     slot++;
                     continue;
                 }
@@ -56,7 +58,7 @@ public class MenuConfiguration {
             }
         }
 
-        return new BuiltMenu(inv, slotIcons);
+        return new BuiltMenu(inv, slotIcons, dynamicSlots);
     }
 
     private List<String> parseRow(String row) {
