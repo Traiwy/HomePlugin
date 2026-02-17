@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import traiwy.homePlugin.cache.HomeCache;
 import traiwy.homePlugin.cache.MemberCache;
+import traiwy.homePlugin.error.ErrorService;
 import traiwy.homePlugin.error.RequestError;
 import traiwy.homePlugin.error.provider.RequestErrorMessageProvider;
 import traiwy.homePlugin.home.Home;
@@ -22,6 +23,7 @@ public class HomeFacade {
     private final RepositoryService repositoryService;
     private final HomeCache cache;
     private final MemberCache memberCache;
+    private final ErrorService errorService;
 
 
     public void load(Player player) {
@@ -97,7 +99,7 @@ public class HomeFacade {
                     Player player = Bukkit.getPlayer(playerName);
                     if (player != null) {
                         player.sendMessage(
-                                RequestErrorMessageProvider.getMessage(
+                                errorService.getRequestErrorMessageProvider().getMessage(
                                         RequestError.MEMBER_ALREADY_EXISTS
                                 )
                         );

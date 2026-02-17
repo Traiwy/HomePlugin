@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
+import traiwy.homePlugin.gui.BuiltMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,34 +29,60 @@ public class MenuConfiguration {
             "A", new IconConfiguration()
     ));
 
-    public Inventory build() {
+    public BuiltMenu build() {
         int rows = layout.size();
 
-        final Inventory inv = Bukkit.createInventory(
-                null,
-                rows * 9,
-                title
-        );
+        final Inventory inv = Bukkit.createInventory(null, rows * 9, title);
+        Map<Integer, IconConfiguration> slotIcons = new HashMap<>();
 
         int slot = 0;
 
         for (String row : layout) {
-            for (char key : row.toCharArray()) {
+            List<String> keys = parseRow(row);
 
-                if (key == '_') {
+            for (String key : keys) {
+                if (key.equals("_")) {
                     slot++;
                     continue;
                 }
 
-                IconConfiguration icon = icons.get(String.valueOf(key));
+                IconConfiguration icon = icons.get(key);
                 if (icon != null) {
                     inv.setItem(slot, icon.build());
+                    slotIcons.put(slot, icon); // ← ВАЖНО
                 }
 
                 slot++;
             }
         }
 
-        return inv;
+        return new BuiltMenu(inv, slotIcons);
+    }
+
+    private List<String> parseRow(String row) {
+        List<String> result = new ArrayList<>();
+        StringBuilder buffer = new StringBuilder();
+        boolean inQuotes = false;
+
+        for (char c : row.toCharArray()) {
+            if (c == '\'') {
+                if (inQuotes) {
+                    result.add(buffer.toString());
+                    buffer.setLength(0);
+                    inQuotes = false;
+                } else {
+                    inQuotes = true;
+                }
+                continue;
+            }
+
+            if (inQuotes) {
+                buffer.append(c);
+            } else {
+                result.add(String.valueOf(c));
+            }
+        }
+
+        return result;
     }
 }

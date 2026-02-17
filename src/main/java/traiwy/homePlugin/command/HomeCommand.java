@@ -4,6 +4,7 @@ import traiwy.homePlugin.command.impl.*;
 import traiwy.homePlugin.command.impl.invite.InviteCommand;
 import traiwy.homePlugin.command.impl.invite.context.InviteContextManager;
 import traiwy.homePlugin.error.CommandError;
+import traiwy.homePlugin.error.ErrorService;
 import traiwy.homePlugin.error.provider.CommandErrorMessageProvider;
 import traiwy.homePlugin.gui.MenuManager;
 import org.bukkit.command.Command;
@@ -17,29 +18,32 @@ import traiwy.homePlugin.listener.PlayerChatListener;
 import traiwy.homePlugin.manager.RequestManager;
 
 import java.util.*;
+import java.util.logging.ErrorManager;
 import java.util.stream.Collectors;
 
 public class HomeCommand implements CommandExecutor, TabExecutor {
     private final Map<String, SubCommand> commands = new HashMap<>();
+    private final ErrorService errorService;
 
     public HomeCommand(MenuService menuService,
                        MenuManager menuManager,
                        PlayerChatListener playerChatListener,
                        RequestManager requestManager,
-                       InviteContextManager inviteContextManager) {
-        commands.put("menu", new MenuCommand(menuService, menuManager));
-        commands.put("accept", new AcceptCommand(requestManager, menuService));
+                       InviteContextManager inviteContextManager, ErrorService errorService) {
+        this.errorService = errorService;
+        commands.put("menu", new MenuCommand(menuService, menuManager, errorService));
+        commands.put("accept", new AcceptCommand(requestManager, menuService, errorService));
         commands.put("cancel", new CancelCommand());
-        commands.put("create", new CreateCommand(playerChatListener));
-        commands.put("invite", new InviteCommand(requestManager, inviteContextManager, menuService));
-        commands.put("list",  new ListCommand(menuService, menuManager));
+        commands.put("create", new CreateCommand(playerChatListener, errorService));
+        commands.put("invite", new InviteCommand(requestManager, inviteContextManager, menuService, errorService));
+        commands.put("list",  new ListCommand(menuService, menuManager, errorService));
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
             sender.sendMessage(
-                    CommandErrorMessageProvider.getMessage(CommandError.ARGS)
+                    errorService.getCommandErrorMessageProvider().getMessage(CommandError.ARGS)
             );
             return true;
         }
@@ -49,9 +53,7 @@ public class HomeCommand implements CommandExecutor, TabExecutor {
 
         if (subCommand == null) {
             sender.sendMessage(
-                    CommandErrorMessageProvider.getMessage(
-                            CommandError.UNKNOWN_SUBCOMMAND
-                    )
+                    errorService.getCommandErrorMessageProvider().getMessage(CommandError.UNKNOWN_SUBCOMMAND)
             );
             return true;
         }

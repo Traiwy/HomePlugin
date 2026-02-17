@@ -26,18 +26,31 @@ public class IconConfiguration {
 
 
     public ItemStack build() {
-        final Material material = Material.matchMaterial(type.toUpperCase());
+
+        if (type == null) {
+            throw new IllegalStateException("Material type is null");
+        }
+
+        String normalized = type.toUpperCase();
+
+        if (normalized.contains(":")) {
+            normalized = normalized.split(":")[1];
+        }
+
+        Material material = Material.matchMaterial(normalized);
+
+        if (material == null) {
+            throw new IllegalArgumentException("Invalid material: " + type);
+        }
 
         final ItemStack item = new ItemStack(material, amount);
+
         final ItemMeta meta = item.getItemMeta();
-
-        if (name != null)
-            meta.setDisplayName(name);
-
-        if (lore != null)
-            meta.setLore(lore);
-
-        item.setItemMeta(meta);
+        if (meta != null) {
+            if (name != null) meta.setDisplayName(name);
+            if (lore != null) meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
 
         return item;
     }

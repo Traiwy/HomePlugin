@@ -18,7 +18,6 @@ import java.util.Map;
 
 
 public class ListMenu extends Menu {
-    private static final int[] GRAY_PANEL = {0,1,2,3,4,5,6,7,8,9,17, 18, 36, 26, 44,46,47, 48, 50, 51, 52, 53};
     private static final int[] COUNT_PLAYER_HEAD = {10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34};
 
 
@@ -32,12 +31,6 @@ public class ListMenu extends Menu {
 
     @Override
     public void setup(Player player) {
-        System.out.println("меню создается2");
-
-        for (int i = 0; i < GRAY_PANEL.length; i++) {
-            setItem(GRAY_PANEL[i], new MenuItem(new ItemStack(Material.GRAY_STAINED_GLASS_PANE), null));
-        }
-
         setSlotsHomes(player);
     }
 

@@ -15,7 +15,6 @@ import java.util.List;
 
 public class DeleteMenu extends Menu {
     private final MenuService service;
-   // public static final int[] RED_PANEL = {0,1,2,3,5,6,7,8,9,17, 18, 36, 26, 44,46,47, 48, 50, 51, 52, 53, 27, 35};
     private static final int[] COUNT_PLAYER_HEAD = {10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34};
     public DeleteMenu(MenuService service) {
         super(service);

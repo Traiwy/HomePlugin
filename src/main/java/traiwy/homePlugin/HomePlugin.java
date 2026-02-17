@@ -9,6 +9,7 @@ import traiwy.homePlugin.configuration.Configuration;
 import traiwy.homePlugin.db.DatabaseManager;
 import traiwy.homePlugin.db.home.MySqlHomeRepository;
 import traiwy.homePlugin.db.member.MySqlMemberRepository;
+import traiwy.homePlugin.error.ErrorService;
 import traiwy.homePlugin.facade.HomeFacade;
 import traiwy.homePlugin.gui.service.MenuService;
 import traiwy.homePlugin.listener.PlayerCacheListener;
@@ -25,6 +26,7 @@ public final class HomePlugin extends JavaPlugin {
     private HomeFacade homeFacade;
     private MenuService menuService;
     private PlayerChatListener playerChatListener;
+    private ErrorService errorService;
 
     @Override
     public void onEnable() {
@@ -44,7 +46,7 @@ public final class HomePlugin extends JavaPlugin {
         cache = new HomeCache();
         memberCache = new MemberCache();
         configuration = new Configuration(this);
-
+        errorService = new ErrorService(configuration.getConfiguration().error());
         databaseManager = new DatabaseManager(configuration.getConfiguration().sql());
     }
 
@@ -55,7 +57,7 @@ public final class HomePlugin extends JavaPlugin {
         RepositoryService repositoryService =
                 new RepositoryService(homeRepository, memberRepository);
 
-        homeFacade = new HomeFacade(repositoryService, cache, memberCache);
+        homeFacade = new HomeFacade(repositoryService, cache, memberCache, errorService);
         menuService = new MenuService(cache, configuration, homeFacade);
         playerChatListener = new PlayerChatListener(this, homeFacade);
     }
@@ -72,7 +74,8 @@ public final class HomePlugin extends JavaPlugin {
                 menuService.getMenuManager(),
                 playerChatListener,
                 menuService.getRequestManager(),
-                menuService.getInviteContextManager()
+                menuService.getInviteContextManager(),
+                errorService
         );
 
         command.setExecutor(homeCommand);

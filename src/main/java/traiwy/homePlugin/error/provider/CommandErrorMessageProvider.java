@@ -1,35 +1,26 @@
 package traiwy.homePlugin.error.provider;
 
+import lombok.AllArgsConstructor;
+import net.kyori.adventure.text.Component;
+import traiwy.homePlugin.configuration.ErrorMessageConfiguration;
 import traiwy.homePlugin.error.CommandError;
 
+import java.util.logging.ErrorManager;
+
+@AllArgsConstructor
 public class CommandErrorMessageProvider {
+    private final ErrorMessageConfiguration configuration;
 
-    public static String getMessage(CommandError error) {
+    public Component getMessage(CommandError error) {
         return switch (error) {
-
-            case CONSOLE ->
-                    "Команда доступна только игрокам.";
-
-            case NO_PERMISSION ->
-                    "У вас нет прав на использование этой команды.";
-
-            case ARGS ->
-                    "Неверное использование команды.";
-
-            case UNKNOWN_SUBCOMMAND ->
-                    "Неизвестная подкоманда.";
-
-            case NOT_FIND_PLAYER ->
-                    "Игрок не найден.";
-
-            case TARGET_OFFLINE ->
-                    "Игрок сейчас не в сети.";
-
-            case PLAYER_NOT_ONLINE ->
-                    "Игрок не в сети.";
-
-            case SELF_TARGET ->
-                    "Нельзя выполнить это действие с самим собой.";
+            case CONSOLE -> Component.text(configuration.console());
+            case NO_PERMISSION -> Component.text(configuration.noPermission());
+            case ARGS -> Component.text(configuration.args());
+            case UNKNOWN_SUBCOMMAND -> Component.text(configuration.unknowSubcommand());
+            case NOT_FIND_PLAYER -> Component.text(configuration.notFindPlayer());
+            case TARGET_OFFLINE -> Component.text(configuration.targetOffline());
+            case PLAYER_NOT_ONLINE -> Component.text(configuration.playerNotOnline());
+            case SELF_TARGET -> Component.text(configuration.selfTarget());
         };
     }
 }

@@ -32,14 +32,14 @@ public class MenuManager implements Listener {
         menu.open(player, nameMenu);
     }
 
-    public void openPrevious(Player player, String nameMenu) {
+    public void openPrevious(Player player) {
         final MenuHistory history = history(player);
 
         history.pop();
         Menu previous = history.peek();
 
         if (previous != null) {
-            previous.open(player, nameMenu);
+            previous.open(player);
         } else {
             player.closeInventory();
         }

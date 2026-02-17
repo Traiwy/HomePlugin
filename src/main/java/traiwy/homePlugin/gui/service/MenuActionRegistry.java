@@ -24,7 +24,7 @@ public class MenuActionRegistry {
                 player.closeInventory();
             }
             case "redstone" -> menuManager.openMenu(player, service.getDeleteAllMenu(), "delete");
-            case "back" -> menuManager.openPrevious(player, "back");
+            case "back" -> menuManager.openPrevious(player);
         }
     }
 }

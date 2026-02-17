@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import traiwy.homePlugin.HomePlugin;
 import traiwy.homePlugin.command.SubCommand;
 import traiwy.homePlugin.error.CommandError;
+import traiwy.homePlugin.error.ErrorService;
 import traiwy.homePlugin.error.RequestError;
 import traiwy.homePlugin.error.provider.CommandErrorMessageProvider;
 import traiwy.homePlugin.error.provider.RequestErrorMessageProvider;
@@ -24,6 +25,7 @@ import java.util.Set;
 public class AcceptCommand implements SubCommand {
     private final RequestManager requestManager;
     private final MenuService service;
+    private final ErrorService errorService;
 
     @Override
     public @NotNull String getName() {
@@ -38,7 +40,9 @@ public class AcceptCommand implements SubCommand {
     @Override
     public void execute(@NotNull CommandSender sender, @NotNull String[] args) {
         if(!(sender instanceof Player receiver)) {
-            sender.sendMessage(CommandErrorMessageProvider.getMessage(CommandError.CONSOLE));
+            sender.sendMessage(
+                    errorService.getCommandErrorMessageProvider().getMessage(CommandError.CONSOLE)
+            );
             return;
         }
 
@@ -46,7 +50,7 @@ public class AcceptCommand implements SubCommand {
 
         if (request == null) {
             receiver.sendMessage(
-                    RequestErrorMessageProvider.getMessage(RequestError.REQUEST_NOT_FOUND)
+                    errorService.getRequestErrorMessageProvider().getMessage(RequestError.REQUEST_NOT_FOUND)
             );
             return;
         }

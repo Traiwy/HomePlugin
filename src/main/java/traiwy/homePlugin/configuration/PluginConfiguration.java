@@ -12,8 +12,7 @@ import java.util.Map;
 @Accessors(fluent = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PluginConfiguration {
-    SqlConfiguration sql = new SqlConfiguration();
-    Map<String, MenuConfiguration> menus = new HashMap<>(Map.of(
-            "main_menu", new MenuConfiguration()
-    ));
+    final SqlConfiguration sql = new SqlConfiguration();
+    final Map<String, MenuConfiguration> menus = new HashMap<>(Map.of("main_menu", new MenuConfiguration()));
+    final ErrorMessageConfiguration error = new ErrorMessageConfiguration();
 }

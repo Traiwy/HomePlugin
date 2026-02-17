@@ -1,36 +1,26 @@
 package traiwy.homePlugin.error.provider;
 
-import traiwy.homePlugin.error.CommandError;
+import lombok.AllArgsConstructor;
+import net.kyori.adventure.text.Component;
+import traiwy.homePlugin.configuration.ErrorMessageConfiguration;
 import traiwy.homePlugin.error.RequestError;
 
+@AllArgsConstructor
 public class RequestErrorMessageProvider {
-    public static String getMessage(RequestError error) {
+
+    private final ErrorMessageConfiguration configuration;
+
+    public Component getMessage(RequestError error) {
         return switch (error) {
-            case REQUEST_ALREADY_SENT ->
-                    "Вы уже отправили этому игроку заявку.";
-
-            case REQUEST_ALREADY_EXISTS ->
-                    "У игрока уже есть активная заявка.";
-
-            case REQUEST_NOT_FOUND ->
-                    "Активная заявка не найдена.";
-
-            case REQUEST_EXPIRED ->
-                    "Время заявки истекло.";
-
-            case REQUEST_CANCELLED ->
-                    "Заявка была отменена.";
-
-            case REQUEST_COOLDOWN ->
-                    "Подождите немного перед отправкой новой заявки.";
-
-            case REQUEST_BLOCKED ->
-                    "Этот игрок запретил принимать заявки.";
-
-            case TOO_MANY_REQUESTS ->
-                    "У вас слишком много активных заявок.";
-            case MEMBER_ALREADY_EXISTS ->
-                "Вы уже находитесь в данной точке дома";
+            case REQUEST_ALREADY_SENT -> Component.text(configuration.requestAlreadySent());
+            case REQUEST_ALREADY_EXISTS -> Component.text(configuration.requestAlreadyExists());
+            case REQUEST_NOT_FOUND -> Component.text(configuration.requestNotFound());
+            case REQUEST_EXPIRED -> Component.text(configuration.requestExpired());
+            case REQUEST_CANCELLED -> Component.text(configuration.requestCancelled());
+            case REQUEST_COOLDOWN -> Component.text(configuration.requestCooldown());
+            case REQUEST_BLOCKED -> Component.text(configuration.requestBlocked());
+            case TOO_MANY_REQUESTS -> Component.text(configuration.tooManyRequests());
+            case MEMBER_ALREADY_EXISTS -> Component.text(configuration.memberAlreadyExists());
         };
     }
 }

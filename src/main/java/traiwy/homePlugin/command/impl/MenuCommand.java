@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import traiwy.homePlugin.command.SubCommand;
 import traiwy.homePlugin.error.CommandError;
+import traiwy.homePlugin.error.ErrorService;
 import traiwy.homePlugin.error.provider.CommandErrorMessageProvider;
 import traiwy.homePlugin.gui.MenuManager;
 import traiwy.homePlugin.gui.menu.MainMenu;
@@ -15,6 +16,7 @@ import traiwy.homePlugin.gui.service.MenuService;
 public class MenuCommand implements SubCommand {
     private final MenuService menuService;
     private final MenuManager menuManager;
+    private final ErrorService errorService;
 
     @Override
     public @NotNull String getName() {
@@ -30,14 +32,14 @@ public class MenuCommand implements SubCommand {
     public void execute(@NotNull CommandSender sender, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage(
-                    CommandErrorMessageProvider.getMessage(CommandError.CONSOLE)
+                    errorService.getCommandErrorMessageProvider().getMessage(CommandError.CONSOLE)
             );
             return;
         }
 
         if (!permission().isEmpty() && !player.hasPermission(permission())) {
             player.sendMessage(
-                    CommandErrorMessageProvider.getMessage(CommandError.NO_PERMISSION)
+                    errorService.getCommandErrorMessageProvider().getMessage(CommandError.NO_PERMISSION)
             );
             return;
         }
